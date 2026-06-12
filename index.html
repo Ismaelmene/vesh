@@ -812,6 +812,106 @@
     nav { padding: 16px 20px; }
   }
 </style>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBwJad_iMupLijRRvaBUXVcd7A3zMLuDhs",
+    authDomain: "vesh-a9fc3.firebaseapp.com",
+    projectId: "vesh-a9fc3",
+    storageBucket: "vesh-a9fc3.firebasestorage.app",
+    messagingSenderId: "609101052696",
+    appId: "1:609101052696:web:ba1a5b83ea5978595cfc6d",
+    measurementId: "G-FJW1YFCN9J"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+
+  async function criarUsuario(uid, email) {
+    const ref = doc(db, "usuarios", uid);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      await setDoc(ref, { email, creditos: 3, criadoEm: new Date() });
+    }
+    return (await getDoc(ref)).data();
+  }
+
+  async function atualizarCreditos(uid) {
+    const ref = doc(db, "usuarios", uid);
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      const c = snap.data().creditos;
+      document.querySelectorAll('.credits-pill').forEach(el => {
+        el.innerHTML = `<span class="dot"></span> ${c} crédito${c !== 1 ? 's' : ''}`;
+      });
+      window._creditos = c;
+    }
+  }
+
+  window.loginGoogle = async function() {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      await criarUsuario(result.user.uid, result.user.email);
+      await atualizarCreditos(result.user.uid);
+      showScreen(2);
+    } catch (e) {
+      alert("Erro ao fazer login: " + e.message);
+    }
+  };
+
+  window.loginEmail = async function() {
+    const email = document.getElementById('emailInput').value;
+    const senha = document.getElementById('senhaInput').value;
+    if (!email || !senha) { alert("Preencha e-mail e senha."); return; }
+    try {
+      let result;
+      try {
+        result = await createUserWithEmailAndPassword(auth, email, senha);
+        await criarUsuario(result.user.uid, email);
+      } catch(e) {
+        if (e.code === 'auth/email-already-in-use') {
+          result = await signInWithEmailAndPassword(auth, email, senha);
+        } else throw e;
+      }
+      await atualizarCreditos(result.user.uid);
+      showScreen(2);
+    } catch (e) {
+      alert("Erro: " + (e.code === 'auth/wrong-password' ? 'Senha incorreta.' : e.message));
+    }
+  };
+
+  window.usarCredito = async function() {
+    const user = auth.currentUser;
+    if (!user) return false;
+    const ref = doc(db, "usuarios", user.uid);
+    const snap = await getDoc(ref);
+    if (!snap.exists() || snap.data().creditos < 1) {
+      alert("Você não tem créditos suficientes. Recarregue para continuar.");
+      showScreen(7);
+      return false;
+    }
+    await updateDoc(ref, { creditos: increment(-1) });
+    await atualizarCreditos(user.uid);
+    return true;
+  };
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      await atualizarCreditos(user.uid);
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) logoutBtn.style.display = 'flex';
+    }
+  });
+
+  window._auth = auth;
+  window._usarCredito = window.usarCredito;
+</script>
 </head>
 <body>
 
@@ -821,7 +921,10 @@
 <section id="screen-0" class="screen active">
   <nav>
     <div class="logo">VE<em>SH</em></div>
-    <button class="btn-secondary" style="padding:9px 20px; font-size:13px;" onclick="showScreen(1)">Entrar</button>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button id="logoutBtn" style="display:none;background:none;border:0.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:7px 14px;color:rgba(255,255,255,0.5);font-size:12px;cursor:pointer;font-family:inherit;" onclick="signOut(window._auth).then(()=>showScreen(0))">Sair</button>
+      <button class="btn-secondary" style="padding:9px 20px; font-size:13px;" onclick="showScreen(1)">Entrar</button>
+    </div>
   </nav>
 
   <div class="hero">
@@ -920,22 +1023,22 @@
     <p class="form-sub">Ganhe <strong style="color:var(--gold);">3 créditos grátis</strong> para começar a explorar seus looks.</p>
 
     <div class="form-gap">
-      <button class="btn-social btn-google" onclick="showScreen(2)">
+      <button class="btn-social btn-google" onclick="loginGoogle()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
         Continuar com Google
       </button>
 
-      <button class="btn-social btn-apple" onclick="showScreen(2)">
+      <button class="btn-social btn-apple" style="opacity:0.5;cursor:not-allowed;" disabled>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        Continuar com Apple
+        Apple (em breve)
       </button>
 
       <div class="divider"><span>ou entre com e-mail</span></div>
 
-      <input class="input-field" type="email" placeholder="seu@email.com">
-      <input class="input-field" type="password" placeholder="Criar senha">
+      <input id="emailInput" class="input-field" type="email" placeholder="seu@email.com">
+      <input id="senhaInput" class="input-field" type="password" placeholder="Criar senha (mín. 6 caracteres)">
 
-      <button class="btn-primary" style="width:100%; margin-top:4px;" onclick="showScreen(2)">
+      <button class="btn-primary" style="width:100%; margin-top:4px;" onclick="loginEmail()">
         Criar conta grátis
       </button>
     </div>
@@ -1390,7 +1493,6 @@
   }
 
   function regenResult() {
-    const credits = document.querySelectorAll('.credits-pill');
     showScreen(4);
   }
 
@@ -1403,6 +1505,74 @@
   }
 
   buildOccasionGrid();
+</script>
+</body>
+</html>
+
+  async function criarOuBuscarUsuario(user) {
+    const ref = doc(db, "usuarios", user.uid);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      await setDoc(ref, {
+        nome: user.displayName || "",
+        email: user.email,
+        creditos: 3,
+        criadoEm: new Date().toISOString()
+      });
+      atualizarCreditos(3);
+    } else {
+      atualizarCreditos(snap.data().creditos);
+    }
+  }
+
+  function atualizarCreditos(n) {
+    document.querySelectorAll('.credits-pill').forEach(el => {
+      el.innerHTML = `<span class="dot"></span> ${n} créditos`;
+    });
+  }
+
+  function mostrarUsuarioLogado(user) {
+    const nav = document.querySelector('#screen-0 nav');
+    const btnEntrar = nav.querySelector('.btn-secondary');
+    if (btnEntrar) {
+      btnEntrar.textContent = user.displayName ? user.displayName.split(' ')[0] : 'Minha conta';
+      btnEntrar.onclick = () => {
+        if (confirm('Deseja sair da conta?')) signOut(auth);
+      };
+    }
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      await criarOuBuscarUsuario(user);
+      mostrarUsuarioLogado(user);
+      const tela = document.querySelector('.screen.active');
+      if (tela && tela.id === 'screen-1') showScreen(2);
+    }
+  });
+
+  window.loginGoogle = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (e) {
+      alert('Erro ao fazer login com Google: ' + e.message);
+    }
+  };
+
+  window.loginEmail = async () => {
+    const email = document.getElementById('emailInput').value;
+    const senha = document.getElementById('senhaInput').value;
+    if (!email || !senha) { alert('Preencha e-mail e senha.'); return; }
+    try {
+      await createUserWithEmailAndPassword(auth, email, senha);
+    } catch (e) {
+      try {
+        await signInWithEmailAndPassword(auth, email, senha);
+      } catch (e2) {
+        alert('Erro: ' + e2.message);
+      }
+    }
+  };
 </script>
 </body>
 </html>

@@ -113,6 +113,13 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
 .look-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
 .look-action-btn{background:var(--dark2);border:0.5px solid var(--border);border-radius:10px;padding:11px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;color:var(--gray2);font-family:'Inter',sans-serif;transition:all .2s}
 .look-action-btn:hover{background:var(--dark3)}
+.gender-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+.gender-card{background:var(--dark2);border:2px solid var(--border);border-radius:16px;padding:32px 16px;cursor:pointer;transition:all .2s;text-align:center}
+.gender-card:hover{border-color:var(--gold-border);background:var(--dark3);transform:translateY(-2px)}
+.gender-card.selected{border-color:var(--gold);background:var(--gold-dim)}
+.gender-emoji{font-size:52px;display:block;margin-bottom:12px}
+.gender-name{font-size:16px;font-weight:500;color:var(--white);margin-bottom:4px}
+.gender-sub{font-size:12px;color:var(--gray3)}
 .mini-spinner{width:20px;height:20px;border:2px solid var(--gold-border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
 
 /* ── PRODUTOS ── */
@@ -226,12 +233,50 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
   </div>
 </section>
 
+<!-- ══ SCREEN 1.5 — GÊNERO ══ -->
+<section id="screen-15" class="screen">
+  <nav>
+    <div class="logo">VE<em>SH</em></div>
+    <div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div>
+  </nav>
+  <div class="progress-bar">
+    <div class="progress-step done"></div>
+    <div class="progress-step active"></div>
+    <div class="progress-step"></div>
+    <div class="progress-step"></div>
+    <div class="progress-step"></div>
+  </div>
+  <div class="form-wrap" style="padding-top:16px">
+    <button class="nav-back" style="margin-bottom:20px;padding:0" onclick="showScreen(1)">← Voltar</button>
+    <p class="step-label">PASSO 2 DE 5</p>
+    <h1 class="form-title">Você é?</h1>
+    <p class="form-sub">A IA vai buscar roupas do seu estilo.</p>
+    <div class="gender-grid">
+      <div class="gender-card" id="genderMasc" onclick="selecionarGenero('masculino',this)">
+        <span class="gender-emoji">👨</span>
+        <p class="gender-name">Masculino</p>
+        <p class="gender-sub">Roupas masc.</p>
+      </div>
+      <div class="gender-card" id="genderFem" onclick="selecionarGenero('feminino',this)">
+        <span class="gender-emoji">👩</span>
+        <p class="gender-name">Feminino</p>
+        <p class="gender-sub">Roupas fem.</p>
+      </div>
+    </div>
+    <button id="btnContinuarGenero" class="btn-primary" style="width:100%" disabled onclick="showScreen(2)">Continuar →</button>
+  </div>
+</section>
+
 <!-- ══ SCREEN 2 — UPLOAD ══ -->
 <section id="screen-2" class="screen">
   <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div></nav>
-  <div class="progress-bar"><div class="progress-step done"></div><div class="progress-step active"></div><div class="progress-step"></div><div class="progress-step"></div></div>
+  <div class="progress-bar">
+    <div class="progress-step done"></div><div class="progress-step done"></div>
+    <div class="progress-step active"></div><div class="progress-step"></div><div class="progress-step"></div>
+  </div>
   <div class="form-wrap" style="padding-top:16px">
-    <p class="step-label">PASSO 2 DE 4</p>
+    <button class="nav-back" style="margin-bottom:20px;padding:0" onclick="showScreen(15)">← Voltar</button>
+    <p class="step-label">PASSO 3 DE 5</p>
     <h1 class="form-title">Envie sua foto</h1>
     <p class="form-sub">Foto de corpo inteiro para os melhores resultados.</p>
     <input type="file" id="fotoInput" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="onFotoSelecionada(event)">
@@ -268,11 +313,15 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
 <!-- ══ SCREEN 3 — OCASIÃO ══ -->
 <section id="screen-3" class="screen">
   <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div></nav>
-  <div class="progress-bar"><div class="progress-step done"></div><div class="progress-step done"></div><div class="progress-step active"></div><div class="progress-step"></div></div>
+  <div class="progress-bar">
+    <div class="progress-step done"></div><div class="progress-step done"></div>
+    <div class="progress-step done"></div><div class="progress-step active"></div><div class="progress-step"></div>
+  </div>
   <div style="padding:24px 24px 0;max-width:480px;margin:0 auto;width:100%">
-    <p class="step-label">PASSO 3 DE 4</p>
+    <button class="nav-back" style="margin-bottom:20px;padding:0" onclick="showScreen(2)">← Voltar</button>
+    <p class="step-label">PASSO 4 DE 5</p>
     <h1 class="form-title">Qual é a ocasião?</h1>
-    <p class="form-sub" style="margin-bottom:20px">A IA vai buscar 3 looks reais da <strong style="color:#EE4D2D">Shopee</strong> e <strong style="color:#e8b4e8">Shein</strong> para você experimentar.</p>
+    <p class="form-sub" style="margin-bottom:20px">A IA vai buscar 3 looks da <strong style="color:#EE4D2D">Shopee</strong> e <strong style="color:#e8b4e8">Shein</strong> para você.</p>
   </div>
   <div style="padding:0 24px 24px;flex:1;max-width:480px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:16px">
     <div class="occasion-grid" id="occasionGrid"></div>
@@ -307,6 +356,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
   <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">2 créditos</span></div></nav>
   <div class="looks-wrap">
     <div class="looks-header">
+      <button class="nav-back" style="margin-bottom:16px;padding:0" onclick="showScreen(3)">← Escolher outra ocasião</button>
       <p style="font-size:11px;letter-spacing:2px;color:var(--gray3);margin-bottom:6px">SEUS 3 LOOKS GERADOS</p>
       <h2 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:400;margin-bottom:4px" id="resultTitle">Festa Sertaneja</h2>
       <p style="font-size:13px;color:var(--gray2)">Toque no look favorito para ver os produtos</p>
@@ -460,7 +510,7 @@ window.loginGoogle=async function(){
   try{
     const r=await signInWithPopup(auth,provider);
     const c=await salvarUsuario(r.user.uid,r.user.email,r.user.displayName);
-    atualizarUI(c,r.user.displayName);showToast('✓ Bem-vindo ao Vesh!');showScreen(2);
+    atualizarUI(c,r.user.displayName);showToast('✓ Bem-vindo ao Vesh!');showScreen(15);
   }catch(e){
     showToast('Erro: '+e.message);
     btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Continuar com Google';
@@ -476,7 +526,7 @@ window.loginEmail=async function(){
     try{r=await createUserWithEmailAndPassword(auth,email,senha);showToast('✓ Conta criada!');}
     catch(e){if(e.code==='auth/email-already-in-use'){r=await signInWithEmailAndPassword(auth,email,senha);showToast('✓ Login realizado!');}else throw e;}
     const c=await salvarUsuario(r.user.uid,email,'');
-    atualizarUI(c,email.split('@')[0]);showScreen(2);
+    atualizarUI(c,email.split('@')[0]);showScreen(15);
   }catch(e){
     const m={'auth/wrong-password':'Senha incorreta.','auth/invalid-credential':'E-mail ou senha incorretos.','auth/invalid-email':'E-mail inválido.'};
     showToast('Erro: '+(m[e.code]||e.message));
@@ -504,7 +554,39 @@ const SHOPEE_AFFILIATE_ID="SEU_ID_SHOPEE"; // substitua pelo seu ID Shopee Afili
 const SHEIN_AFFILIATE_ID="SEU_ID_SHEIN";  // substitua pelo seu ID Shein Afiliados
 const AMAZON_AFFILIATE_ID="SEU_TAG_AQUI";
 
-const OCCASIONS=[
+let _selectedOccasion=null, _selectedOccasionQuery=null, _selectedPlan=null;
+let _produtosEncontrados=[], _lookSelecionado=null, _looksGerados=[null,null,null];
+
+// ── NAV ──
+function showScreen(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const id = n===15 ? 'screen-15' : 'screen-'+n;
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if(n===3) buildOccasions();
+  if(n===6) renderProdutos();
+}
+function handleCTA(){showScreen(window._creditos!==undefined?15:1);}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ── GÊNERO ──
+let _genero='masculino'; // padrão
+
+window.selecionarGenero=function(genero, card){
+  _genero=genero;
+  document.querySelectorAll('.gender-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  document.getElementById('btnContinuarGenero').disabled=false;
+  // Atualiza emoji da tela de upload
+  document.querySelector('#uploadPlaceholder .upload-icon').textContent=genero==='feminino'?'🧍‍♀️':'🧍';
+};
+
+// ── OCASIÕES POR GÊNERO ──
+const OCCASIONS_MASC=[
   {emoji:'💼',name:'Reunião de Negócios',style:'Executivo & formal',query:'camisa social masculina'},
   {emoji:'❤️',name:'Encontro Romântico',style:'Casual chique',query:'camisa masculina casual estilosa'},
   {emoji:'💍',name:'Casamento',style:'Elegante & sofisticado',query:'terno masculino slim casamento'},
@@ -514,24 +596,16 @@ const OCCASIONS=[
   {emoji:'🎓',name:'Formatura',style:'Elegante & memorável',query:'terno masculino formatura'},
   {emoji:'🏢',name:'Evento Corporativo',style:'Business casual',query:'blazer masculino casual'},
 ];
-
-let _selectedOccasion=null, _selectedOccasionQuery=null, _selectedPlan=null;
-let _produtosEncontrados=[], _lookSelecionado=null, _looksGerados=[null,null,null];
-
-// ── NAV ──
-function showScreen(n){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+n).classList.add('active');
-  window.scrollTo(0,0);
-  if(n===3) buildOccasions();
-  if(n===6) renderProdutos();
-}
-function handleCTA(){showScreen(window._creditos!==undefined?2:1);}
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('show'),3500);
-}
+const OCCASIONS_FEM=[
+  {emoji:'💼',name:'Reunião de Negócios',style:'Executivo & elegante',query:'blazer feminino social'},
+  {emoji:'❤️',name:'Encontro Romântico',style:'Delicado & chique',query:'vestido feminino casual romantrico'},
+  {emoji:'💍',name:'Casamento',style:'Elegante & sofisticado',query:'vestido de festa feminino casamento'},
+  {emoji:'🤠',name:'Festa Sertaneja',style:'Country & estiloso',query:'moda country feminina bota'},
+  {emoji:'🎉',name:'Balada',style:'Festivo & ousado',query:'vestido feminino festa balada'},
+  {emoji:'🥩',name:'Churrasco',style:'Casual & confortável',query:'conjunto feminino casual'},
+  {emoji:'🎓',name:'Formatura',style:'Elegante & memorável',query:'vestido longo formatura feminino'},
+  {emoji:'🏢',name:'Evento Corporativo',style:'Business casual',query:'blazer feminino trabalho'},
+];
 
 // ── UPLOAD ──
 window.onFotoSelecionada=function(e){
@@ -561,8 +635,10 @@ window.addEventListener('load',()=>{
 
 // ── OCASIÕES ──
 function buildOccasions(){
-  const grid=document.getElementById('occasionGrid');if(grid.children.length)return;
-  OCCASIONS.forEach(oc=>{
+  const grid=document.getElementById('occasionGrid');
+  grid.innerHTML=''; // rebuild sempre para refletir o gênero atual
+  const lista=_genero==='feminino'?OCCASIONS_FEM:OCCASIONS_MASC;
+  lista.forEach(oc=>{
     const card=document.createElement('div');card.className='occasion-card';
     card.innerHTML=`<span class="oc-emoji">${oc.emoji}</span><p class="oc-name">${oc.name}</p><p class="oc-style">${oc.style}</p>`;
     card.onclick=()=>{

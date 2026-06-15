@@ -194,20 +194,29 @@ window.fazerLogin=async function(){
 
 window.logout=async function(){
   await signOut(auth);
-  document.getElementById('dashboard').style.display='none';
-  document.getElementById('loginWrap').style.display='flex';
-  document.getElementById('btnLogout').style.display='none';
+  // Força reload para limpar completamente a sessão
+  window.location.reload();
 };
 
 onAuthStateChanged(auth,async(user)=>{
-  if(user&&user.email===ADMIN_EMAIL){
+  if(user && user.email===ADMIN_EMAIL){
+    // Admin logado — mostra dashboard
     document.getElementById('loginWrap').style.display='none';
     document.getElementById('dashboard').style.display='block';
     document.getElementById('btnLogout').style.display='block';
     await carregarDados();
-  } else if(!user){
+  } else if(user && user.email!==ADMIN_EMAIL){
+    // Usuário normal logado — faz logout automático e mostra login admin
+    await signOut(auth);
     document.getElementById('loginWrap').style.display='flex';
     document.getElementById('dashboard').style.display='none';
+    document.getElementById('btnLogout').style.display='none';
+    document.getElementById('loginErr').textContent='Esta conta não tem acesso ao painel admin.';
+  } else {
+    // Ninguém logado — mostra tela de login
+    document.getElementById('loginWrap').style.display='flex';
+    document.getElementById('dashboard').style.display='none';
+    document.getElementById('btnLogout').style.display='none';
   }
 });
 
@@ -348,7 +357,7 @@ window.copiarEmail=function(tipo){
   else lista=_usuarios;
   const emails=lista.map(u=>u.email).filter(Boolean).join(', ');
   if(!emails){toast('Nenhum e-mail encontrado.');return;}
-  navigator.clipboard.writeText(emails).then(()=>   
+  navigator.clipboard.writeText(emails).then(()=>
     toast(`✓ ${lista.length} e-mails copiados!`)
   );
 };

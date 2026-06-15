@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vesh Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#080808;--dark:#111;--dark2:#1a1a1a;--dark3:#242424;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--gold:#C9A84C;--gold2:#D4B560;--gold-dim:rgba(201,168,76,0.15);--gold-border:rgba(201,168,76,0.3);--white:#FFF;--gray2:rgba(255,255,255,0.45);--gray3:rgba(255,255,255,0.25);--green:#4caf82;--red:#e05c7a;--blue:#5b9cf6}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);min-height:100vh}
+nav{display:flex;justify-content:space-between;align-items:center;padding:16px 28px;border-bottom:0.5px solid var(--border);background:rgba(8,8,8,.95);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+.logo{font-family:'Playfair Display',serif;font-size:20px;letter-spacing:4px}
+.logo em{color:var(--gold);font-style:normal}
+.badge{background:var(--gold-dim);border:0.5px solid var(--gold-border);border-radius:6px;padding:3px 10px;font-size:11px;color:var(--gold);font-weight:600;letter-spacing:1px}
+
+/* LOGIN */
+#loginWrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:24px}
+.login-box{background:var(--dark2);border:0.5px solid var(--border2);border-radius:16px;padding:40px 32px;width:100%;max-width:360px;text-align:center}
+.login-box h2{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px}
+.login-box p{font-size:13px;color:var(--gray2);margin-bottom:28px}
+.input{width:100%;background:var(--dark3);border:0.5px solid var(--border2);border-radius:8px;padding:12px 14px;color:var(--white);font-size:14px;font-family:'Inter',sans-serif;outline:none;margin-bottom:12px}
+.input:focus{border-color:var(--gold-border)}
+.btn{background:var(--gold);color:var(--black);border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;width:100%;font-family:'Inter',sans-serif}
+.btn:hover{background:var(--gold2)}
+.err{color:var(--red);font-size:12px;margin-top:8px}
+
+/* DASHBOARD */
+#dashboard{display:none;padding:24px;max-width:1100px;margin:0 auto}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:28px}
+.stat-card{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;padding:20px 16px}
+.stat-val{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold);margin-bottom:4px}
+.stat-lbl{font-size:12px;color:var(--gray3)}
+.stat-sub{font-size:11px;color:var(--green);margin-top:4px}
+
+.section-title{font-size:13px;font-weight:500;color:var(--gray2);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.table-wrap{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px}
+table{width:100%;border-collapse:collapse}
+th{padding:12px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--gray3);letter-spacing:1px;border-bottom:0.5px solid var(--border);background:var(--dark3)}
+td{padding:12px 16px;font-size:13px;border-bottom:0.5px solid rgba(255,255,255,.04)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.pill{display:inline-block;font-size:10px;font-weight:600;border-radius:20px;padding:2px 10px}
+.pill-green{background:rgba(76,175,130,.15);color:var(--green)}
+.pill-gold{background:var(--gold-dim);color:var(--gold)}
+.pill-red{background:rgba(224,92,122,.15);color:var(--red)}
+
+.toolbar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.search-input{background:var(--dark2);border:0.5px solid var(--border2);border-radius:8px;padding:10px 14px;color:var(--white);font-size:13px;font-family:'Inter',sans-serif;outline:none;flex:1;min-width:200px}
+.search-input:focus{border-color:var(--gold-border)}
+.btn-sm{background:transparent;border:0.5px solid var(--border2);border-radius:8px;padding:9px 16px;font-size:12px;color:var(--gray2);cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap}
+.btn-sm:hover{border-color:var(--gold-border);color:var(--gold)}
+.btn-sm.active{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold)}
+.btn-export{background:var(--gold);color:var(--black);border:none;border-radius:8px;padding:9px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+
+.empty{text-align:center;padding:40px;color:var(--gray3);font-size:14px}
+.loading{text-align:center;padding:40px;color:var(--gray2);font-size:14px}
+.spinner{width:28px;height:28px;border:2px solid var(--gold-border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+.copy-btn{background:none;border:0.5px solid var(--border);border-radius:4px;padding:2px 8px;font-size:10px;color:var(--gray3);cursor:pointer;margin-left:6px}
+.copy-btn:hover{border-color:var(--gold-border);color:var(--gold)}
+
+.promo-box{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;padding:24px;margin-bottom:24px}
+.promo-box h3{font-size:15px;font-weight:500;margin-bottom:16px}
+.promo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.promo-card{background:var(--dark3);border-radius:10px;padding:16px;cursor:pointer;border:0.5px solid var(--border);transition:border-color .2s}
+.promo-card:hover{border-color:var(--gold-border)}
+.promo-title{font-size:13px;font-weight:500;margin-bottom:4px}
+.promo-desc{font-size:11px;color:var(--gray3);line-height:1.5}
+
+@media(max-width:600px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .promo-grid{grid-template-columns:1fr}
+  th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4){display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">VE<em>SH</em></div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <span class="badge">ADMIN</span>
+    <button id="btnLogout" style="display:none;background:none;border:0.5px solid var(--border2);border-radius:8px;padding:7px 14px;color:var(--gray2);font-size:12px;cursor:pointer;font-family:inherit" onclick="logout()">Sair</button>
+  </div>
+</nav>
+
+<!-- LOGIN -->
+<div id="loginWrap">
+  <div class="login-box">
+    <div style="font-size:36px;margin-bottom:16px">🔐</div>
+    <h2>Painel Admin</h2>
+    <p>Entre com sua conta de administrador do Vesh</p>
+    <input class="input" id="adminEmail" type="email" placeholder="seu@email.com">
+    <input class="input" id="adminSenha" type="password" placeholder="Senha">
+    <button class="btn" onclick="fazerLogin()">Entrar no painel</button>
+    <p class="err" id="loginErr"></p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <!-- Stats -->
+  <div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+    <h1 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:400">Dashboard Vesh</h1>
+    <button class="btn-sm" onclick="carregarDados()" style="display:flex;align-items:center;gap:6px">🔄 Atualizar</button>
+  </div>
+
+  <div class="stats-row" id="statsRow">
+    <div class="stat-card"><div class="spinner"></div></div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <input class="search-input" id="searchInput" type="text" placeholder="🔍 Buscar por nome ou e-mail..." oninput="filtrarUsuarios()">
+    <button class="btn-sm" id="filtroTodos" onclick="setFiltro('todos')" class="active">Todos</button>
+    <button class="btn-sm" id="filtroAtivos" onclick="setFiltro('ativos')">Com créditos</button>
+    <button class="btn-sm" id="filtroSem" onclick="setFiltro('sem')">Sem créditos</button>
+    <button class="btn-sm" id="filtroHoje" onclick="setFiltro('hoje')">Hoje</button>
+    <button class="btn-export" onclick="exportarCSV()">⬇ Exportar CSV</button>
+  </div>
+
+  <!-- Tabela usuários -->
+  <p class="section-title">
+    <span id="contadorLabel">Usuários</span>
+    <span id="totalLabel" style="color:var(--gray3);font-size:12px"></span>
+  </p>
+  <div class="table-wrap">
+    <div id="tabelaUsuarios" class="loading"><div class="spinner"></div>Carregando usuários...</div>
+  </div>
+
+  <!-- Promoções -->
+  <div class="promo-box">
+    <h3>📣 Ações de Marketing</h3>
+    <div class="promo-grid">
+      <div class="promo-card" onclick="copiarEmail('semCreditos')">
+        <p class="promo-title">🎁 Dar créditos grátis</p>
+        <p class="promo-desc">Copiar lista de e-mails de usuários sem créditos para enviar promoção</p>
+      </div>
+      <div class="promo-card" onclick="copiarEmail('todos')">
+        <p class="promo-title">📧 Newsletter</p>
+        <p class="promo-desc">Copiar todos os e-mails para campanha de e-mail marketing</p>
+      </div>
+      <div class="promo-card" onclick="copiarEmail('novos')">
+        <p class="promo-title">👋 Boas-vindas</p>
+        <p class="promo-desc">Copiar e-mails de usuários que se cadastraram hoje</p>
+      </div>
+      <div class="promo-card" onclick="abrirMailto()">
+        <p class="promo-title">✉️ Enviar e-mail agora</p>
+        <p class="promo-desc">Abrir cliente de e-mail com todos os usuários no BCC</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:#1a1a1a;border:0.5px solid var(--gold-border);border-radius:10px;padding:10px 20px;font-size:13px;z-index:999;transition:transform .3s" id="toast2"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyBwJad_iMupLijRRvaBUXVcd7A3zMLuDhs",
+  authDomain:"vesh-a9fc3.firebaseapp.com",
+  projectId:"vesh-a9fc3",
+  storageBucket:"vesh-a9fc3.firebasestorage.app",
+  messagingSenderId:"609101052696",
+  appId:"1:609101052696:web:ba1a5b83ea5978595cfc6d"
+});
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+// E-MAIL DO ADMIN — só esse e-mail consegue entrar
+const ADMIN_EMAIL="menezeslemes82@gmail.com";
+
+let _usuarios=[];
+let _filtroAtual='todos';
+
+window.fazerLogin=async function(){
+  const email=document.getElementById('adminEmail').value.trim();
+  const senha=document.getElementById('adminSenha').value;
+  const err=document.getElementById('loginErr');
+  err.textContent='';
+  if(email!==ADMIN_EMAIL){err.textContent='Acesso não autorizado.';return;}
+  try{
+    await signInWithEmailAndPassword(auth,email,senha);
+  }catch(e){
+    err.textContent='Erro: '+e.message;
+  }
+};
+
+window.logout=async function(){
+  await signOut(auth);
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('loginWrap').style.display='flex';
+  document.getElementById('btnLogout').style.display='none';
+};
+
+onAuthStateChanged(auth,async(user)=>{
+  if(user&&user.email===ADMIN_EMAIL){
+    document.getElementById('loginWrap').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    document.getElementById('btnLogout').style.display='block';
+    await carregarDados();
+  } else if(!user){
+    document.getElementById('loginWrap').style.display='flex';
+    document.getElementById('dashboard').style.display='none';
+  }
+});
+
+window.carregarDados=async function(){
+  try{
+    const q=query(collection(db,'usuarios'));
+    const snap=await getDocs(q);
+    _usuarios=[];
+    snap.forEach(doc=>{
+      _usuarios.push({id:doc.id,...doc.data()});
+    });
+    // Ordena por data de criação (mais recentes primeiro)
+    _usuarios.sort((a,b)=>new Date(b.criadoEm||0)-new Date(a.criadoEm||0));
+    renderStats();
+    renderTabela(_usuarios);
+  }catch(e){
+    document.getElementById('tabelaUsuarios').innerHTML=
+      `<div class="empty">Erro ao carregar: ${e.message}</div>`;
+  }
+};
+
+function renderStats(){
+  const total=_usuarios.length;
+  const comCredito=_usuarios.filter(u=>(u.creditos||0)>0).length;
+  const semCredito=_usuarios.filter(u=>(u.creditos||0)===0).length;
+  const hoje=new Date().toDateString();
+  const novosHoje=_usuarios.filter(u=>u.criadoEm&&new Date(u.criadoEm).toDateString()===hoje).length;
+  const totalCreditos=_usuarios.reduce((s,u)=>s+(u.creditos||0),0);
+  const geracoes=_usuarios.reduce((s,u)=>s+(3-(u.creditos||0)>0?3-(u.creditos||0):0),0);
+
+  document.getElementById('statsRow').innerHTML=`
+    <div class="stat-card">
+      <div class="stat-val">${total}</div>
+      <div class="stat-lbl">Total de usuários</div>
+      <div class="stat-sub">+${novosHoje} hoje</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">${comCredito}</div>
+      <div class="stat-lbl">Com créditos</div>
+      <div class="stat-sub">${Math.round(comCredito/total*100)||0}% do total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">${semCredito}</div>
+      <div class="stat-lbl">Sem créditos</div>
+      <div class="stat-sub">Potencial de venda</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">${novosHoje}</div>
+      <div class="stat-lbl">Novos hoje</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">${totalCreditos}</div>
+      <div class="stat-lbl">Créditos ativos</div>
+    </div>`;
+}
+
+function renderTabela(lista){
+  const tbody=lista.map(u=>{
+    const data=u.criadoEm?new Date(u.criadoEm).toLocaleDateString('pt-BR'):'—';
+    const hora=u.criadoEm?new Date(u.criadoEm).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'';
+    const creditos=u.creditos||0;
+    let pill=creditos>0
+      ?`<span class="pill pill-green">${creditos} crédito${creditos!==1?'s':''}</span>`
+      :`<span class="pill pill-red">sem créditos</span>`;
+    const nome=u.nome||u.email?.split('@')[0]||'—';
+    return `<tr>
+      <td><strong>${nome}</strong></td>
+      <td>${u.email||'—'}<button class="copy-btn" onclick="copiarTexto('${u.email}')">copiar</button></td>
+      <td style="color:var(--gray3)">${data} ${hora}</td>
+      <td>${pill}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('tabelaUsuarios').innerHTML=lista.length===0
+    ?'<div class="empty">Nenhum usuário encontrado</div>'
+    :`<table>
+        <thead><tr><th>NOME</th><th>E-MAIL</th><th>CADASTRO</th><th>CRÉDITOS</th></tr></thead>
+        <tbody>${tbody}</tbody>
+      </table>`;
+
+  document.getElementById('totalLabel').textContent=`${lista.length} usuário${lista.length!==1?'s':''}`;
+}
+
+window.filtrarUsuarios=function(){
+  const termo=document.getElementById('searchInput').value.toLowerCase();
+  let lista=filtrarPorTipo(_filtroAtual);
+  if(termo) lista=lista.filter(u=>
+    (u.email||'').toLowerCase().includes(termo)||
+    (u.nome||'').toLowerCase().includes(termo)
+  );
+  renderTabela(lista);
+};
+
+function filtrarPorTipo(tipo){
+  const hoje=new Date().toDateString();
+  if(tipo==='ativos') return _usuarios.filter(u=>(u.creditos||0)>0);
+  if(tipo==='sem') return _usuarios.filter(u=>(u.creditos||0)===0);
+  if(tipo==='hoje') return _usuarios.filter(u=>u.criadoEm&&new Date(u.criadoEm).toDateString()===hoje);
+  return _usuarios;
+}
+
+window.setFiltro=function(tipo){
+  _filtroAtual=tipo;
+  ['Todos','Ativos','Sem','Hoje'].forEach(f=>{
+    const el=document.getElementById('filtro'+f);
+    if(el) el.classList.remove('active');
+  });
+  const map={todos:'Todos',ativos:'Ativos',sem:'Sem',hoje:'Hoje'};
+  const el=document.getElementById('filtro'+map[tipo]);
+  if(el) el.classList.add('active');
+  filtrarUsuarios();
+};
+
+window.exportarCSV=function(){
+  const rows=[['Nome','Email','Cadastro','Créditos']];
+  _usuarios.forEach(u=>{
+    rows.push([
+      u.nome||'',
+      u.email||'',
+      u.criadoEm?new Date(u.criadoEm).toLocaleDateString('pt-BR'):'',
+      u.creditos||0
+    ]);
+  });
+  const csv=rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`vesh-usuarios-${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.csv`;
+  a.click();
+  toast('✓ CSV exportado com sucesso!');
+};
+
+window.copiarEmail=function(tipo){
+  let lista;
+  const hoje=new Date().toDateString();
+  if(tipo==='semCreditos') lista=_usuarios.filter(u=>(u.creditos||0)===0);
+  else if(tipo==='novos') lista=_usuarios.filter(u=>u.criadoEm&&new Date(u.criadoEm).toDateString()===hoje);
+  else lista=_usuarios;
+  const emails=lista.map(u=>u.email).filter(Boolean).join(', ');
+  if(!emails){toast('Nenhum e-mail encontrado.');return;}
+  navigator.clipboard.writeText(emails).then(()=>   
+    toast(`✓ ${lista.length} e-mails copiados!`)
+  );
+};
+
+window.abrirMailto=function(){
+  const emails=_usuarios.map(u=>u.email).filter(Boolean).join(',');
+  window.open(`mailto:?bcc=${emails}&subject=Novidade no Vesh&body=Olá! Temos uma novidade especial para você no Vesh...`);
+};
+
+window.copiarTexto=function(texto){
+  navigator.clipboard.writeText(texto).then(()=>toast('✓ Copiado!'));
+};
+
+function toast(msg){
+  const t=document.getElementById('toast2');
+  t.textContent=msg;
+  t.style.transform='translateX(-50%) translateY(0)';
+  setTimeout(()=>t.style.transform='translateX(-50%) translateY(60px)',2500);
+}
+</script>
+</body>
+</html>

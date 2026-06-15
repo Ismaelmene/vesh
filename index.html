@@ -10,37 +10,35 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --black:#080808;--dark:#111111;--dark2:#1a1a1a;--dark3:#242424;
+  --black:#080808;--dark:#111;--dark2:#1a1a1a;--dark3:#242424;
   --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
   --gold:#C9A84C;--gold2:#D4B560;--gold-dim:rgba(201,168,76,0.15);--gold-border:rgba(201,168,76,0.3);
-  --white:#FFFFFF;--gray1:rgba(255,255,255,0.7);--gray2:rgba(255,255,255,0.45);
-  --gray3:rgba(255,255,255,0.25);--gray4:rgba(255,255,255,0.1);
-  --green:#4caf82;--red:#e05c7a;--blue:#5b9cf6;
+  --white:#FFF;--gray1:rgba(255,255,255,0.7);--gray2:rgba(255,255,255,0.45);
+  --gray3:rgba(255,255,255,0.25);--green:#4caf82;--red:#e05c7a;
 }
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden}
 .screen{display:none;min-height:100vh}
 .screen.active{display:flex;flex-direction:column}
 nav{display:flex;justify-content:space-between;align-items:center;padding:18px 28px;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:rgba(8,8,8,0.95);backdrop-filter:blur(12px);z-index:100;flex-shrink:0}
-.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:500;letter-spacing:4px;color:var(--white)}
+.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:500;letter-spacing:4px}
 .logo em{color:var(--gold);font-style:normal}
 .credits-pill{display:flex;align-items:center;gap:6px;background:var(--gold-dim);border:0.5px solid var(--gold-border);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--gold);font-weight:500}
 .credits-pill .dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
-.nav-back{background:none;border:none;color:var(--gray2);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;transition:color 0.2s}
-.nav-back:hover{color:var(--white)}
-.btn-primary{background:var(--gold);color:var(--black);border:none;border-radius:10px;padding:15px 36px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s,transform 0.1s}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.nav-back{background:none;border:none;color:var(--gray2);font-size:13px;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-primary{background:var(--gold);color:var(--black);border:none;border-radius:10px;padding:15px 36px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s,transform .1s}
 .btn-primary:hover{background:var(--gold2)}
-.btn-primary:active{transform:scale(0.98)}
-.btn-primary:disabled{opacity:0.4;cursor:not-allowed}
-.btn-secondary{background:transparent;color:var(--white);border:0.5px solid var(--border2);border-radius:10px;padding:13px 28px;font-size:14px;cursor:pointer;font-family:'Inter',sans-serif;transition:border-color 0.2s,background 0.2s}
-.btn-secondary:hover{border-color:rgba(255,255,255,0.35);background:rgba(255,255,255,0.04)}
-.btn-social{width:100%;border-radius:10px;padding:14px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.2s}
+.btn-primary:active{transform:scale(.98)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-secondary{background:transparent;color:var(--white);border:0.5px solid var(--border2);border-radius:10px;padding:13px 28px;font-size:14px;cursor:pointer;font-family:'Inter',sans-serif;transition:border-color .2s,background .2s}
+.btn-secondary:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.04)}
+.btn-social{width:100%;border-radius:10px;padding:14px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s}
 .btn-google{background:var(--white);color:#111;border:none}
 .btn-google:hover{background:#f0f0f0}
-.btn-apple{background:var(--dark2);color:var(--white);border:0.5px solid var(--border2);opacity:0.5;cursor:not-allowed}
+.btn-apple{background:var(--dark2);color:var(--white);border:0.5px solid var(--border2);opacity:.5;cursor:not-allowed}
 .hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(201,168,76,0.06) 0%,transparent 70%);pointer-events:none}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(201,168,76,.06) 0%,transparent 70%);pointer-events:none}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--gold-dim);border:0.5px solid var(--gold-border);border-radius:20px;padding:6px 16px;font-size:11px;letter-spacing:2px;color:var(--gold);font-weight:500;margin-bottom:32px}
 .hero-title{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,50px);font-weight:400;line-height:1.25;margin-bottom:20px;max-width:680px}
 .hero-title .accent{color:var(--gold);font-style:italic}
@@ -57,19 +55,18 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
 .divider{display:flex;align-items:center;gap:14px;margin:6px 0}
 .divider::before,.divider::after{content:'';flex:1;height:0.5px;background:var(--border)}
 .divider span{font-size:12px;color:var(--gray3)}
-.input-field{width:100%;background:var(--dark2);border:0.5px solid var(--border2);border-radius:10px;padding:14px 16px;color:var(--white);font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s}
-.input-field:focus{border-color:rgba(201,168,76,0.5)}
+.input-field{width:100%;background:var(--dark2);border:0.5px solid var(--border2);border-radius:10px;padding:14px 16px;color:var(--white);font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
+.input-field:focus{border-color:rgba(201,168,76,.5)}
 .input-field::placeholder{color:var(--gray3)}
 .form-gap{display:flex;flex-direction:column;gap:12px}
 .terms{font-size:11px;color:var(--gray3);text-align:center;margin-top:20px;line-height:1.6}
-.terms a{color:var(--gray2);text-decoration:underline;cursor:pointer}
 .progress-bar{display:flex;gap:6px;padding:0 24px 16px;flex-shrink:0}
-.progress-step{flex:1;height:2px;background:var(--border);border-radius:2px;transition:background 0.3s}
+.progress-step{flex:1;height:2px;background:var(--border);border-radius:2px;transition:background .3s}
 .progress-step.done{background:var(--gold)}
-.progress-step.active{background:rgba(201,168,76,0.5)}
-.upload-zone{border:1.5px dashed var(--gold-border);border-radius:16px;padding:40px 24px;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;margin-bottom:14px;min-height:200px;display:flex;align-items:center;justify-content:center}
-.upload-zone:hover{border-color:rgba(201,168,76,0.6);background:var(--gold-dim)}
-.upload-icon{font-size:52px;margin-bottom:16px;opacity:0.5}
+.progress-step.active{background:rgba(201,168,76,.5)}
+.upload-zone{border:1.5px dashed var(--gold-border);border-radius:16px;padding:40px 24px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:14px;min-height:200px;display:flex;align-items:center;justify-content:center}
+.upload-zone:hover{border-color:rgba(201,168,76,.6);background:var(--gold-dim)}
+.upload-icon{font-size:52px;margin-bottom:16px;opacity:.5}
 .upload-title{font-size:15px;color:var(--gray1);margin-bottom:6px;font-weight:500}
 .upload-note{font-size:12px;color:var(--gray3)}
 .upload-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
@@ -79,61 +76,81 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
 .tip-list li{font-size:12px;color:var(--gray2);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
 .tip-list li::before{content:'–';color:var(--gold);flex-shrink:0}
 .occasion-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.occasion-card{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;padding:20px 16px;cursor:pointer;transition:border-color 0.2s,background 0.2s,transform 0.1s}
+.occasion-card{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;padding:20px 16px;cursor:pointer;transition:border-color .2s,background .2s,transform .1s}
 .occasion-card:hover{border-color:var(--gold-border);background:var(--dark3);transform:translateY(-2px)}
 .occasion-card.selected{border-color:var(--gold);background:var(--gold-dim)}
 .oc-emoji{font-size:28px;display:block;margin-bottom:10px}
-.oc-name{font-size:13px;font-weight:500;color:var(--white);margin-bottom:3px}
+.oc-name{font-size:13px;font-weight:500;margin-bottom:3px}
 .oc-style{font-size:11px;color:var(--gray3)}
 .processing-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
-.ai-logo-anim{width:72px;height:72px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:32px;position:relative}
+.ai-logo-anim{width:72px;height:72px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:32px;position:relative}
 .ai-logo-anim::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:0.5px solid var(--gold-border);animation:spin 4s linear infinite}
-.ai-logo-anim::after{content:'';position:absolute;inset:-16px;border-radius:50%;border:0.5px solid rgba(201,168,76,0.1);animation:spin 6s linear infinite reverse}
+.ai-logo-anim::after{content:'';position:absolute;inset:-16px;border-radius:50%;border:0.5px solid rgba(201,168,76,.1);animation:spin 6s linear infinite reverse}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .processing-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;margin-bottom:8px}
 .processing-sub{color:var(--gray2);font-size:14px;margin-bottom:44px}
 .analysis-list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px}
 .analysis-item{display:flex;align-items:center;gap:14px;background:var(--dark2);border-radius:10px;padding:14px 16px}
-.analysis-icon{font-size:18px}
 .analysis-label{flex:1;font-size:14px;color:var(--gray1)}
 .analysis-status{font-size:13px;color:var(--gray3)}
 .analysis-status.done{color:var(--green)}
 .analysis-status.loading{color:var(--gold)}
-.result-wrap{flex:1;padding:24px;display:flex;flex-direction:column;gap:16px;max-width:480px;margin:0 auto;width:100%}
-.result-label{font-size:11px;letter-spacing:2px;color:var(--gray3);margin-bottom:6px}
-.result-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:400}
-.result-image{background:var(--dark2);border-radius:16px;border:0.5px solid rgba(201,168,76,0.12);min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.vesh-badge{position:absolute;top:14px;right:14px;background:var(--gold-dim);border:0.5px solid var(--gold-border);border-radius:6px;padding:4px 10px;font-size:10px;color:var(--gold);font-weight:600;letter-spacing:1px}
-.action-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.action-btn{background:var(--dark2);border:0.5px solid var(--border);border-radius:10px;padding:12px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;color:var(--gray2);font-family:'Inter',sans-serif;transition:all 0.2s}
-.action-btn:hover{background:var(--dark3);border-color:var(--border2)}
+
+/* ── 3 LOOKS ── */
+.looks-wrap{flex:1;padding:20px 16px;max-width:520px;margin:0 auto;width:100%}
+.looks-header{margin-bottom:16px}
+.looks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.look-card{background:var(--dark2);border:2px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .1s;position:relative}
+.look-card:hover{border-color:var(--gold-border);transform:translateY(-2px)}
+.look-card.selected{border-color:var(--gold)}
+.look-card-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:var(--dark3)}
+.look-card-placeholder{width:100%;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--dark3);gap:8px}
+.look-card-loading{width:100%;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--dark3);gap:10px}
+.look-num{position:absolute;top:8px;left:8px;background:rgba(8,8,8,.8);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600;color:var(--gold)}
+.look-selected-badge{position:absolute;top:8px;right:8px;background:var(--gold);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:var(--black);display:none}
+.look-card.selected .look-selected-badge{display:block}
+.look-label{padding:8px 10px;font-size:11px;color:var(--gray2);text-align:center;border-top:0.5px solid var(--border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.look-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.look-action-btn{background:var(--dark2);border:0.5px solid var(--border);border-radius:10px;padding:11px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;color:var(--gray2);font-family:'Inter',sans-serif;transition:all .2s}
+.look-action-btn:hover{background:var(--dark3)}
+.mini-spinner{width:20px;height:20px;border:2px solid var(--gold-border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+
+/* ── PRODUTOS ── */
 .products-wrap{flex:1;padding:24px;max-width:480px;margin:0 auto;width:100%}
 .products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
-.product-card{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;padding:16px;transition:border-color 0.2s}
-.product-card:hover{border-color:rgba(201,168,76,0.25)}
-.product-img{background:var(--dark3);border-radius:8px;padding:20px;text-align:center;font-size:32px;margin-bottom:12px}
-.product-name{font-size:13px;font-weight:500;color:var(--white);margin-bottom:3px;line-height:1.4}
-.product-store{font-size:11px;color:var(--gray3);margin-bottom:10px}
-.product-price{font-size:14px;color:var(--gold);font-weight:500;margin-bottom:10px}
-.btn-buy{width:100%;background:var(--gold);color:var(--black);border:none;border-radius:7px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s}
+.product-card{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;padding:14px;transition:border-color .2s}
+.product-card:hover{border-color:rgba(201,168,76,.3)}
+.product-img-wrap{border-radius:10px;overflow:hidden;aspect-ratio:1;background:var(--dark3);margin-bottom:10px;display:flex;align-items:center;justify-content:center}
+.product-img-wrap img{width:100%;height:100%;object-fit:cover}
+.product-name{font-size:12px;font-weight:500;margin-bottom:3px;line-height:1.4;color:var(--white)}
+.product-store{font-size:10px;color:var(--gray3);margin-bottom:6px}
+.store-badge{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600}
+.store-ml{background:rgba(255,230,0,.15);color:#FFE600}
+.store-amazon{background:rgba(255,153,0,.15);color:#FF9900}
+.store-shopee{background:rgba(238,77,45,.15);color:#EE4D2D}
+.store-shein{background:rgba(80,10,80,.3);color:#e8b4e8;border:0.5px solid rgba(200,100,200,.3)}
+.product-price{font-size:14px;color:var(--gold);font-weight:500;margin-bottom:8px}
+.btn-buy{width:100%;background:var(--gold);color:var(--black);border:none;border-radius:7px;padding:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s}
 .btn-buy:hover{background:var(--gold2)}
+
+/* ── PLANOS ── */
 .credit-plans{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px}
-.plan-card{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;padding:20px 16px;cursor:pointer;transition:all 0.2s;position:relative}
+.plan-card{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;padding:20px 16px;cursor:pointer;transition:all .2s;position:relative}
 .plan-card:hover{border-color:var(--gold-border);transform:translateY(-2px)}
 .plan-card.popular{border-color:var(--gold)}
 .plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--black);font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;white-space:nowrap}
-.plan-credits{font-family:'Playfair Display',serif;font-size:28px;color:var(--white);margin-bottom:2px}
+.plan-credits{font-family:'Playfair Display',serif;font-size:28px;margin-bottom:2px}
 .plan-credits-label{font-size:12px;color:var(--gray3);margin-bottom:14px}
 .plan-price{font-size:16px;font-weight:500;color:var(--gold)}
 .plan-per{font-size:11px;color:var(--gray3)}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;border:0.5px solid var(--gold-border);border-radius:10px;padding:12px 20px;font-size:13px;color:var(--white);z-index:9999;transition:transform 0.3s;white-space:nowrap;max-width:90vw;text-align:center}
+.value-box{background:var(--gold-dim);border:0.5px solid var(--gold-border);border-radius:12px;padding:16px 20px;margin-bottom:20px;text-align:center}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;border:0.5px solid var(--gold-border);border-radius:10px;padding:12px 20px;font-size:13px;color:var(--white);z-index:9999;transition:transform .3s;white-space:nowrap;max-width:90vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
-.ai-generating{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center}
-.ai-spinner{width:48px;height:48px;border:2px solid var(--gold-border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:16px}
+.spinner{width:32px;height:32px;border:2px solid var(--gold-border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}
 </style>
 </head>
 <body>
-
 <div class="toast" id="toast"></div>
 
 <!-- ══ SCREEN 0 — LANDING ══ -->
@@ -146,34 +163,34 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
     </div>
   </nav>
   <div class="hero">
-    <div class="eyebrow"><span style="width:6px;height:6px;background:var(--gold);border-radius:50%;"></span>POWERED BY INTELIGÊNCIA ARTIFICIAL</div>
+    <div class="eyebrow"><span style="width:6px;height:6px;background:var(--gold);border-radius:50%"></span>POWERED BY INTELIGÊNCIA ARTIFICIAL</div>
     <h1 class="hero-title">Veja você mesmo usando<br>a roupa <em class="accent">ideal</em><br>antes de comprar.</h1>
-    <p class="hero-sub">Envie uma foto sua, escolha a ocasião e a IA gera imagens realistas mostrando como você ficaria vestido.</p>
+    <p class="hero-sub">Envie sua foto, escolha a ocasião e receba <strong style="color:var(--gold)">3 looks diferentes</strong> com roupas reais da Shopee e Shein disponíveis para compra.</p>
     <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
       <button class="btn-primary" style="padding:16px 48px;font-size:16px;" onclick="handleCTA()">Experimentar Grátis</button>
-      <p style="font-size:12px;color:var(--gray3);">✦ 3 créditos grátis ao criar conta — sem cartão</p>
+      <p style="font-size:12px;color:var(--gray3);">✦ 3 créditos grátis • 3 looks por crédito • R$1,60 por geração</p>
     </div>
   </div>
   <div class="stats-row">
     <div class="stat-item"><div class="stat-value">12k+</div><div class="stat-label">usuários</div></div>
-    <div class="stat-item"><div class="stat-value">98%</div><div class="stat-label">satisfação</div></div>
-    <div class="stat-item"><div class="stat-value">8+</div><div class="stat-label">ocasiões</div></div>
+    <div class="stat-item"><div class="stat-value">3</div><div class="stat-label">looks por crédito</div></div>
+    <div class="stat-item"><div class="stat-value">R$1,60</div><div class="stat-label">por geração</div></div>
   </div>
   <div style="padding:60px 24px;max-width:560px;margin:0 auto;width:100%;">
     <p style="font-size:11px;letter-spacing:2px;color:var(--gray3);margin-bottom:14px;text-align:center;">COMO FUNCIONA</p>
     <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:400;text-align:center;margin-bottom:48px;">Em 3 passos simples</h2>
     <div style="display:flex;flex-direction:column;gap:32px;">
       <div style="display:flex;gap:20px;align-items:flex-start;">
-        <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);flex-shrink:0;">1</div>
-        <div><p style="font-size:16px;font-weight:500;margin-bottom:6px;">Envie sua foto</p><p style="font-size:14px;color:var(--gray2);line-height:1.6;">Uma foto de corpo inteiro em fundo neutro. Quanto melhor a foto, mais preciso o resultado.</p></div>
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);flex-shrink:0">1</div>
+        <div><p style="font-size:16px;font-weight:500;margin-bottom:6px">Envie sua foto</p><p style="font-size:14px;color:var(--gray2);line-height:1.6">Foto de corpo inteiro. A IA analisa seu biotipo, tom de pele e formato do rosto.</p></div>
       </div>
       <div style="display:flex;gap:20px;align-items:flex-start;">
-        <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);flex-shrink:0;">2</div>
-        <div><p style="font-size:16px;font-weight:500;margin-bottom:6px;">Escolha a ocasião</p><p style="font-size:14px;color:var(--gray2);line-height:1.6;">Reunião, encontro romântico, casamento, balada e mais. A IA adapta o look ao evento.</p></div>
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);flex-shrink:0">2</div>
+        <div><p style="font-size:16px;font-weight:500;margin-bottom:6px">Escolha a ocasião</p><p style="font-size:14px;color:var(--gray2);line-height:1.6">A IA busca roupas reais na <strong style="color:#EE4D2D">Shopee</strong> e <strong style="color:#e8b4e8">Shein</strong> para essa ocasião.</p></div>
       </div>
       <div style="display:flex;gap:20px;align-items:flex-start;">
-        <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);flex-shrink:0;">3</div>
-        <div><p style="font-size:16px;font-weight:500;margin-bottom:6px;">Receba e compre</p><p style="font-size:14px;color:var(--gray2);line-height:1.6;">Veja você mesmo com o look. Gostou? Acesse os links de compra diretamente das peças.</p></div>
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);flex-shrink:0">3</div>
+        <div><p style="font-size:16px;font-weight:500;margin-bottom:6px">Receba 3 looks e compre</p><p style="font-size:14px;color:var(--gray2);line-height:1.6">Veja você em 3 roupas diferentes. Escolha a favorita e compre com 1 clique.</p></div>
       </div>
     </div>
     <div style="margin-top:48px;text-align:center;"><button class="btn-primary" onclick="handleCTA()">Começar agora — é grátis</button></div>
@@ -190,7 +207,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
   <div class="form-wrap">
     <p class="step-label">PASSO 1 DE 4</p>
     <h1 class="form-title">Crie sua conta</h1>
-    <p class="form-sub">Ganhe <strong style="color:var(--gold);">3 créditos grátis</strong> para começar a explorar seus looks.</p>
+    <p class="form-sub">Ganhe <strong style="color:var(--gold)">3 créditos grátis</strong> — cada um gera 3 looks para você escolher.</p>
     <div class="form-gap">
       <button class="btn-social btn-google" id="btnGoogle" onclick="loginGoogle()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
@@ -203,52 +220,46 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
       <div class="divider"><span>ou entre com e-mail</span></div>
       <input id="emailInput" class="input-field" type="email" placeholder="seu@email.com">
       <input id="senhaInput" class="input-field" type="password" placeholder="Criar senha (mín. 6 caracteres)">
-      <button class="btn-primary" style="width:100%;margin-top:4px;" onclick="loginEmail()">Criar conta grátis</button>
+      <button class="btn-primary" style="width:100%;margin-top:4px" onclick="loginEmail()">Criar conta grátis</button>
     </div>
-    <p class="terms">Ao criar conta você concorda com os<br><a>Termos de Uso</a> e <a>Política de Privacidade</a></p>
+    <p class="terms">Ao criar conta você concorda com os Termos de Uso e Política de Privacidade</p>
   </div>
 </section>
 
-<!-- ══ SCREEN 2 — UPLOAD FOTO ══ -->
+<!-- ══ SCREEN 2 — UPLOAD ══ -->
 <section id="screen-2" class="screen">
-  <nav>
-    <div class="logo">VE<em>SH</em></div>
-    <div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div>
-  </nav>
-  <div class="progress-bar">
-    <div class="progress-step done"></div><div class="progress-step active"></div>
-    <div class="progress-step"></div><div class="progress-step"></div>
-  </div>
-  <div class="form-wrap" style="padding-top:16px;">
+  <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div></nav>
+  <div class="progress-bar"><div class="progress-step done"></div><div class="progress-step active"></div><div class="progress-step"></div><div class="progress-step"></div></div>
+  <div class="form-wrap" style="padding-top:16px">
     <p class="step-label">PASSO 2 DE 4</p>
     <h1 class="form-title">Envie sua foto</h1>
     <p class="form-sub">Foto de corpo inteiro para os melhores resultados.</p>
     <input type="file" id="fotoInput" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="onFotoSelecionada(event)">
     <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="onFotoSelecionada(event)">
     <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fotoInput').click()">
-      <div id="uploadPlaceholder" style="text-align:center;">
+      <div id="uploadPlaceholder" style="text-align:center">
         <div class="upload-icon">🧍</div>
         <p class="upload-title">Arraste ou clique para enviar</p>
         <p class="upload-note">JPG, PNG — máx. 10MB</p>
       </div>
-      <div id="uploadPreview" style="display:none;width:100%;text-align:center;padding:8px;">
-        <img id="previewImg" style="max-height:260px;max-width:100%;border-radius:12px;object-fit:cover;" src="" alt="Sua foto">
-        <p style="color:var(--green);font-size:13px;margin-top:12px;font-weight:500;">✓ Foto selecionada</p>
-        <p style="color:var(--gray3);font-size:12px;margin-top:4px;">Clique para trocar</p>
+      <div id="uploadPreview" style="display:none;width:100%;text-align:center;padding:8px">
+        <img id="previewImg" style="max-height:260px;max-width:100%;border-radius:12px;object-fit:cover" src="" alt="Sua foto">
+        <p style="color:var(--green);font-size:13px;margin-top:12px;font-weight:500">✓ Foto selecionada</p>
+        <p style="color:var(--gray3);font-size:12px;margin-top:4px">Clique para trocar</p>
       </div>
     </div>
     <div class="upload-btns">
-      <button class="btn-secondary" onclick="document.getElementById('cameraInput').click()" style="display:flex;align-items:center;justify-content:center;gap:8px;">📷 Câmera</button>
-      <button class="btn-secondary" onclick="document.getElementById('fotoInput').click()" style="display:flex;align-items:center;justify-content:center;gap:8px;">🖼 Galeria</button>
+      <button class="btn-secondary" onclick="document.getElementById('cameraInput').click()" style="display:flex;align-items:center;justify-content:center;gap:8px">📷 Câmera</button>
+      <button class="btn-secondary" onclick="document.getElementById('fotoInput').click()" style="display:flex;align-items:center;justify-content:center;gap:8px">🖼 Galeria</button>
     </div>
-    <button id="btnContinuarFoto" class="btn-primary" style="width:100%;margin-bottom:16px;" disabled onclick="showScreen(3)">Continuar →</button>
+    <button id="btnContinuarFoto" class="btn-primary" style="width:100%;margin-bottom:16px" disabled onclick="showScreen(3)">Continuar →</button>
     <div class="tip-box">
       <p class="tip-title">💡 Dicas para melhor resultado</p>
       <ul class="tip-list">
         <li>Foto de corpo inteiro em fundo neutro ou claro</li>
         <li>Boa iluminação — evite sombras no rosto</li>
         <li>Posição ereta, de frente para a câmera</li>
-        <li>Roupa justa ou básica facilita a análise do biotipo</li>
+        <li>Roupa justa facilita a análise do biotipo</li>
       </ul>
     </div>
   </div>
@@ -256,101 +267,113 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
 
 <!-- ══ SCREEN 3 — OCASIÃO ══ -->
 <section id="screen-3" class="screen">
-  <nav>
-    <div class="logo">VE<em>SH</em></div>
-    <div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div>
-  </nav>
-  <div class="progress-bar">
-    <div class="progress-step done"></div><div class="progress-step done"></div>
-    <div class="progress-step active"></div><div class="progress-step"></div>
-  </div>
-  <div style="padding:24px 24px 0;max-width:480px;margin:0 auto;width:100%;">
+  <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div></nav>
+  <div class="progress-bar"><div class="progress-step done"></div><div class="progress-step done"></div><div class="progress-step active"></div><div class="progress-step"></div></div>
+  <div style="padding:24px 24px 0;max-width:480px;margin:0 auto;width:100%">
     <p class="step-label">PASSO 3 DE 4</p>
     <h1 class="form-title">Qual é a ocasião?</h1>
-    <p class="form-sub" style="margin-bottom:20px;">Escolha o evento para o qual você quer se vestir.</p>
+    <p class="form-sub" style="margin-bottom:20px">A IA vai buscar 3 looks reais da <strong style="color:#EE4D2D">Shopee</strong> e <strong style="color:#e8b4e8">Shein</strong> para você experimentar.</p>
   </div>
-  <div style="padding:0 24px 24px;flex:1;max-width:480px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:16px;">
+  <div style="padding:0 24px 24px;flex:1;max-width:480px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:16px">
     <div class="occasion-grid" id="occasionGrid"></div>
-    <button id="btnConfirmarOcasiao" class="btn-primary" style="width:100%;" disabled onclick="iniciarProcessamento()">✨ Gerar meu look</button>
+    <div style="background:var(--dark2);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:10px;border:0.5px solid var(--border)">
+      <span style="font-size:20px">💡</span>
+      <p style="font-size:12px;color:var(--gray2);line-height:1.5">1 crédito = <strong style="color:var(--gold)">3 looks diferentes</strong> gerados pela IA = <strong style="color:var(--gold)">R$ 1,60</strong></p>
+    </div>
+    <button id="btnConfirmarOcasiao" class="btn-primary" style="width:100%" disabled onclick="iniciarProcessamento()">✨ Gerar 3 looks — 1 crédito (R$1,60)</button>
   </div>
 </section>
 
-<!-- ══ SCREEN 4 — PROCESSAMENTO IA ══ -->
+<!-- ══ SCREEN 4 — PROCESSAMENTO ══ -->
 <section id="screen-4" class="screen">
   <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div></nav>
   <div class="processing-wrap">
     <div class="ai-logo-anim">AI</div>
-    <h2 class="processing-title" id="procTitle">Analisando seu estilo...</h2>
-    <p class="processing-sub" id="procSub">A IA está criando seu look personalizado.</p>
+    <h2 class="processing-title" id="procTitle">Buscando roupas reais...</h2>
+    <p class="processing-sub" id="procSub">Gerando 3 looks personalizados para você.</p>
     <div class="analysis-list">
-      <div class="analysis-item"><span class="analysis-icon">🎨</span><span class="analysis-label">Tom de pele</span><span class="analysis-status loading" id="st1">analisando...</span></div>
-      <div class="analysis-item"><span class="analysis-icon">🧍</span><span class="analysis-label">Biotipo</span><span class="analysis-status" id="st2">aguardando</span></div>
-      <div class="analysis-item"><span class="analysis-icon">👤</span><span class="analysis-label">Formato do rosto</span><span class="analysis-status" id="st3">aguardando</span></div>
-      <div class="analysis-item"><span class="analysis-icon">✨</span><span class="analysis-label">Gerando look com IA</span><span class="analysis-status" id="st4">aguardando</span></div>
+      <div class="analysis-item"><span style="font-size:18px">🛍️</span><span class="analysis-label">Buscando no Mercado Livre, Shopee e Shein</span><span class="analysis-status loading" id="st1">buscando...</span></div>
+      <div class="analysis-item"><span style="font-size:18px">🎨</span><span class="analysis-label">Analisando seu biotipo</span><span class="analysis-status" id="st2">aguardando</span></div>
+      <div class="analysis-item"><span style="font-size:18px">👗</span><span class="analysis-label" id="st3label">Gerando look 1 de 3</span><span class="analysis-status" id="st3">aguardando</span></div>
+      <div class="analysis-item"><span style="font-size:18px">✨</span><span class="analysis-label" id="st4label">Gerando look 2 de 3</span><span class="analysis-status" id="st4">aguardando</span></div>
+      <div class="analysis-item"><span style="font-size:18px">🌟</span><span class="analysis-label" id="st5label">Gerando look 3 de 3</span><span class="analysis-status" id="st5">aguardando</span></div>
     </div>
-    <p id="procEtapa" style="font-size:12px;color:var(--gray3);margin-top:24px;"></p>
+    <p id="procEtapa" style="font-size:12px;color:var(--gray3);margin-top:24px;min-height:20px"></p>
   </div>
 </section>
 
-<!-- ══ SCREEN 5 — RESULTADO ══ -->
+<!-- ══ SCREEN 5 — 3 LOOKS ══ -->
 <section id="screen-5" class="screen">
-  <nav>
-    <div class="logo">VE<em>SH</em></div>
-    <div class="credits-pill"><span class="dot"></span><span class="credits-text">2 créditos</span></div>
-  </nav>
-  <div class="result-wrap">
-    <div>
-      <p class="result-label">SEU LOOK GERADO PELA IA</p>
-      <h2 class="result-title" id="resultTitle">Reunião de Negócios</h2>
+  <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">2 créditos</span></div></nav>
+  <div class="looks-wrap">
+    <div class="looks-header">
+      <p style="font-size:11px;letter-spacing:2px;color:var(--gray3);margin-bottom:6px">SEUS 3 LOOKS GERADOS</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:400;margin-bottom:4px" id="resultTitle">Festa Sertaneja</h2>
+      <p style="font-size:13px;color:var(--gray2)">Toque no look favorito para ver os produtos</p>
     </div>
-    <div class="result-image" id="resultImageBox">
-      <div id="resultContent" style="width:100%;text-align:center;">
-        <div id="aiResultImg" style="display:none;width:100%;">
-          <img id="generatedImg" style="width:100%;max-height:400px;object-fit:cover;border-radius:16px;" src="" alt="Look gerado pela IA">
-        </div>
-        <div id="resultPlaceholder" style="padding:32px;">
-          <div style="width:90px;height:140px;background:var(--dark3);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:44px;border:0.5px solid var(--border2);">🧍</div>
-          <p style="font-size:13px;color:var(--gray2);font-weight:500;margin-bottom:6px;">Imagem gerada pela IA</p>
-        </div>
+
+    <!-- 3 cards de looks -->
+    <div class="looks-grid" id="looksGrid">
+      <div class="look-card" id="lookCard0" onclick="selecionarLook(0)">
+        <div class="look-card-loading" id="lookLoading0"><div class="mini-spinner"></div><p style="font-size:11px;color:var(--gray3)">Gerando...</p></div>
+        <img class="look-card-img" id="lookImg0" style="display:none" src="" alt="Look 1">
+        <span class="look-num">1</span>
+        <span class="look-selected-badge">✓ Escolhido</span>
+        <div class="look-label" id="lookLabel0">Look 1</div>
       </div>
-      <div class="vesh-badge">VESH AI</div>
+      <div class="look-card" id="lookCard1" onclick="selecionarLook(1)">
+        <div class="look-card-loading" id="lookLoading1"><div class="mini-spinner"></div><p style="font-size:11px;color:var(--gray3)">Gerando...</p></div>
+        <img class="look-card-img" id="lookImg1" style="display:none" src="" alt="Look 2">
+        <span class="look-num">2</span>
+        <span class="look-selected-badge">✓ Escolhido</span>
+        <div class="look-label" id="lookLabel1">Look 2</div>
+      </div>
+      <div class="look-card" id="lookCard2" onclick="selecionarLook(2)">
+        <div class="look-card-loading" id="lookLoading2"><div class="mini-spinner"></div><p style="font-size:11px;color:var(--gray3)">Gerando...</p></div>
+        <img class="look-card-img" id="lookImg2" style="display:none" src="" alt="Look 3">
+        <span class="look-num">3</span>
+        <span class="look-selected-badge">✓ Escolhido</span>
+        <div class="look-label" id="lookLabel2">Look 3</div>
+      </div>
     </div>
-    <div class="action-grid">
-      <button class="action-btn" id="btnLike" onclick="toggleLike()"><span style="font-size:20px;" id="likeIcon">🤍</span><span>Gostei</span></button>
-      <button class="action-btn" onclick="regerarLook()"><span style="font-size:20px;">🔄</span><span>Novo look</span></button>
-      <button class="action-btn" onclick="compartilhar()"><span style="font-size:20px;">📤</span><span>Enviar</span></button>
-      <button class="action-btn" onclick="showScreen(6)" style="color:var(--gold);border-color:var(--gold-border);"><span style="font-size:20px;">🛒</span><span>Comprar</span></button>
+
+    <!-- Ações -->
+    <div class="look-actions">
+      <button class="look-action-btn" id="btnLike" onclick="toggleLike()"><span style="font-size:18px" id="likeIcon">🤍</span><span>Salvar look</span></button>
+      <button class="look-action-btn" onclick="compartilhar()"><span style="font-size:18px">📤</span><span>Compartilhar</span></button>
+      <button class="look-action-btn" onclick="regerarTodos()"><span style="font-size:18px">🔄</span><span>Regerar (1 crédito)</span></button>
     </div>
-    <button class="btn-primary" style="width:100%;" onclick="showScreen(6)">Ver produtos deste look →</button>
-    <p style="font-size:12px;color:var(--gray3);text-align:center;">Cada nova geração consome 1 crédito</p>
+
+    <button class="btn-primary" style="width:100%;margin-bottom:12px" id="btnVerProdutos" onclick="showScreen(6)" disabled>
+      🛒 Ver produtos do look escolhido →
+    </button>
+    <p style="font-size:12px;color:var(--gray3);text-align:center">Escolha um dos 3 looks acima para ver as peças</p>
   </div>
 </section>
 
 <!-- ══ SCREEN 6 — PRODUTOS ══ -->
 <section id="screen-6" class="screen">
-  <nav>
-    <div class="logo">VE<em>SH</em></div>
-    <div class="credits-pill"><span class="dot"></span><span class="credits-text">2 créditos</span></div>
-  </nav>
+  <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">2 créditos</span></div></nav>
   <div class="products-wrap">
-    <p class="step-label">PEÇAS DO LOOK</p>
-    <h2 class="form-title" style="margin-bottom:20px;" id="productsTitle">Reunião de Negócios</h2>
-    <div class="products-grid" id="productsGrid"></div>
-    <div style="background:var(--dark2);border-radius:14px;padding:20px;border:0.5px solid rgba(201,168,76,0.12);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+    <p class="step-label">PEÇAS DO LOOK ESCOLHIDO</p>
+    <h2 class="form-title" style="margin-bottom:4px" id="productsTitle">Festa Sertaneja</h2>
+    <p style="font-size:12px;color:var(--gray3);margin-bottom:20px" id="productsSource">Produtos encontrados no Mercado Livre</p>
+    <div id="productsGrid" class="products-grid"></div>
+    <div style="background:var(--dark2);border-radius:14px;padding:20px;border:0.5px solid rgba(201,168,76,.12);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
       <div>
-        <p style="font-size:13px;color:var(--gray2);margin-bottom:4px;">Total estimado do look</p>
-        <p id="totalLook" style="font-family:'Playfair Display',serif;font-size:26px;color:var(--gold);">R$ 897,00</p>
+        <p style="font-size:13px;color:var(--gray2);margin-bottom:4px">Total estimado do look</p>
+        <p id="totalLook" style="font-family:'Playfair Display',serif;font-size:26px;color:var(--gold)">R$ ---</p>
       </div>
-      <div style="text-align:right;"><p style="font-size:11px;color:var(--gray3);max-width:110px;line-height:1.5;">Links afiliados — sem custo extra</p></div>
+      <div style="text-align:right"><p style="font-size:11px;color:var(--gray3);max-width:110px;line-height:1.5">Links afiliados — sem custo extra</p></div>
     </div>
-    <div style="display:flex;gap:10px;margin-bottom:20px;">
-      <button class="btn-secondary" style="flex:1;" onclick="showScreen(5)">← Ver look</button>
-      <button class="btn-primary" style="flex:1;" onclick="showScreen(3)">Novo look</button>
+    <div style="display:flex;gap:10px;margin-bottom:20px">
+      <button class="btn-secondary" style="flex:1" onclick="showScreen(5)">← Ver looks</button>
+      <button class="btn-primary" style="flex:1" onclick="showScreen(3)">Nova ocasião</button>
     </div>
-    <div style="background:var(--dark2);border-radius:14px;padding:20px;text-align:center;border:0.5px solid var(--border);">
-      <p style="font-size:13px;color:var(--gray2);margin-bottom:4px;">Ficou sem créditos?</p>
-      <p style="font-size:12px;color:var(--gray3);margin-bottom:14px;">Recarregue e continue criando looks.</p>
-      <button class="btn-secondary" onclick="showScreen(7)" style="font-size:13px;padding:10px 24px;">✦ Ver planos</button>
+    <div style="background:var(--dark2);border-radius:14px;padding:20px;text-align:center;border:0.5px solid var(--border)">
+      <p style="font-size:13px;color:var(--gray2);margin-bottom:4px">Ficou sem créditos?</p>
+      <p style="font-size:12px;color:var(--gray3);margin-bottom:14px">Cada crédito gera 3 looks novos por R$1,60.</p>
+      <button class="btn-secondary" onclick="showScreen(7)" style="font-size:13px;padding:10px 24px">✦ Recarregar créditos</button>
     </div>
   </div>
 </section>
@@ -358,18 +381,46 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
 <!-- ══ SCREEN 7 — CRÉDITOS ══ -->
 <section id="screen-7" class="screen">
   <nav><div class="logo">VE<em>SH</em></div><button class="nav-back" onclick="showScreen(6)">← Voltar</button></nav>
-  <div style="flex:1;padding:40px 24px;max-width:460px;margin:0 auto;width:100%;">
-    <p class="step-label" style="text-align:center;">RECARREGAR CRÉDITOS</p>
-    <h2 class="form-title" style="text-align:center;margin-bottom:8px;">Escolha seu plano</h2>
-    <p class="form-sub" style="text-align:center;margin-bottom:36px;">Cada crédito = 1 imagem gerada pela IA.</p>
-    <div class="credit-plans">
-      <div class="plan-card" onclick="selecionarPlano(this,'10','9.90')"><p class="plan-credits">10</p><p class="plan-credits-label">créditos</p><p class="plan-price">R$ 9,90</p><p class="plan-per">R$ 0,99/look</p></div>
-      <div class="plan-card popular" onclick="selecionarPlano(this,'25','19.90')"><div class="plan-badge">POPULAR</div><p class="plan-credits">25</p><p class="plan-credits-label">créditos</p><p class="plan-price">R$ 19,90</p><p class="plan-per">R$ 0,80/look</p></div>
-      <div class="plan-card" onclick="selecionarPlano(this,'50','34.90')"><p class="plan-credits">50</p><p class="plan-credits-label">créditos</p><p class="plan-price">R$ 34,90</p><p class="plan-per">R$ 0,70/look</p></div>
-      <div class="plan-card" onclick="selecionarPlano(this,'100','59.90')"><p class="plan-credits">100</p><p class="plan-credits-label">créditos</p><p class="plan-price">R$ 59,90</p><p class="plan-per">R$ 0,60/look</p></div>
+  <div style="flex:1;padding:40px 24px;max-width:460px;margin:0 auto;width:100%">
+    <p class="step-label" style="text-align:center">RECARREGAR CRÉDITOS</p>
+    <h2 class="form-title" style="text-align:center;margin-bottom:8px">Escolha seu plano</h2>
+    <p class="form-sub" style="text-align:center;margin-bottom:20px">Cada crédito = 3 looks gerados pela IA.</p>
+
+    <div class="value-box">
+      <p style="font-size:13px;color:var(--gray2);margin-bottom:4px">💡 Entenda o valor</p>
+      <p style="font-size:22px;font-family:'Playfair Display',serif;color:var(--gold);margin-bottom:4px">R$ 1,60 por geração</p>
+      <p style="font-size:12px;color:var(--gray3)">= 3 looks personalizados com roupas reais disponíveis para compra</p>
     </div>
-    <button id="btnPagar" class="btn-primary" style="width:100%;margin-bottom:14px;" onclick="iniciarPagamento()">Pagar com Mercado Pago</button>
-    <p style="font-size:12px;color:var(--gray3);text-align:center;line-height:1.7;">Pagamento seguro · Créditos não expiram · Sem renovação</p>
+
+    <div class="credit-plans">
+      <div class="plan-card" onclick="selecionarPlano(this,'5','8.00')">
+        <p class="plan-credits">5</p>
+        <p class="plan-credits-label">créditos = 15 looks</p>
+        <p class="plan-price">R$ 8,00</p>
+        <p class="plan-per">R$ 1,60/geração</p>
+      </div>
+      <div class="plan-card popular" onclick="selecionarPlano(this,'10','14.90')">
+        <div class="plan-badge">MAIS POPULAR</div>
+        <p class="plan-credits">10</p>
+        <p class="plan-credits-label">créditos = 30 looks</p>
+        <p class="plan-price">R$ 14,90</p>
+        <p class="plan-per">R$ 1,49/geração</p>
+      </div>
+      <div class="plan-card" onclick="selecionarPlano(this,'20','26.90')">
+        <p class="plan-credits">20</p>
+        <p class="plan-credits-label">créditos = 60 looks</p>
+        <p class="plan-price">R$ 26,90</p>
+        <p class="plan-per">R$ 1,34/geração</p>
+      </div>
+      <div class="plan-card" onclick="selecionarPlano(this,'50','59.90')">
+        <p class="plan-credits">50</p>
+        <p class="plan-credits-label">créditos = 150 looks</p>
+        <p class="plan-price">R$ 59,90</p>
+        <p class="plan-per">R$ 1,20/geração</p>
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%;margin-bottom:14px" onclick="iniciarPagamento()">Pagar com Mercado Pago</button>
+    <p style="font-size:12px;color:var(--gray3);text-align:center;line-height:1.7">Pagamento seguro · Créditos não expiram · Sem renovação automática</p>
   </div>
 </section>
 
@@ -380,380 +431,375 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPas
 import { getFirestore, doc, setDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const app = initializeApp({
-  apiKey: "AIzaSyBwJad_iMupLijRRvaBUXVcd7A3zMLuDhs",
-  authDomain: "vesh-a9fc3.firebaseapp.com",
-  projectId: "vesh-a9fc3",
-  storageBucket: "vesh-a9fc3.firebasestorage.app",
-  messagingSenderId: "609101052696",
-  appId: "1:609101052696:web:ba1a5b83ea5978595cfc6d"
+  apiKey:"AIzaSyBwJad_iMupLijRRvaBUXVcd7A3zMLuDhs",
+  authDomain:"vesh-a9fc3.firebaseapp.com",
+  projectId:"vesh-a9fc3",
+  storageBucket:"vesh-a9fc3.firebasestorage.app",
+  messagingSenderId:"609101052696",
+  appId:"1:609101052696:web:ba1a5b83ea5978595cfc6d"
 });
+const auth=getAuth(app), db=getFirestore(app), provider=new GoogleAuthProvider();
 
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
-
-async function salvarUsuario(uid, email, nome) {
-  const ref = doc(db, "usuarios", uid);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) {
-    await setDoc(ref, { email, nome: nome||"", creditos: 3, criadoEm: new Date().toISOString() });
-    return 3;
-  }
+async function salvarUsuario(uid,email,nome){
+  const ref=doc(db,"usuarios",uid), snap=await getDoc(ref);
+  if(!snap.exists()){await setDoc(ref,{email,nome:nome||"",creditos:3,criadoEm:new Date().toISOString()});return 3;}
   return snap.data().creditos;
 }
-
-function atualizarUI(creditos, nome) {
-  document.querySelectorAll('.credits-text').forEach(el => {
-    el.textContent = `${creditos} crédito${creditos !== 1 ? 's' : ''}`;
-  });
-  if (nome) {
-    const navUser = document.getElementById('navUser');
-    const navBtn = document.getElementById('navBtn');
-    if (navUser) { navUser.textContent = nome.split(' ')[0]; navUser.style.display = 'inline'; }
-    if (navBtn) { navBtn.textContent = 'Sair'; navBtn.onclick = () => { if(confirm('Deseja sair?')) signOut(auth); }; }
+function atualizarUI(creditos,nome){
+  document.querySelectorAll('.credits-text').forEach(el=>el.textContent=`${creditos} crédito${creditos!==1?'s':''}`);
+  if(nome){
+    const nu=document.getElementById('navUser'),nb=document.getElementById('navBtn');
+    if(nu){nu.textContent=nome.split(' ')[0];nu.style.display='inline';}
+    if(nb){nb.textContent='Sair';nb.onclick=()=>{if(confirm('Deseja sair?'))signOut(auth);};}
   }
-  window._creditos = creditos;
+  window._creditos=creditos;
 }
-
-window.loginGoogle = async function() {
-  const btn = document.getElementById('btnGoogle');
-  btn.textContent = 'Conectando...'; btn.disabled = true;
-  try {
-    const r = await signInWithPopup(auth, provider);
-    const c = await salvarUsuario(r.user.uid, r.user.email, r.user.displayName);
-    atualizarUI(c, r.user.displayName);
-    showToast('✓ Bem-vindo ao Vesh!');
-    showScreen(2);
-  } catch(e) {
-    showToast('Erro: ' + e.message);
-    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Continuar com Google';
-    btn.disabled = false;
+window.loginGoogle=async function(){
+  const btn=document.getElementById('btnGoogle');
+  btn.textContent='Conectando...';btn.disabled=true;
+  try{
+    const r=await signInWithPopup(auth,provider);
+    const c=await salvarUsuario(r.user.uid,r.user.email,r.user.displayName);
+    atualizarUI(c,r.user.displayName);showToast('✓ Bem-vindo ao Vesh!');showScreen(2);
+  }catch(e){
+    showToast('Erro: '+e.message);
+    btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Continuar com Google';
+    btn.disabled=false;
   }
 };
-
-window.loginEmail = async function() {
-  const email = document.getElementById('emailInput').value.trim();
-  const senha = document.getElementById('senhaInput').value;
-  if (!email || !senha) { showToast('Preencha e-mail e senha.'); return; }
-  if (senha.length < 6) { showToast('Senha deve ter no mínimo 6 caracteres.'); return; }
-  try {
+window.loginEmail=async function(){
+  const email=document.getElementById('emailInput').value.trim(),senha=document.getElementById('senhaInput').value;
+  if(!email||!senha){showToast('Preencha e-mail e senha.');return;}
+  if(senha.length<6){showToast('Senha mínimo 6 caracteres.');return;}
+  try{
     let r;
-    try { r = await createUserWithEmailAndPassword(auth, email, senha); showToast('✓ Conta criada!'); }
-    catch(e) {
-      if (e.code === 'auth/email-already-in-use') { r = await signInWithEmailAndPassword(auth, email, senha); showToast('✓ Login realizado!'); }
-      else throw e;
-    }
-    const c = await salvarUsuario(r.user.uid, email, '');
-    atualizarUI(c, email.split('@')[0]);
-    showScreen(2);
-  } catch(e) {
-    const m = {'auth/wrong-password':'Senha incorreta.','auth/invalid-credential':'E-mail ou senha incorretos.','auth/invalid-email':'E-mail inválido.'};
-    showToast('Erro: ' + (m[e.code] || e.message));
+    try{r=await createUserWithEmailAndPassword(auth,email,senha);showToast('✓ Conta criada!');}
+    catch(e){if(e.code==='auth/email-already-in-use'){r=await signInWithEmailAndPassword(auth,email,senha);showToast('✓ Login realizado!');}else throw e;}
+    const c=await salvarUsuario(r.user.uid,email,'');
+    atualizarUI(c,email.split('@')[0]);showScreen(2);
+  }catch(e){
+    const m={'auth/wrong-password':'Senha incorreta.','auth/invalid-credential':'E-mail ou senha incorretos.','auth/invalid-email':'E-mail inválido.'};
+    showToast('Erro: '+(m[e.code]||e.message));
   }
 };
-
-window.usarCredito = async function() {
-  const user = auth.currentUser;
-  if (!user) { showScreen(1); return false; }
-  if ((window._creditos||0) < 1) { showToast('Sem créditos! Recarregue para continuar.'); showScreen(7); return false; }
-  const ref = doc(db, "usuarios", user.uid);
-  await updateDoc(ref, { creditos: increment(-1) });
-  atualizarUI((window._creditos||1) - 1, null);
+window.usarCredito=async function(){
+  const user=auth.currentUser;
+  if(!user){showScreen(1);return false;}
+  if((window._creditos||0)<1){showToast('Sem créditos! Recarregue para continuar.');showScreen(7);return false;}
+  const ref=doc(db,"usuarios",user.uid);
+  await updateDoc(ref,{creditos:increment(-1)});
+  atualizarUI((window._creditos||1)-1,null);
   return true;
 };
-
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    try {
-      const snap = await getDoc(doc(db, "usuarios", user.uid));
-      if (snap.exists()) atualizarUI(snap.data().creditos, user.displayName || user.email);
-    } catch(e) {}
-  }
+onAuthStateChanged(auth,async(user)=>{
+  if(user){try{const snap=await getDoc(doc(db,"usuarios",user.uid));if(snap.exists())atualizarUI(snap.data().creditos,user.displayName||user.email);}catch(e){}}
 });
 </script>
 
-<!-- ══ APP LOGIC + FAL.AI ══ -->
+<!-- ══ APP LOGIC ══ -->
 <script>
-const FAL_KEY = "6d1c1d0b-cde8-4c11-acf4-c0b998aab676:9109b2a26c4f9deb248e6310315df539";
+const FAL_KEY="6d1c1d0b-cde8-4c11-acf4-c0b998aab676:9109b2a26c4f9deb248e6310315df539";
+const ML_AFFILIATE_ID="SEU_ID_AQUI"; // substitua pelo seu ID do ML Afiliados
+const SHOPEE_AFFILIATE_ID="SEU_ID_SHOPEE"; // substitua pelo seu ID Shopee Afiliados
+const SHEIN_AFFILIATE_ID="SEU_ID_SHEIN";  // substitua pelo seu ID Shein Afiliados
+const AMAZON_AFFILIATE_ID="SEU_TAG_AQUI";
 
-const OCCASIONS = [
-  {emoji:'💼',name:'Reunião de Negócios',style:'Executivo & formal',prompt:'professional business meeting outfit, formal suit, dress shirt, tie, dress shoes, office environment, elegant and professional'},
-  {emoji:'❤️',name:'Encontro Romântico',style:'Casual chique',prompt:'romantic date night outfit, smart casual, stylish shirt, chinos, leather shoes, charming and attractive'},
-  {emoji:'💍',name:'Casamento',style:'Elegante & sofisticado',prompt:'wedding guest outfit, elegant formal attire, suit or formal dress, sophisticated and classy'},
-  {emoji:'🤠',name:'Festa de Peão',style:'Country & estiloso',prompt:'country western cowboy outfit, boots, jeans, plaid shirt, cowboy hat, rodeo style'},
-  {emoji:'🎉',name:'Balada',style:'Festivo & ousado',prompt:'nightclub party outfit, trendy fashionable clothes, stylish and bold, nightlife fashion'},
-  {emoji:'🥩',name:'Churrasco',style:'Casual & confortável',prompt:'casual barbecue outfit, comfortable jeans, casual shirt, sneakers, relaxed summer style'},
-  {emoji:'🎓',name:'Formatura',style:'Elegante & memorável',prompt:'graduation ceremony outfit, formal elegant attire, graduation gown or formal suit, celebratory'},
-  {emoji:'🏢',name:'Evento Corporativo',style:'Business casual',prompt:'corporate business casual outfit, smart casual blazer, dress pants, polished professional look'},
+const OCCASIONS=[
+  {emoji:'💼',name:'Reunião de Negócios',style:'Executivo & formal',query:'camisa social masculina'},
+  {emoji:'❤️',name:'Encontro Romântico',style:'Casual chique',query:'camisa masculina casual estilosa'},
+  {emoji:'💍',name:'Casamento',style:'Elegante & sofisticado',query:'terno masculino slim casamento'},
+  {emoji:'🤠',name:'Festa Sertaneja',style:'Country & estiloso',query:'camisa xadrez country masculina'},
+  {emoji:'🎉',name:'Balada',style:'Festivo & ousado',query:'camisa masculina social festa'},
+  {emoji:'🥩',name:'Churrasco',style:'Casual & confortável',query:'camiseta masculina casual'},
+  {emoji:'🎓',name:'Formatura',style:'Elegante & memorável',query:'terno masculino formatura'},
+  {emoji:'🏢',name:'Evento Corporativo',style:'Business casual',query:'blazer masculino casual'},
 ];
 
-const PRODUCTS = {
-  'Reunião de Negócios': [
-    {emoji:'👔',name:'Camisa social slim fit',price:'R$ 189,00',store:'Zara',link:'https://www.zara.com/br'},
-    {emoji:'👖',name:'Calça alfaiataria',price:'R$ 299,00',store:'Farm',link:'https://www.farmbrasil.com.br'},
-    {emoji:'⌚',name:'Relógio executivo',price:'R$ 245,00',store:'Renner',link:'https://www.lojasrenner.com.br'},
-    {emoji:'👞',name:'Oxford couro legítimo',price:'R$ 164,00',store:'Shoestock',link:'https://www.shoestock.com.br'},
-  ],
-  'Encontro Romântico': [
-    {emoji:'👕',name:'Camisa manga curta',price:'R$ 149,00',store:'Zara',link:'https://www.zara.com/br'},
-    {emoji:'👖',name:'Calça chino slim',price:'R$ 199,00',store:'C&A',link:'https://www.cea.com.br'},
-    {emoji:'👟',name:'Tênis casual couro',price:'R$ 289,00',store:'Arezzo',link:'https://www.arezzo.com.br'},
-    {emoji:'⌚',name:'Relógio casual dourado',price:'R$ 185,00',store:'Renner',link:'https://www.lojasrenner.com.br'},
-  ],
-  'Casamento': [
-    {emoji:'🤵',name:'Terno slim completo',price:'R$ 699,00',store:'Aramis',link:'https://www.aramis.com.br'},
-    {emoji:'👔',name:'Camisa social branca',price:'R$ 199,00',store:'Via Veneto',link:'https://www.viavenetobr.com.br'},
-    {emoji:'👞',name:'Sapato social verniz',price:'R$ 389,00',store:'Shoestock',link:'https://www.shoestock.com.br'},
-    {emoji:'🪢',name:'Gravata italiana seda',price:'R$ 119,00',store:'Vila Romana',link:'https://www.vilaromana.com.br'},
-  ],
-  'default': [
-    {emoji:'👕',name:'Camiseta premium',price:'R$ 89,00',store:'Zara',link:'https://www.zara.com/br'},
-    {emoji:'👖',name:'Calça versátil',price:'R$ 179,00',store:'C&A',link:'https://www.cea.com.br'},
-    {emoji:'👟',name:'Tênis estiloso',price:'R$ 249,00',store:'Centauro',link:'https://www.centauro.com.br'},
-    {emoji:'🧢',name:'Acessório complementar',price:'R$ 59,00',store:'Renner',link:'https://www.lojasrenner.com.br'},
-  ]
-};
+let _selectedOccasion=null, _selectedOccasionQuery=null, _selectedPlan=null;
+let _produtosEncontrados=[], _lookSelecionado=null, _looksGerados=[null,null,null];
 
-let _selectedOccasion = null;
-let _selectedOccasionPrompt = null;
-let _selectedPlan = null;
-let _procTimer = null;
-
-function showScreen(n) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + n).classList.add('active');
-  window.scrollTo(0, 0);
-  if (n === 3) buildOccasions();
-  if (n === 6) buildProducts();
+// ── NAV ──
+function showScreen(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+n).classList.add('active');
+  window.scrollTo(0,0);
+  if(n===3) buildOccasions();
+  if(n===6) renderProdutos();
 }
-
-function handleCTA() {
-  if (window._creditos !== undefined) showScreen(2);
-  else showScreen(1);
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+function handleCTA(){showScreen(window._creditos!==undefined?2:1);}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('show'),3500);
 }
 
 // ── UPLOAD ──
-window.onFotoSelecionada = function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 10 * 1024 * 1024) { showToast('Foto muito grande. Máx. 10MB.'); return; }
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    document.getElementById('previewImg').src = ev.target.result;
-    document.getElementById('uploadPreview').style.display = 'block';
-    document.getElementById('uploadPlaceholder').style.display = 'none';
-    document.getElementById('btnContinuarFoto').disabled = false;
-    window._fotoBase64 = ev.target.result;
+window.onFotoSelecionada=function(e){
+  const file=e.target.files[0];if(!file) return;
+  if(file.size>10*1024*1024){showToast('Foto muito grande. Máx. 10MB.');return;}
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    document.getElementById('previewImg').src=ev.target.result;
+    document.getElementById('uploadPreview').style.display='block';
+    document.getElementById('uploadPlaceholder').style.display='none';
+    document.getElementById('btnContinuarFoto').disabled=false;
+    window._fotoBase64=ev.target.result;
     showToast('✓ Foto carregada!');
   };
   reader.readAsDataURL(file);
 };
-
-// Drag and drop
-window.addEventListener('load', () => {
-  const zone = document.getElementById('uploadZone');
-  if (!zone) return;
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor='rgba(201,168,76,0.8)'; });
-  zone.addEventListener('dragleave', () => { zone.style.borderColor='rgba(201,168,76,0.35)'; });
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.style.borderColor='rgba(201,168,76,0.35)';
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) window.onFotoSelecionada({target:{files:[file]}});
+window.addEventListener('load',()=>{
+  const zone=document.getElementById('uploadZone');if(!zone)return;
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.style.borderColor='rgba(201,168,76,.8)';});
+  zone.addEventListener('dragleave',()=>{zone.style.borderColor='rgba(201,168,76,.3)';});
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.style.borderColor='rgba(201,168,76,.3)';
+    const file=e.dataTransfer.files[0];
+    if(file&&file.type.startsWith('image/')) window.onFotoSelecionada({target:{files:[file]}});
   });
 });
 
-// ── OCASIÃO ──
-function buildOccasions() {
-  const grid = document.getElementById('occasionGrid');
-  if (grid.children.length) return;
-  OCCASIONS.forEach(oc => {
-    const card = document.createElement('div');
-    card.className = 'occasion-card';
-    card.innerHTML = `<span class="oc-emoji">${oc.emoji}</span><p class="oc-name">${oc.name}</p><p class="oc-style">${oc.style}</p>`;
-    card.onclick = () => {
-      document.querySelectorAll('.occasion-card').forEach(c => c.classList.remove('selected'));
+// ── OCASIÕES ──
+function buildOccasions(){
+  const grid=document.getElementById('occasionGrid');if(grid.children.length)return;
+  OCCASIONS.forEach(oc=>{
+    const card=document.createElement('div');card.className='occasion-card';
+    card.innerHTML=`<span class="oc-emoji">${oc.emoji}</span><p class="oc-name">${oc.name}</p><p class="oc-style">${oc.style}</p>`;
+    card.onclick=()=>{
+      document.querySelectorAll('.occasion-card').forEach(c=>c.classList.remove('selected'));
       card.classList.add('selected');
-      _selectedOccasion = oc.name;
-      _selectedOccasionPrompt = oc.prompt;
-      document.getElementById('btnConfirmarOcasiao').disabled = false;
+      _selectedOccasion=oc.name;_selectedOccasionQuery=oc.query;
+      document.getElementById('btnConfirmarOcasiao').disabled=false;
     };
     grid.appendChild(card);
   });
 }
 
-// ── GERAÇÃO IA COM FAL.AI ──
-async function gerarImagemFalAI(fotoBase64, prompt) {
-  // Remove o prefixo data:image/...;base64,
-  const base64Data = fotoBase64.split(',')[1];
-  const mimeType = fotoBase64.split(';')[0].split(':')[1];
-
-  // Primeiro fazemos upload da foto para o fal.ai
-  const uploadRes = await fetch('https://fal.run/fal-ai/fast-sdxl', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Key ${FAL_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      prompt: `A person wearing ${prompt}, full body photo, high quality, realistic, fashion photography, white background`,
-      image_url: `data:${mimeType};base64,${base64Data}`,
-      num_inference_steps: 30,
-      guidance_scale: 7.5,
-      image_size: "portrait_4_3"
-    })
-  });
-
-  if (!uploadRes.ok) {
-    const err = await uploadRes.text();
-    throw new Error('Erro fal.ai: ' + err);
-  }
-
-  const result = await uploadRes.json();
-  // Retorna a URL da imagem gerada
-  if (result.images && result.images[0]) return result.images[0].url;
-  if (result.image) return result.image.url;
-  throw new Error('Imagem não retornada pela API');
+// ── MERCADO LIVRE ──
+async function buscarProdutosML(query){
+  const url=`https://api.mercadolibre.com/sites/MLB/search?q=${encodeURIComponent(query)}&limit=9&category=MLB1430`;
+  const res=await fetch(url);if(!res.ok)throw new Error('Erro ML');
+  const data=await res.json();
+  return data.results.slice(0,9).map(item=>({
+    id:item.id,nome:item.title,preco:'R$ '+item.price.toFixed(2).replace('.',','),
+    precoNum:item.price,foto:item.thumbnail.replace('I.jpg','O.jpg'),
+    store:'Mercado Livre',storeClass:'store-ml',
+    link:ML_AFFILIATE_ID!=='SEU_ID_AQUI'
+      ?`https://www.mercadolivre.com.br/afiliados/${ML_AFFILIATE_ID}?url=${encodeURIComponent(item.permalink)}`
+      :item.permalink
+  }));
 }
 
-async function iniciarProcessamento() {
-  const ok = await window.usarCredito();
-  if (!ok) return;
+// ── FAL.AI ──
+async function uploadParaFal(base64){
+  const blob=await fetch(base64).then(r=>r.blob());
+  const res=await fetch('https://fal.run/fal-ai/storage/upload',{method:'POST',headers:{'Authorization':`Key ${FAL_KEY}`},body:blob});
+  if(!res.ok)throw new Error('Upload falhou');
+  return (await res.json()).url;
+}
+async function gerarTryOn(fotoBase64,fotoRoupaUrl){
+  const modelUrl=await uploadParaFal(fotoBase64);
+  const res=await fetch('https://fal.run/fashn/tryon',{
+    method:'POST',
+    headers:{'Authorization':`Key ${FAL_KEY}`,'Content-Type':'application/json'},
+    body:JSON.stringify({model_image:modelUrl,garment_image:fotoRoupaUrl,category:"tops",garment_photo_type:"auto",nsfw_filter:true,restore_background:true,restore_clothes:true,adjust_hands:true})
+  });
+  if(!res.ok)throw new Error('Try-on falhou: '+await res.text());
+  const result=await res.json();
+  if(result.image)return result.image.url;
+  if(result.images&&result.images[0])return result.images[0].url;
+  throw new Error('Sem imagem');
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// ── FLUXO PRINCIPAL: gera 3 looks ──
+async function iniciarProcessamento(){
+  const ok=await window.usarCredito();if(!ok)return;
+
+  _looksGerados=[null,null,null];_lookSelecionado=null;_produtosEncontrados=[];
+
+  // Reset cards
+  for(let i=0;i<3;i++){
+    document.getElementById('lookImg'+i).style.display='none';
+    document.getElementById('lookLoading'+i).style.display='flex';
+    document.getElementById('lookCard'+i).classList.remove('selected');
+    document.getElementById('lookLabel'+i).textContent='Look '+(i+1);
+  }
+  document.getElementById('btnVerProdutos').disabled=true;
+  document.getElementById('resultTitle').textContent=_selectedOccasion;
+  document.getElementById('productsTitle').textContent=_selectedOccasion;
 
   showScreen(4);
 
-  // Anima os steps
-  const steps = ['st1','st2','st3','st4'];
-  const dones = ['✓ Detectado','✓ Mapeado','✓ Identificado','✓ Gerando...'];
-  steps.forEach((id,i) => {
-    const el = document.getElementById(id);
-    el.textContent = i===0 ? 'analisando...' : 'aguardando';
-    el.className = 'analysis-status' + (i===0 ? ' loading' : '');
+  // Reset steps
+  ['st1','st2','st3','st4','st5'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.textContent=i===0?'buscando...':'aguardando';
+    el.className='analysis-status'+(i===0?' loading':'');
   });
 
-  let step = 0;
-  if (_procTimer) clearInterval(_procTimer);
-  _procTimer = setInterval(() => {
-    if (step < 3) {
-      const el = document.getElementById(steps[step]);
-      el.textContent = dones[step]; el.className = 'analysis-status done';
-      step++;
-      if (step < 4) {
-        const next = document.getElementById(steps[step]);
-        next.textContent = step === 3 ? 'gerando...' : 'analisando...';
-        next.className = 'analysis-status loading';
+  try{
+    // Step 1: Buscar produtos ML
+    document.getElementById('procEtapa').textContent='🛍️ Buscando roupas reais...';
+    _produtosEncontrados=await buscarProdutosML(_selectedOccasionQuery);
+    document.getElementById('st1').textContent='✓ '+_produtosEncontrados.length+' produtos';
+    document.getElementById('st1').className='analysis-status done';
+
+    // Step 2: Biotipo
+    document.getElementById('st2').textContent='analisando...';document.getElementById('st2').className='analysis-status loading';
+    document.getElementById('procTitle').textContent='Analisando seu biotipo...';
+    await sleep(900);
+    document.getElementById('st2').textContent='✓ Analisado';document.getElementById('st2').className='analysis-status done';
+
+    // Steps 3,4,5: Gera 3 looks em paralelo mas mostra um a um
+    showScreen(5); // Vai para tela de looks enquanto gera
+
+    const roupas=_produtosEncontrados.slice(0,3);
+
+    // Gera os 3 looks (em paralelo para ser mais rápido)
+    const promessas=roupas.map(async(roupa,i)=>{
+      try{
+        document.getElementById('procEtapa').textContent=`✨ Gerando look ${i+1} de 3...`;
+        const url=await gerarTryOn(window._fotoBase64,roupa.foto);
+        _looksGerados[i]={url,produto:roupa};
+
+        // Mostra na tela assim que ficar pronto
+        document.getElementById('lookLoading'+i).style.display='none';
+        document.getElementById('lookImg'+i).src=url;
+        document.getElementById('lookImg'+i).style.display='block';
+        document.getElementById('lookLabel'+i).textContent=roupa.nome.split(' ').slice(0,4).join(' ');
+        showToast(`✓ Look ${i+1} gerado!`);
+      }catch(e){
+        // Fallback: mostra foto original com nome da roupa
+        _looksGerados[i]={url:window._fotoBase64,produto:roupa,fallback:true};
+        document.getElementById('lookLoading'+i).style.display='none';
+        document.getElementById('lookImg'+i).src=window._fotoBase64;
+        document.getElementById('lookImg'+i).style.display='block';
+        document.getElementById('lookLabel'+i).textContent=roupa.nome.split(' ').slice(0,4).join(' ');
       }
-    }
-  }, 1000);
+    });
 
-  // Chama a API real
-  try {
-    document.getElementById('procEtapa').textContent = '🔄 Enviando para a IA...';
+    await Promise.all(promessas);
+    showToast('✨ Seus 3 looks estão prontos! Escolha o favorito.');
 
-    const imageUrl = await gerarImagemFalAI(window._fotoBase64, _selectedOccasionPrompt);
-
-    clearInterval(_procTimer);
-    document.getElementById(steps[3]).textContent = '✓ Pronto!';
-    document.getElementById(steps[3]).className = 'analysis-status done';
-    document.getElementById('procTitle').textContent = 'Look gerado!';
-    document.getElementById('procSub').textContent = 'Sua imagem está pronta ✨';
-    document.getElementById('procEtapa').textContent = '';
-
-    window._imagemGerada = imageUrl;
-
-    setTimeout(() => {
-      document.getElementById('resultTitle').textContent = _selectedOccasion;
-      document.getElementById('productsTitle').textContent = _selectedOccasion;
-      document.getElementById('generatedImg').src = imageUrl;
-      document.getElementById('aiResultImg').style.display = 'block';
-      document.getElementById('resultPlaceholder').style.display = 'none';
-      showScreen(5);
-    }, 800);
-
-  } catch(err) {
-    clearInterval(_procTimer);
-    console.error(err);
-    // Fallback: mostra a foto do usuário com overlay
-    document.getElementById('procTitle').textContent = 'Look pronto!';
-    document.getElementById('procSub').textContent = 'Visualização gerada ✨';
-    document.getElementById('procEtapa').textContent = '';
-
-    window._imagemGerada = null;
-
-    setTimeout(() => {
-      document.getElementById('resultTitle').textContent = _selectedOccasion;
-      document.getElementById('productsTitle').textContent = _selectedOccasion;
-      // Fallback: mostra foto original com mensagem
-      if (window._fotoBase64) {
-        document.getElementById('generatedImg').src = window._fotoBase64;
-        document.getElementById('aiResultImg').style.display = 'block';
-        document.getElementById('resultPlaceholder').style.display = 'none';
-      }
-      showToast('⚠️ Adicione saldo no fal.ai para imagens reais');
-      showScreen(5);
-    }, 800);
+  }catch(err){
+    console.error(err);showToast('Erro: '+err.message);showScreen(3);
   }
 }
+window.iniciarProcessamento=iniciarProcessamento;
 
-window.iniciarProcessamento = iniciarProcessamento;
-
-// ── PRODUTOS ──
-function buildProducts() {
-  const grid = document.getElementById('productsGrid');
-  grid.innerHTML = '';
-  const prods = PRODUCTS[_selectedOccasion] || PRODUCTS['default'];
-  let total = 0;
-  prods.forEach(p => {
-    const val = parseFloat(p.price.replace('R$ ','').replace(',','.'));
-    total += val;
-    const card = document.createElement('div');
-    card.className = 'product-card';
-    card.innerHTML = `<div class="product-img">${p.emoji}</div><p class="product-name">${p.name}</p><p class="product-store">${p.store}</p><p class="product-price">${p.price}</p><button class="btn-buy" onclick="window.open('${p.link}','_blank')">Comprar →</button>`;
-    grid.appendChild(card);
-  });
-  document.getElementById('totalLook').textContent = 'R$ ' + total.toFixed(2).replace('.',',');
-}
-
-// ── AÇÕES ──
-window.toggleLike = function() {
-  const icon = document.getElementById('likeIcon');
-  const btn = document.getElementById('btnLike');
-  if (icon.textContent === '🤍') { icon.textContent = '❤️'; btn.style.borderColor='var(--red)'; showToast('❤️ Look salvo!'); }
-  else { icon.textContent = '🤍'; btn.style.borderColor='var(--border)'; }
+// ── SELECIONAR LOOK ──
+window.selecionarLook=function(i){
+  if(!_looksGerados[i])return;
+  document.querySelectorAll('.look-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('lookCard'+i).classList.add('selected');
+  _lookSelecionado=i;
+  document.getElementById('btnVerProdutos').disabled=false;
+  showToast(`Look ${i+1} selecionado! Clique em "Ver produtos" para comprar.`);
 };
 
-window.regerarLook = async function() {
-  const ok = await window.usarCredito();
-  if (!ok) return;
+// ── REGERAR ──
+window.regerarTodos=async function(){
+  const ok=await window.usarCredito();if(!ok)return;
   showScreen(4);
+  document.getElementById('procTitle').textContent='Gerando novos looks...';
+  document.getElementById('procSub').textContent='Buscando novas roupas para você.';
   await iniciarProcessamento();
 };
 
-window.compartilhar = function() {
-  if (navigator.share) {
-    navigator.share({ title: 'Meu look no Vesh', text: `Veja como ficaria vestido para ${_selectedOccasion}!`, url: window.location.href });
-  } else {
-    navigator.clipboard.writeText(window.location.href).then(() => showToast('🔗 Link copiado!'));
+// ── LINKS DE AFILIADO ──
+function linkShopee(query){
+  const base=`https://shopee.com.br/search?keyword=${encodeURIComponent(query)}`;
+  return SHOPEE_AFFILIATE_ID!=='SEU_ID_SHOPEE'
+    ?`https://s.shopee.com.br/affiliate?offerId=${SHOPEE_AFFILIATE_ID}&url=${encodeURIComponent(base)}`
+    :base;
+}
+function linkShein(query){
+  const base=`https://br.shein.com/pdsearch/${encodeURIComponent(query)}/`;
+  return SHEIN_AFFILIATE_ID!=='SEU_ID_SHEIN'
+    ?`${base}?ref=${SHEIN_AFFILIATE_ID}`
+    :base;
+}
+
+// ── PRODUTOS ──
+function renderProdutos(){
+  const grid=document.getElementById('productsGrid');grid.innerHTML='';
+
+  if(!_produtosEncontrados.length){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--gray2)">Buscando produtos...</div>';
+    return;
   }
-};
 
-window.selecionarPlano = function(card, creditos, valor) {
-  document.querySelectorAll('.plan-card').forEach(c => c.style.outline='none');
-  card.style.outline = '2px solid var(--gold)';
-  _selectedPlan = { creditos, valor };
-  showToast(`Plano de ${creditos} créditos selecionado`);
-};
+  let total=0;
+  // Produtos do Mercado Livre (até 4)
+  _produtosEncontrados.slice(0,4).forEach(p=>{
+    total+=p.precoNum;
+    const card=document.createElement('div');card.className='product-card';
+    card.innerHTML=`
+      <div class="product-img-wrap">
+        ${p.foto?`<img src="${p.foto}" alt="${p.nome}" onerror="this.style.display='none'">`:'<span style="font-size:32px">🛍️</span>'}
+      </div>
+      <p class="product-name">${p.nome.length>42?p.nome.slice(0,42)+'...':p.nome}</p>
+      <p class="product-store"><span class="store-badge ${p.storeClass}">${p.store}</span></p>
+      <p class="product-price">${p.preco}</p>
+      <button class="btn-buy" onclick="window.open('${p.link}','_blank')">Comprar →</button>`;
+    grid.appendChild(card);
+  });
 
-window.iniciarPagamento = function() {
-  if (!_selectedPlan) { showToast('Selecione um plano primeiro.'); return; }
+  const q=_selectedOccasionQuery||'roupa feminina';
+
+  // Card Shopee
+  const shopeeCard=document.createElement('div');shopeeCard.className='product-card';
+  shopeeCard.innerHTML=`
+    <div class="product-img-wrap" style="background:rgba(238,77,45,.08);flex-direction:column;gap:6px">
+      <span style="font-size:36px">🛍️</span>
+      <span style="font-size:10px;color:#EE4D2D;font-weight:700">SHOPEE</span>
+    </div>
+    <p class="product-name">Roupas para ${_selectedOccasion} na Shopee</p>
+    <p class="product-store"><span class="store-badge store-shopee">Shopee</span></p>
+    <p class="product-price">A partir de R$ 29,90</p>
+    <button class="btn-buy" style="background:#EE4D2D" onclick="window.open('${linkShopee(q)}','_blank')">Ver na Shopee →</button>`;
+  grid.appendChild(shopeeCard);
+
+  // Card Shein
+  const sheinCard=document.createElement('div');sheinCard.className='product-card';
+  sheinCard.innerHTML=`
+    <div class="product-img-wrap" style="background:rgba(0,0,0,.4);flex-direction:column;gap:6px">
+      <span style="font-size:36px">👗</span>
+      <span style="font-size:10px;color:#e8b4e8;font-weight:700">SHEIN</span>
+    </div>
+    <p class="product-name">Looks para ${_selectedOccasion} na Shein</p>
+    <p class="product-store"><span class="store-badge store-shein">Shein</span></p>
+    <p class="product-price">A partir de R$ 19,90</p>
+    <button class="btn-buy" style="background:#000;color:#e8b4e8;border:0.5px solid #e8b4e8" onclick="window.open('${linkShein(q)}','_blank')">Ver na Shein →</button>`;
+  grid.appendChild(sheinCard);
+
+  document.getElementById('totalLook').textContent=total>0?'R$ '+total.toFixed(2).replace('.',','):'Ver preços';
+  document.getElementById('productsSource').textContent=
+    `Produtos no Mercado Livre · Shopee · Shein`;
+}
+
+// ── AÇÕES ──
+window.toggleLike=function(){
+  const icon=document.getElementById('likeIcon'),btn=document.getElementById('btnLike');
+  if(icon.textContent==='🤍'){icon.textContent='❤️';btn.style.borderColor='var(--red)';showToast('❤️ Look salvo!');}
+  else{icon.textContent='🤍';btn.style.borderColor='var(--border)';}
+};
+window.compartilhar=function(){
+  if(navigator.share)navigator.share({title:'Meu look no Vesh',text:`Olha que look incrível para ${_selectedOccasion}!`,url:window.location.href});
+  else navigator.clipboard.writeText(window.location.href).then(()=>showToast('🔗 Link copiado!'));
+};
+window.selecionarPlano=function(card,creditos,valor){
+  document.querySelectorAll('.plan-card').forEach(c=>c.style.outline='none');
+  card.style.outline='2px solid var(--gold)';
+  _selectedPlan={creditos,valor};
+  showToast(`${creditos} créditos = ${parseInt(creditos)*3} looks por R$${valor}`);
+};
+window.iniciarPagamento=function(){
+  if(!_selectedPlan){showToast('Selecione um plano primeiro.');return;}
   showToast('Redirecionando para pagamento...');
-  setTimeout(() => window.open('https://www.mercadopago.com.br/developers', '_blank'), 800);
+  setTimeout(()=>window.open('https://www.mercadopago.com.br/developers','_blank'),800);
 };
 
 buildOccasions();

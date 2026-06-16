@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/shopee.js": {
+      "maxDuration": 10
+    }
+  }
+}

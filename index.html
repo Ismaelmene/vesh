@@ -581,23 +581,33 @@ window.loginEmail=async function(modo='cadastro'){
     :document.getElementById('senhaLogin')).value;
 
   if(!email||!senha){showToast('Preencha e-mail e senha.');return;}
-  if(isCadastro&&senha.length<6){showToast('Senha mínimo 6 caracteres.');return;}
+  if(senha.length<6){showToast('Senha mínimo 6 caracteres.');return;}
 
   try{
     let r;
     if(isCadastro){
-      try{r=await createUserWithEmailAndPassword(auth,email,senha);showToast('✓ Conta criada!');}
-      catch(e){
-        if(e.code==='auth/email-already-in-use'){
-          // Já tem conta — faz login direto
+      // Tenta criar conta
+      try{
+        r=await createUserWithEmailAndPassword(auth,email,senha);
+        showToast('✓ Conta criada! Bem-vindo ao Vesh!');
+      }catch(e){
+        if(e.code==='auth/email-already-in-use'||e.code==='auth/invalid-credential'){
+          // Já tem conta — faz login
           r=await signInWithEmailAndPassword(auth,email,senha);
           showToast('✓ Login realizado!');
         } else throw e;
       }
     } else {
-      // Modo login direto
-      r=await signInWithEmailAndPassword(auth,email,senha);
-      showToast('✓ Bem-vindo de volta!');
+      // Aba "Já tenho conta" — login direto
+      try{
+        r=await signInWithEmailAndPassword(auth,email,senha);
+        showToast('✓ Bem-vindo de volta!');
+      }catch(e){
+        if(e.code==='auth/invalid-credential'||e.code==='auth/wrong-password'||e.code==='auth/user-not-found'){
+          showToast('E-mail ou senha incorretos. Verifique e tente novamente.');
+          return;
+        } else throw e;
+      }
     }
     const c=await salvarUsuario(r.user.uid,email,'');
     atualizarUI(c,email.split('@')[0]);
@@ -607,10 +617,11 @@ window.loginEmail=async function(modo='cadastro'){
       'auth/wrong-password':'Senha incorreta.',
       'auth/invalid-credential':'E-mail ou senha incorretos.',
       'auth/invalid-email':'E-mail inválido.',
-      'auth/user-not-found':'E-mail não cadastrado. Crie uma conta.',
-      'auth/too-many-requests':'Muitas tentativas. Aguarde alguns minutos.'
+      'auth/user-not-found':'E-mail não cadastrado.',
+      'auth/too-many-requests':'Muitas tentativas. Aguarde alguns minutos.',
+      'auth/network-request-failed':'Erro de conexão. Verifique sua internet.'
     };
-    showToast('Erro: '+(m[e.code]||e.message));
+    showToast(m[e.code]||'Erro: '+e.message);
   }
 };
 window.usarCredito=async function(){
@@ -734,17 +745,44 @@ function buildOccasions(){
 
 // ── MERCADO LIVRE ──
 async function buscarProdutosML(query){
-  const url=`https://api.mercadolibre.com/sites/MLB/search?q=${encodeURIComponent(query)}&limit=9&category=MLB1430`;
-  const res=await fetch(url);if(!res.ok)throw new Error('Erro ML');
-  const data=await res.json();
-  return data.results.slice(0,9).map(item=>({
-    id:item.id,nome:item.title,preco:'R$ '+item.price.toFixed(2).replace('.',','),
-    precoNum:item.price,foto:item.thumbnail.replace('I.jpg','O.jpg'),
-    store:'Mercado Livre',storeClass:'store-ml',
-    link:ML_AFFILIATE_ID!=='SEU_ID_AQUI'
-      ?`https://www.mercadolivre.com.br/afiliados/${ML_AFFILIATE_ID}?url=${encodeURIComponent(item.permalink)}`
-      :item.permalink
-  }));
+  // Usa o proxy CORS do ML que funciona no browser
+  const url=`https://api.mercadolibre.com/sites/MLB/search?q=${encodeURIComponent(query)}&limit=9`;
+  try{
+    const res=await fetch(url,{headers:{'Accept':'application/json'}});
+    if(!res.ok) throw new Error('status '+res.status);
+    const data=await res.json();
+    if(!data.results||data.results.length===0) throw new Error('sem resultados');
+    return data.results.slice(0,9).map(item=>({
+      id:item.id,
+      nome:item.title,
+      preco:'R$ '+item.price.toFixed(2).replace('.',','),
+      precoNum:item.price,
+      foto:(item.thumbnail||'').replace('I.jpg','O.jpg').replace('http:','https:'),
+      store:'Mercado Livre',
+      storeClass:'store-ml',
+      link:ML_AFFILIATE_ID!=='SEU_ID_AQUI'
+        ?`https://www.mercadolivre.com.br/afiliados/${ML_AFFILIATE_ID}?url=${encodeURIComponent(item.permalink)}`
+        :item.permalink
+    }));
+  }catch(e){
+    console.warn('ML falhou, usando produtos fallback:',e.message);
+    // Produtos fallback por gênero e ocasião
+    return gerarProdutosFallback(query);
+  }
+}
+
+function gerarProdutosFallback(query){
+  const isFem=_genero==='feminino';
+  const base=isFem?[
+    {nome:'Blusa feminina elegante',preco:'R$ 79,90',precoNum:79.90,foto:'',link:`https://shopee.com.br/search?keyword=${encodeURIComponent(query)}`},
+    {nome:'Calça feminina fashion',preco:'R$ 119,90',precoNum:119.90,foto:'',link:`https://shopee.com.br/search?keyword=${encodeURIComponent(query)}`},
+    {nome:'Vestido estiloso',preco:'R$ 149,90',precoNum:149.90,foto:'',link:`https://br.shein.com/pdsearch/${encodeURIComponent(query)}/`},
+  ]:[
+    {nome:'Camisa masculina premium',preco:'R$ 89,90',precoNum:89.90,foto:'',link:`https://shopee.com.br/search?keyword=${encodeURIComponent(query)}`},
+    {nome:'Calça masculina estilosa',preco:'R$ 129,90',precoNum:129.90,foto:'',link:`https://shopee.com.br/search?keyword=${encodeURIComponent(query)}`},
+    {nome:'Look completo masculino',preco:'R$ 159,90',precoNum:159.90,foto:'',link:`https://br.shein.com/pdsearch/${encodeURIComponent(query)}/`},
+  ];
+  return base.map((p,i)=>({...p,id:'fallback-'+i,store:'Shopee/Shein',storeClass:'store-shopee'}));
 }
 
 // ── FAL.AI ──
@@ -772,7 +810,6 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
 // ── FLUXO PRINCIPAL: gera 3 looks ──
 async function iniciarProcessamento(){
-  const ok=await window.usarCredito();if(!ok)return;
 
   _looksGerados=[null,null,null];_lookSelecionado=null;_produtosEncontrados=[];
 
@@ -797,11 +834,15 @@ async function iniciarProcessamento(){
   });
 
   try{
-    // Step 1: Buscar produtos ML
+    // Step 1: Buscar produtos — SÓ desconta crédito depois disso
     document.getElementById('procEtapa').textContent='🛍️ Buscando roupas reais...';
     _produtosEncontrados=await buscarProdutosML(_selectedOccasionQuery);
     document.getElementById('st1').textContent='✓ '+_produtosEncontrados.length+' produtos';
     document.getElementById('st1').className='analysis-status done';
+
+    // Desconta crédito APENAS após busca bem sucedida
+    const ok=await window.usarCredito();
+    if(!ok){ showScreen(3); return; }
 
     // Step 2: Biotipo
     document.getElementById('st2').textContent='analisando...';document.getElementById('st2').className='analysis-status loading';
@@ -858,7 +899,10 @@ window.selecionarLook=function(i){
 
 // ── REGERAR ──
 window.regerarTodos=async function(){
-  const ok=await window.usarCredito();if(!ok)return;
+  if((window._creditos||0)<1){
+    showToast('Sem créditos! Recarregue para continuar.');
+    showScreen(7);return;
+  }
   showScreen(4);
   document.getElementById('procTitle').textContent='Gerando novos looks...';
   document.getElementById('procSub').textContent='Buscando novas roupas para você.';

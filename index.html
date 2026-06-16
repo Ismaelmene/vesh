@@ -785,7 +785,101 @@ function gerarProdutosFallback(query){
   return base.map((p,i)=>({...p,id:'fallback-'+i,store:'Shopee/Shein',storeClass:'store-shopee'}));
 }
 
-// ── FAL.AI ──
+// ── ROUPAS DE REFERÊNCIA FIXAS (por ocasião e gênero) ──
+// Usadas quando a API não retorna foto do produto
+const ROUPAS_REF = {
+  masculino: {
+    'Reunião de Negócios': [
+      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80',
+      'https://images.unsplash.com/photo-1594938298603-c8148c4b4d7b?w=600&q=80',
+      'https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=600&q=80',
+    ],
+    'Encontro Romântico': [
+      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80',
+      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80',
+      'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=80',
+    ],
+    'Casamento': [
+      'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=600&q=80',
+      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80',
+      'https://images.unsplash.com/photo-1594938298603-c8148c4b4d7b?w=600&q=80',
+    ],
+    'Festa Sertaneja': [
+      'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&q=80',
+      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80',
+      'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=80',
+    ],
+    'Balada': [
+      'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=80',
+      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80',
+      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80',
+    ],
+    'Churrasco': [
+      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80',
+      'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=80',
+      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80',
+    ],
+    'Formatura': [
+      'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=600&q=80',
+      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80',
+      'https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=600&q=80',
+    ],
+    'Evento Corporativo': [
+      'https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=600&q=80',
+      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80',
+      'https://images.unsplash.com/photo-1594938298603-c8148c4b4d7b?w=600&q=80',
+    ],
+  },
+  feminino: {
+    'Reunião de Negócios': [
+      'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&q=80',
+      'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&q=80',
+      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
+    ],
+    'Encontro Romântico': [
+      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
+      'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80',
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
+    ],
+    'Casamento': [
+      'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&q=80',
+      'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80',
+      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
+    ],
+    'Festa Sertaneja': [
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
+      'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80',
+      'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=600&q=80',
+    ],
+    'Balada': [
+      'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80',
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
+      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
+    ],
+    'Churrasco': [
+      'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=600&q=80',
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
+      'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80',
+    ],
+    'Formatura': [
+      'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80',
+      'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&q=80',
+      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
+    ],
+    'Evento Corporativo': [
+      'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&q=80',
+      'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&q=80',
+      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
+    ],
+  }
+};
+
+function getFotoRoupa(roupa, indice){
+  // Se o produto tem foto real usa ela, senão usa referência da ocasião
+  if(roupa.foto && roupa.foto.length > 10) return roupa.foto;
+  const refs = ROUPAS_REF[_genero]?.[_selectedOccasion] || ROUPAS_REF['masculino']['Reunião de Negócios'];
+  return refs[indice % refs.length];
+}
 async function uploadParaFal(base64){
   const blob=await fetch(base64).then(r=>r.blob());
   const res=await fetch('https://fal.run/fal-ai/storage/upload',{method:'POST',headers:{'Authorization':`Key ${FAL_KEY}`},body:blob});
@@ -858,15 +952,17 @@ async function iniciarProcessamento(){
     // Gera os 3 looks (em paralelo para ser mais rápido)
     const promessas=roupas.map(async(roupa,i)=>{
       try{
+        const fotoRoupa = getFotoRoupa(roupa, i);
         document.getElementById('procEtapa').textContent=`✨ Gerando look ${i+1} de 3...`;
-        const url=await gerarTryOn(window._fotoBase64,roupa.foto);
+        const url=await gerarTryOn(window._fotoBase64, fotoRoupa);
         _looksGerados[i]={url,produto:roupa};
 
         // Mostra na tela assim que ficar pronto
         document.getElementById('lookLoading'+i).style.display='none';
         document.getElementById('lookImg'+i).src=url;
         document.getElementById('lookImg'+i).style.display='block';
-        document.getElementById('lookLabel'+i).textContent=roupa.nome.split(' ').slice(0,4).join(' ');
+        const label = roupa.nome || `Look ${i+1} — ${_selectedOccasion}`;
+        document.getElementById('lookLabel'+i).textContent=label.split(' ').slice(0,4).join(' ');
         showToast(`✓ Look ${i+1} gerado!`);
       }catch(e){
         // Fallback: mostra foto original com nome da roupa

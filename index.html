@@ -882,22 +882,37 @@ function getFotoRoupa(roupa, indice){
 }
 async function uploadParaFal(base64){
   const blob=await fetch(base64).then(r=>r.blob());
-  const res=await fetch('https://fal.run/fal-ai/storage/upload',{method:'POST',headers:{'Authorization':`Key ${FAL_KEY}`},body:blob});
-  if(!res.ok)throw new Error('Upload falhou');
+  const res=await fetch("https://fal.run/fal-ai/storage/upload",{method:"POST",headers:{"Authorization":`Key ${FAL_KEY}`},body:blob});
+  if(!res.ok) throw new Error("Upload falhou: "+res.status);
   return (await res.json()).url;
 }
-async function gerarTryOn(fotoBase64,fotoRoupaUrl){
-  const modelUrl=await uploadParaFal(fotoBase64);
-  const res=await fetch('https://fal.run/fashn/tryon',{
-    method:'POST',
-    headers:{'Authorization':`Key ${FAL_KEY}`,'Content-Type':'application/json'},
-    body:JSON.stringify({model_image:modelUrl,garment_image:fotoRoupaUrl,category:"tops",garment_photo_type:"auto",nsfw_filter:true,restore_background:true,restore_clothes:true,adjust_hands:true})
+
+async function gerarTryOn(fotoBase64, fotoRoupaUrl){
+  const modelUrl = await uploadParaFal(fotoBase64);
+  const submitRes = await fetch("https://queue.fal.run/fal-ai/fashn/tryon/v1.6",{
+    method:"POST",
+    headers:{"Authorization":`Key ${FAL_KEY}`,"Content-Type":"application/json"},
+    body: JSON.stringify({model_image:modelUrl,garment_image:fotoRoupaUrl,category:"auto",garment_photo_type:"auto",nsfw_filter:true,restore_background:true,restore_clothes:true,adjust_hands:true,mode:"balanced"})
   });
-  if(!res.ok)throw new Error('Try-on falhou: '+await res.text());
-  const result=await res.json();
-  if(result.image)return result.image.url;
-  if(result.images&&result.images[0])return result.images[0].url;
-  throw new Error('Sem imagem');
+  if(!submitRes.ok) throw new Error("Submit falhou: "+await submitRes.text());
+  const submitData = await submitRes.json();
+  const request_id = submitData.request_id;
+  if(!request_id) throw new Error("Sem request_id: "+JSON.stringify(submitData));
+  for(let i=0;i<60;i++){
+    await sleep(2000);
+    const stRes=await fetch(`https://queue.fal.run/fal-ai/fashn/tryon/v1.6/requests/${request_id}/status`,{headers:{"Authorization":`Key ${FAL_KEY}`}});
+    if(!stRes.ok) continue;
+    const st=await stRes.json();
+    if(st.status==="COMPLETED"){
+      const rRes=await fetch(`https://queue.fal.run/fal-ai/fashn/tryon/v1.6/requests/${request_id}`,{headers:{"Authorization":`Key ${FAL_KEY}`}});
+      const r=await rRes.json();
+      if(r.images&&r.images[0]) return r.images[0].url;
+      if(r.image) return r.image.url;
+      throw new Error("Sem imagem no resultado");
+    }
+    if(st.status==="FAILED") throw new Error("Try-on falhou no servidor");
+  }
+  throw new Error("Timeout - tente novamente");
 }
 
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}

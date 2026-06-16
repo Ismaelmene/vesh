@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/shopee.js": { "maxDuration": 10 },
+    "api/tryon.js": { "maxDuration": 30 },
+    "api/tryon-status.js": { "maxDuration": 10 }
+  }
+}

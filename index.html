@@ -640,7 +640,7 @@ onAuthStateChanged(auth,async(user)=>{
 
 <!-- ══ APP LOGIC ══ -->
 <script>
-const FAL_KEY="6d1c1d0b-cde8-4c11-acf4-c0b998aab676:9109b2a26c4f9deb248e6310315df539";
+// FAL_KEY removida do frontend — agora protegida no backend (api/tryon.js)
 const ML_AFFILIATE_ID="SEU_ID_AQUI"; // substitua pelo seu ID do ML Afiliados
 const SHOPEE_AFFILIATE_ID="SEU_ID_SHOPEE"; // substitua pelo seu ID Shopee Afiliados
 const SHEIN_AFFILIATE_ID="SEU_ID_SHEIN";  // substitua pelo seu ID Shein Afiliados
@@ -880,39 +880,32 @@ function getFotoRoupa(roupa, indice){
   const refs = ROUPAS_REF[_genero]?.[_selectedOccasion] || ROUPAS_REF['masculino']['Reunião de Negócios'];
   return refs[indice % refs.length];
 }
-async function uploadParaFal(base64){
-  const blob=await fetch(base64).then(r=>r.blob());
-  const res=await fetch("https://fal.run/fal-ai/storage/upload",{method:"POST",headers:{"Authorization":`Key ${FAL_KEY}`},body:blob});
-  if(!res.ok) throw new Error("Upload falhou: "+res.status);
-  return (await res.json()).url;
-}
-
 async function gerarTryOn(fotoBase64, fotoRoupaUrl){
-  const modelUrl = await uploadParaFal(fotoBase64);
-  const submitRes = await fetch("https://queue.fal.run/fal-ai/fashn/tryon/v1.6",{
-    method:"POST",
-    headers:{"Authorization":`Key ${FAL_KEY}`,"Content-Type":"application/json"},
-    body: JSON.stringify({model_image:modelUrl,garment_image:fotoRoupaUrl,category:"auto",garment_photo_type:"auto",nsfw_filter:true,restore_background:true,restore_clothes:true,adjust_hands:true,mode:"balanced"})
+  // Chama o backend (Vercel Function) que protege a chave e evita CORS
+  const res = await fetch('/api/tryon', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fotoBase64, fotoRoupaUrl })
   });
-  if(!submitRes.ok) throw new Error("Submit falhou: "+await submitRes.text());
-  const submitData = await submitRes.json();
-  const request_id = submitData.request_id;
-  if(!request_id) throw new Error("Sem request_id: "+JSON.stringify(submitData));
-  for(let i=0;i<60;i++){
-    await sleep(2000);
-    const stRes=await fetch(`https://queue.fal.run/fal-ai/fashn/tryon/v1.6/requests/${request_id}/status`,{headers:{"Authorization":`Key ${FAL_KEY}`}});
-    if(!stRes.ok) continue;
-    const st=await stRes.json();
-    if(st.status==="COMPLETED"){
-      const rRes=await fetch(`https://queue.fal.run/fal-ai/fashn/tryon/v1.6/requests/${request_id}`,{headers:{"Authorization":`Key ${FAL_KEY}`}});
-      const r=await rRes.json();
-      if(r.images&&r.images[0]) return r.images[0].url;
-      if(r.image) return r.image.url;
-      throw new Error("Sem imagem no resultado");
+  if(!res.ok) throw new Error('Erro no servidor: '+res.status);
+  const data = await res.json();
+
+  if(data.success && data.imageUrl) return data.imageUrl;
+
+  // Se ainda está processando, continua verificando via /api/tryon-status
+  if(data.pending && data.requestId){
+    for(let i=0;i<30;i++){
+      await sleep(2000);
+      const stRes = await fetch(`/api/tryon-status?requestId=${data.requestId}`);
+      if(!stRes.ok) continue;
+      const st = await stRes.json();
+      if(st.done && st.success && st.imageUrl) return st.imageUrl;
+      if(st.done && !st.success) throw new Error(st.error||'Try-on falhou');
     }
-    if(st.status==="FAILED") throw new Error("Try-on falhou no servidor");
+    throw new Error('Timeout - tente novamente');
   }
-  throw new Error("Timeout - tente novamente");
+
+  throw new Error(data.error || 'Erro desconhecido no try-on');
 }
 
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}

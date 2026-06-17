@@ -374,7 +374,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
     <h2 class="processing-title" id="procTitle">Buscando roupas reais...</h2>
     <p class="processing-sub" id="procSub">Gerando 3 looks personalizados para você.</p>
     <div class="analysis-list">
-      <div class="analysis-item"><span style="font-size:18px">🛍️</span><span class="analysis-label">Buscando no Mercado Livre, Shopee e Shein</span><span class="analysis-status loading" id="st1">buscando...</span></div>
+      <div class="analysis-item"><span style="font-size:18px">🛍️</span><span class="analysis-label">Buscando na Shopee e Shein</span><span class="analysis-status loading" id="st1">buscando...</span></div>
       <div class="analysis-item"><span style="font-size:18px">🎨</span><span class="analysis-label">Analisando seu biotipo</span><span class="analysis-status" id="st2">aguardando</span></div>
       <div class="analysis-item"><span style="font-size:18px">👗</span><span class="analysis-label" id="st3label">Gerando look 1 de 3</span><span class="analysis-status" id="st3">aguardando</span></div>
       <div class="analysis-item"><span style="font-size:18px">✨</span><span class="analysis-label" id="st4label">Gerando look 2 de 3</span><span class="analysis-status" id="st4">aguardando</span></div>
@@ -440,7 +440,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
   <div class="products-wrap">
     <p class="step-label">PEÇAS DO LOOK ESCOLHIDO</p>
     <h2 class="form-title" style="margin-bottom:4px" id="productsTitle">Festa Sertaneja</h2>
-    <p style="font-size:12px;color:var(--gray3);margin-bottom:20px" id="productsSource">Produtos encontrados no Mercado Livre</p>
+    <p style="font-size:12px;color:var(--gray3);margin-bottom:20px" id="productsSource">Produtos encontrados na Shopee</p>
     <div id="productsGrid" class="products-grid"></div>
     <div style="background:var(--dark2);border-radius:14px;padding:20px;border:0.5px solid rgba(201,168,76,.12);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
       <div>
@@ -641,7 +641,7 @@ onAuthStateChanged(auth,async(user)=>{
 <!-- ══ APP LOGIC ══ -->
 <script>
 // FAL_KEY removida do frontend — agora protegida no backend (api/tryon.js)
-const ML_AFFILIATE_ID="SEU_ID_AQUI"; // substitua pelo seu ID do ML Afiliados
+// ML_AFFILIATE_ID removida — Vesh agora usa apenas Shopee e Shein
 const SHOPEE_AFFILIATE_ID="SEU_ID_SHOPEE"; // substitua pelo seu ID Shopee Afiliados
 const SHEIN_AFFILIATE_ID="SEU_ID_SHEIN";  // substitua pelo seu ID Shein Afiliados
 const AMAZON_AFFILIATE_ID="SEU_TAG_AQUI";
@@ -743,33 +743,7 @@ function buildOccasions(){
   });
 }
 
-// ── MERCADO LIVRE ──
-async function buscarProdutosML(query){
-  // Usa o proxy CORS do ML que funciona no browser
-  const url=`https://api.mercadolibre.com/sites/MLB/search?q=${encodeURIComponent(query)}&limit=9`;
-  try{
-    const res=await fetch(url,{headers:{'Accept':'application/json'}});
-    if(!res.ok) throw new Error('status '+res.status);
-    const data=await res.json();
-    if(!data.results||data.results.length===0) throw new Error('sem resultados');
-    return data.results.slice(0,9).map(item=>({
-      id:item.id,
-      nome:item.title,
-      preco:'R$ '+item.price.toFixed(2).replace('.',','),
-      precoNum:item.price,
-      foto:(item.thumbnail||'').replace('I.jpg','O.jpg').replace('http:','https:'),
-      store:'Mercado Livre',
-      storeClass:'store-ml',
-      link:ML_AFFILIATE_ID!=='SEU_ID_AQUI'
-        ?`https://www.mercadolivre.com.br/afiliados/${ML_AFFILIATE_ID}?url=${encodeURIComponent(item.permalink)}`
-        :item.permalink
-    }));
-  }catch(e){
-    console.warn('ML falhou, usando produtos fallback:',e.message);
-    // Produtos fallback por gênero e ocasião
-    return gerarProdutosFallback(query);
-  }
-}
+// ── PRODUTOS FALLBACK (quando Shopee não retorna nada) ──
 
 function gerarProdutosFallback(query){
   const isFem=_genero==='feminino';
@@ -936,15 +910,9 @@ async function iniciarProcessamento(){
   });
 
   try{
-    // Step 1: Buscar produtos no ML e Shopee — SÓ desconta crédito depois disso
-    document.getElementById('procEtapa').textContent='🛍️ Buscando roupas reais...';
-    const [produtosML, produtosShopee] = await Promise.all([
-      buscarProdutosML(_selectedOccasionQuery),
-      buscarProdutosShopee(_selectedOccasionQuery)
-    ]);
-    // Prioriza produtos com foto real (Shopee primeiro, costuma ter fotos melhores para try-on)
-    _produtosEncontrados = [...produtosShopee, ...produtosML];
-    if(!_produtosEncontrados.length) _produtosEncontrados = await buscarProdutosML(_selectedOccasionQuery);
+    // Step 1: Buscar produtos na Shopee — SÓ desconta crédito depois disso
+    document.getElementById('procEtapa').textContent='🛍️ Buscando roupas na Shopee...';
+    _produtosEncontrados = await buscarProdutosShopee(_selectedOccasionQuery);
     document.getElementById('st1').textContent='✓ '+_produtosEncontrados.length+' produtos';
     document.getElementById('st1').className='analysis-status done';
 
@@ -1030,8 +998,8 @@ async function buscarProdutosShopee(query){
     if(!data.success || !data.produtos || !data.produtos.length) throw new Error(data.error||'sem produtos');
     return data.produtos;
   }catch(e){
-    console.warn('Shopee API falhou:', e.message);
-    return [];
+    console.warn('Shopee API falhou, usando fallback:', e.message);
+    return gerarProdutosFallback(query);
   }
 }
 
@@ -1052,18 +1020,12 @@ function linkShein(query){
 // ── PRODUTOS ──
 async function renderProdutos(){
   const grid=document.getElementById('productsGrid');
-  grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--gray2)"><div class="spinner" style="margin:0 auto 12px"></div>Buscando produtos reais...</div>';
-
-  const q = _selectedOccasionQuery || 'roupa';
-
-  // Busca produtos Shopee reais (além dos já encontrados do ML)
-  const produtosShopee = await buscarProdutosShopee(q);
-
   grid.innerHTML='';
   let total=0;
+  const q = _selectedOccasionQuery || 'roupa';
 
-  // Produtos do Mercado Livre (até 3)
-  _produtosEncontrados.slice(0,3).forEach(p=>{
+  // Produtos já buscados na Shopee durante a geração do look (até 5)
+  _produtosEncontrados.slice(0,5).forEach(p=>{
     total+=p.precoNum;
     const card=document.createElement('div');card.className='product-card';
     card.innerHTML=`
@@ -1071,29 +1033,13 @@ async function renderProdutos(){
         ${p.foto?`<img src="${p.foto}" alt="${p.nome}" onerror="this.style.display='none'">`:'<span style="font-size:32px">🛍️</span>'}
       </div>
       <p class="product-name">${p.nome.length>42?p.nome.slice(0,42)+'...':p.nome}</p>
-      <p class="product-store"><span class="store-badge ${p.storeClass}">${p.store}</span></p>
+      <p class="product-store"><span class="store-badge store-shopee">Shopee</span>${p.avaliacao?` <span style="font-size:10px;color:var(--gray3)">★${p.avaliacao}</span>`:''}</p>
       <p class="product-price">${p.preco}</p>
-      <button class="btn-buy" onclick="window.open('${p.link}','_blank')">Comprar →</button>`;
+      <button class="btn-buy" style="background:#EE4D2D" onclick="window.open('${p.link}','_blank')">Comprar →</button>`;
     grid.appendChild(card);
   });
 
-  // Produtos reais da Shopee (até 3)
-  if(produtosShopee.length){
-    produtosShopee.slice(0,3).forEach(p=>{
-      total+=p.precoNum;
-      const card=document.createElement('div');card.className='product-card';
-      card.innerHTML=`
-        <div class="product-img-wrap">
-          ${p.foto?`<img src="${p.foto}" alt="${p.nome}" onerror="this.style.display='none'">`:'<span style="font-size:32px">🛍️</span>'}
-        </div>
-        <p class="product-name">${p.nome.length>42?p.nome.slice(0,42)+'...':p.nome}</p>
-        <p class="product-store"><span class="store-badge store-shopee">Shopee</span>${p.avaliacao?` <span style="font-size:10px;color:var(--gray3)">★${p.avaliacao}</span>`:''}</p>
-        <p class="product-price">${p.preco}</p>
-        <button class="btn-buy" style="background:#EE4D2D" onclick="window.open('${p.link}','_blank')">Comprar →</button>`;
-      grid.appendChild(card);
-    });
-  } else {
-    // Fallback: card de busca Shopee
+  if(!_produtosEncontrados.length){
     const shopeeCard=document.createElement('div');shopeeCard.className='product-card';
     shopeeCard.innerHTML=`
       <div class="product-img-wrap" style="background:rgba(238,77,45,.08);flex-direction:column;gap:6px">
@@ -1122,7 +1068,7 @@ async function renderProdutos(){
 
   document.getElementById('totalLook').textContent=total>0?'R$ '+total.toFixed(2).replace('.',','):'Ver preços';
   document.getElementById('productsSource').textContent=
-    produtosShopee.length ? `Produtos reais do Mercado Livre e Shopee` : `Produtos no Mercado Livre · Shopee · Shein`;
+    _produtosEncontrados.length ? `Produtos reais da Shopee` : `Shopee · Shein`;
 }
 
 // ── AÇÕES ──

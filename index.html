@@ -979,12 +979,14 @@ async function iniciarProcessamento(){
         document.getElementById('lookLabel'+i).textContent=label.split(' ').slice(0,4).join(' ');
         showToast(`✓ Look ${i+1} gerado!`);
       }catch(e){
+        console.error(`Erro no try-on do look ${i+1}:`, e.message, e);
         // Fallback: mostra foto original com nome da roupa
         _looksGerados[i]={url:window._fotoBase64,produto:roupa,fallback:true};
         document.getElementById('lookLoading'+i).style.display='none';
         document.getElementById('lookImg'+i).src=window._fotoBase64;
         document.getElementById('lookImg'+i).style.display='block';
         document.getElementById('lookLabel'+i).textContent=roupa.nome.split(' ').slice(0,4).join(' ');
+        showToast(`⚠️ Look ${i+1}: ${e.message.slice(0,60)}`);
       }
     });
 

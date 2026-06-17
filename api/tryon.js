@@ -20,21 +20,7 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    // 1. Upload da foto do usuário para o storage do fal.ai
-    const blob = await fetch(fotoBase64).then(r => r.arrayBuffer());
-    const uploadRes = await fetch('https://fal.run/fal-ai/storage/upload', {
-      method: 'POST',
-      headers: { 'Authorization': `Key ${FAL_KEY}` },
-      body: Buffer.from(blob)
-    });
-    if (!uploadRes.ok) {
-      const errText = await uploadRes.text();
-      res.status(200).json({ success: false, error: 'Upload falhou: ' + errText });
-      return;
-    }
-    const { url: modelUrl } = await uploadRes.json();
-
-    // 2. Submete para a fila do fashn/tryon v1.6
+    // A API do fal.ai aceita Data URI em Base64 diretamente — sem precisar fazer upload manual
     const submitRes = await fetch('https://queue.fal.run/fal-ai/fashn/tryon/v1.6', {
       method: 'POST',
       headers: {
@@ -42,7 +28,7 @@ module.exports = async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model_image: modelUrl,
+        model_image: fotoBase64,
         garment_image: fotoRoupaUrl,
         category: 'auto',
         garment_photo_type: 'auto',
@@ -55,7 +41,7 @@ module.exports = async function handler(req, res) {
     });
     if (!submitRes.ok) {
       const errText = await submitRes.text();
-      res.status(200).json({ success: false, error: 'Submit falhou: ' + errText });
+      res.status(200).json({ success: false, error: 'Submit falhou ('+submitRes.status+'): ' + errText });
       return;
     }
     const submitData = await submitRes.json();
@@ -65,8 +51,8 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    // 3. Polling do status (máximo ~25s, dentro do limite da Vercel Function)
-    for (let i = 0; i < 12; i++) {
+    // Polling do status (máximo ~25s, dentro do limite da Vercel Function)
+    for (let i = 0; i < 11; i++) {
       await sleep(2000);
       const statusRes = await fetch(`https://queue.fal.run/fal-ai/fashn/tryon/v1.6/requests/${requestId}/status`, {
         headers: { 'Authorization': `Key ${FAL_KEY}` }
@@ -84,11 +70,11 @@ module.exports = async function handler(req, res) {
           res.status(200).json({ success: true, imageUrl });
           return;
         }
-        res.status(200).json({ success: false, error: 'Sem imagem no resultado' });
+        res.status(200).json({ success: false, error: 'Sem imagem no resultado: '+JSON.stringify(result) });
         return;
       }
       if (status.status === 'FAILED') {
-        res.status(200).json({ success: false, error: 'Try-on falhou no servidor' });
+        res.status(200).json({ success: false, error: 'Try-on falhou no servidor fal.ai' });
         return;
       }
     }

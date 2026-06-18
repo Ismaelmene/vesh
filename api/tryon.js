@@ -1,4 +1,4 @@
-// Vercel Serverless Function — SUBMETE o try-on (rápido, sem esperar terminar)
+// Vercel Serverless Function — SUBMETE o try-on para a fila (rápido, ~1-2s)
 // Caminho: /api/tryon.js
 
 const FAL_KEY = process.env.FAL_KEY || "6d1c1d0b-cde8-4c11-acf4-c0b998aab676:9109b2a26c4f9deb248e6310315df539";
@@ -17,8 +17,11 @@ module.exports = async function handler(req, res) {
       res.status(400).json({ success: false, error: 'fotoBase64 e fotoRoupaUrl são obrigatórios' });
       return;
     }
+    if (!fotoBase64.startsWith('data:image')) {
+      res.status(200).json({ success: false, error: 'fotoBase64 não é um Data URI válido (deve começar com data:image)' });
+      return;
+    }
 
-    // Apenas SUBMETE o pedido para a fila — não espera terminar
     const submitRes = await fetch('https://queue.fal.run/fal-ai/fashn/tryon/v1.6', {
       method: 'POST',
       headers: {
@@ -29,32 +32,40 @@ module.exports = async function handler(req, res) {
         model_image: fotoBase64,
         garment_image: fotoRoupaUrl,
         category: 'auto',
+        mode: 'performance',
         garment_photo_type: 'auto',
-        nsfw_filter: true,
-        restore_background: true,
-        restore_clothes: true,
-        adjust_hands: true,
-        mode: 'balanced'
+        moderation_level: 'permissive',
+        num_samples: 1,
+        segmentation_free: true,
+        output_format: 'png'
       })
     });
 
+    const submitText = await submitRes.text();
+    let submitData;
+    try { submitData = JSON.parse(submitText); } catch { submitData = null; }
+
     if (!submitRes.ok) {
-      const errText = await submitRes.text();
-      res.status(200).json({ success: false, error: 'Submit falhou ('+submitRes.status+'): ' + errText });
+      res.status(200).json({
+        success: false,
+        error: `Submit retornou HTTP ${submitRes.status}: ${submitText.slice(0,400)}`
+      });
       return;
     }
 
-    const submitData = await submitRes.json();
-    const requestId = submitData.request_id;
+    const requestId = submitData?.request_id;
     if (!requestId) {
-      res.status(200).json({ success: false, error: 'Sem request_id: ' + JSON.stringify(submitData) });
+      res.status(200).json({
+        success: false,
+        error: 'Submit OK mas sem request_id. Resposta: ' + submitText.slice(0,400)
+      });
       return;
     }
 
-    // Retorna IMEDIATAMENTE com o requestId — o frontend fica perguntando o status
+    // Retorna imediatamente — o frontend vai perguntar /api/tryon-status
     res.status(200).json({ success: true, pending: true, requestId });
 
   } catch (e) {
-    res.status(200).json({ success: false, error: e.message });
+    res.status(200).json({ success: false, error: 'Exceção: ' + e.message });
   }
 };

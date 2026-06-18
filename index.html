@@ -871,13 +871,27 @@ async function gerarTryOn(fotoBase64, fotoRoupaUrl, lookIndex){
     console.log(`[Look ${lookIndex}] requestId=${data.requestId} — iniciando polling`);
     for(let i=0;i<45;i++){
       await sleep(2000);
-      const stRes = await fetch(`/api/tryon-status?requestId=${data.requestId}`);
-      if(!stRes.ok){ console.warn(`[Look ${lookIndex}] status HTTP falhou: ${stRes.status}`); continue; }
-      const st = await stRes.json();
+      let stRes;
+      try{
+        stRes = await fetch(`/api/tryon-status?requestId=${data.requestId}`);
+      }catch(netErr){
+        console.warn(`[Look ${lookIndex}] erro de rede no poll #${i+1}:`, netErr.message);
+        continue;
+      }
+      const rawText = await stRes.text();
+      if(!rawText || rawText.trim()===''){
+        console.warn(`[Look ${lookIndex}] poll #${i+1}: resposta vazia, HTTP ${stRes.status}`);
+        continue;
+      }
+      let st;
+      try{ st = JSON.parse(rawText); }
+      catch(parseErr){
+        console.warn(`[Look ${lookIndex}] poll #${i+1}: corpo não-JSON (HTTP ${stRes.status}):`, rawText.slice(0,200));
+        continue;
+      }
       console.log(`[Look ${lookIndex}] poll #${i+1}:`, st);
       if(st.done && st.success && st.imageUrl) return st.imageUrl;
       if(st.done && !st.success) throw new Error(st.error||'Try-on falhou (sem detalhes)');
-      // ainda processando — mostra status na tela
       if(st.status) document.getElementById('procEtapa').textContent = `🤖 ${st.status}${st.queuePosition!=null?' (posição na fila: '+st.queuePosition+')':''}`;
     }
     throw new Error('Timeout — passou de 90s aguardando o fal.ai');

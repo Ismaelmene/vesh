@@ -54,6 +54,9 @@ module.exports = async function handler(req, res) {
     }
 
     const requestId = submitData?.request_id;
+    const statusUrl = submitData?.status_url;
+    const responseUrl = submitData?.response_url;
+
     if (!requestId) {
       res.status(200).json({
         success: false,
@@ -63,7 +66,8 @@ module.exports = async function handler(req, res) {
     }
 
     // Retorna imediatamente — o frontend vai perguntar /api/tryon-status
-    res.status(200).json({ success: true, pending: true, requestId });
+    // Passamos as URLs reais que o fal.ai nos deu, em vez de montar manualmente
+    res.status(200).json({ success: true, pending: true, requestId, statusUrl, responseUrl });
 
   } catch (e) {
     res.status(200).json({ success: false, error: 'Exceção: ' + e.message });

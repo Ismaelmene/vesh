@@ -12,34 +12,31 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') { res.status(200).end(); return; }
 
   const requestId = req.query.requestId;
+  // Usa a URL real devolvida pelo fal.ai no submit, com fallback para montagem manual
+  const statusUrl = req.query.statusUrl
+    ? decodeURIComponent(req.query.statusUrl)
+    : `https://queue.fal.run/fal-ai/fashn/tryon/v1.6/requests/${requestId}/status`;
+  const responseUrl = req.query.responseUrl
+    ? decodeURIComponent(req.query.responseUrl)
+    : `https://queue.fal.run/fal-ai/fashn/tryon/v1.6/requests/${requestId}`;
+
   if (!requestId) {
     res.status(200).send(JSON.stringify({ success: false, done: true, error: 'requestId obrigatório' }));
     return;
   }
 
   try {
-    const statusUrl = `https://queue.fal.run/fal-ai/fashn/tryon/v1.6/requests/${requestId}/status`;
-
-    let statusRes;
+    let statusRes, statusText;
     try {
-      statusRes = await fetch(statusUrl, {
-        headers: { 'Authorization': `Key ${FAL_KEY}` }
-      });
-    } catch (fetchErr) {
-      res.status(200).send(JSON.stringify({ success: false, done: false, error: 'Fetch falhou: ' + fetchErr.message }));
-      return;
-    }
-
-    let statusText;
-    try {
+      statusRes = await fetch(statusUrl, { headers: { 'Authorization': `Key ${FAL_KEY}` } });
       statusText = await statusRes.text();
-    } catch (readErr) {
-      res.status(200).send(JSON.stringify({ success: false, done: false, error: 'Erro lendo resposta: ' + readErr.message }));
+    } catch (fetchErr) {
+      res.status(200).send(JSON.stringify({ success: false, done: false, error: 'Fetch status falhou: ' + fetchErr.message + ' | URL: ' + statusUrl }));
       return;
     }
 
     if (!statusText || statusText.trim() === '') {
-      res.status(200).send(JSON.stringify({ success: false, done: false, error: `Resposta vazia do fal.ai (HTTP ${statusRes.status})` }));
+      res.status(200).send(JSON.stringify({ success: false, done: false, error: `Resposta vazia (HTTP ${statusRes.status}) | URL: ${statusUrl}` }));
       return;
     }
 
@@ -47,15 +44,14 @@ module.exports = async function handler(req, res) {
     try {
       status = JSON.parse(statusText);
     } catch (parseErr) {
-      res.status(200).send(JSON.stringify({ success: false, done: true, error: `Status HTTP ${statusRes.status}, corpo não-JSON: ${statusText.slice(0,200)}` }));
+      res.status(200).send(JSON.stringify({ success: false, done: true, error: `HTTP ${statusRes.status}, corpo: ${statusText.slice(0,200)} | URL: ${statusUrl}` }));
       return;
     }
 
     if (status.status === 'COMPLETED') {
-      const resultUrl = `https://queue.fal.run/fal-ai/fashn/tryon/v1.6/requests/${requestId}`;
       let resultRes, resultText;
       try {
-        resultRes = await fetch(resultUrl, { headers: { 'Authorization': `Key ${FAL_KEY}` } });
+        resultRes = await fetch(responseUrl, { headers: { 'Authorization': `Key ${FAL_KEY}` } });
         resultText = await resultRes.text();
       } catch (e) {
         res.status(200).send(JSON.stringify({ success: false, done: true, error: 'Erro buscando resultado: ' + e.message }));
@@ -78,7 +74,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (status.status === 'FAILED' || status.status === 'ERROR') {
-      res.status(200).send(JSON.stringify({ success: false, done: true, error: 'fal.ai status=' + status.status }));
+      res.status(200).send(JSON.stringify({ success: false, done: true, error: 'fal.ai status=' + status.status + ' | ' + statusText.slice(0,300) }));
       return;
     }
 

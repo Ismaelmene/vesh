@@ -866,17 +866,18 @@ async function gerarTryOn(fotoBase64, fotoRoupaUrl){
 
   if(data.success && data.imageUrl) return data.imageUrl;
 
-  // Se ainda está processando, continua verificando via /api/tryon-status
+  // Backend retorna rápido com um requestId — agora ficamos perguntando o status
   if(data.pending && data.requestId){
-    for(let i=0;i<30;i++){
+    for(let i=0;i<45;i++){ // até ~90 segundos de espera
       await sleep(2000);
       const stRes = await fetch(`/api/tryon-status?requestId=${data.requestId}`);
       if(!stRes.ok) continue;
       const st = await stRes.json();
       if(st.done && st.success && st.imageUrl) return st.imageUrl;
       if(st.done && !st.success) throw new Error(st.error||'Try-on falhou');
+      // ainda processando, continua o loop
     }
-    throw new Error('Timeout - tente novamente');
+    throw new Error('Timeout — a geração demorou demais, tente novamente');
   }
 
   throw new Error(data.error || 'Erro desconhecido no try-on');

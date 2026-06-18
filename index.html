@@ -869,11 +869,15 @@ async function gerarTryOn(fotoBase64, fotoRoupaUrl, lookIndex){
 
   if(data.pending && data.requestId){
     console.log(`[Look ${lookIndex}] requestId=${data.requestId} — iniciando polling`);
+    const urlParams = new URLSearchParams({ requestId: data.requestId });
+    if(data.statusUrl) urlParams.set('statusUrl', encodeURIComponent(data.statusUrl));
+    if(data.responseUrl) urlParams.set('responseUrl', encodeURIComponent(data.responseUrl));
+
     for(let i=0;i<45;i++){
       await sleep(2000);
       let stRes;
       try{
-        stRes = await fetch(`/api/tryon-status?requestId=${data.requestId}`);
+        stRes = await fetch(`/api/tryon-status?${urlParams.toString()}`);
       }catch(netErr){
         console.warn(`[Look ${lookIndex}] erro de rede no poll #${i+1}:`, netErr.message);
         continue;

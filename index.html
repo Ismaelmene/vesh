@@ -172,7 +172,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
   <div class="hero">
     <div class="eyebrow"><span style="width:6px;height:6px;background:var(--gold);border-radius:50%"></span>POWERED BY INTELIGÊNCIA ARTIFICIAL</div>
     <h1 class="hero-title">Veja você mesmo usando<br>a roupa <em class="accent">ideal</em><br>antes de comprar.</h1>
-    <p class="hero-sub">Envie sua foto, escolha a ocasião e receba <strong style="color:var(--gold)">3 looks diferentes</strong> com roupas reais da Shopee e Shein disponíveis para compra.</p>
+    <p class="hero-sub">Envie sua foto, escolha a ocasião e receba <strong style="color:var(--gold)">3 looks diferentes</strong> com roupas reais da Shopee disponíveis para compra.</p>
     <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
       <button class="btn-primary" style="padding:16px 48px;font-size:16px;" onclick="handleCTA()">Experimentar Grátis</button>
       <p style="font-size:12px;color:var(--gray3);">✦ 3 créditos grátis • 3 looks por crédito • R$1,60 por geração</p>
@@ -193,7 +193,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
       </div>
       <div style="display:flex;gap:20px;align-items:flex-start;">
         <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);flex-shrink:0">2</div>
-        <div><p style="font-size:16px;font-weight:500;margin-bottom:6px">Escolha a ocasião</p><p style="font-size:14px;color:var(--gray2);line-height:1.6">A IA busca roupas reais na <strong style="color:#EE4D2D">Shopee</strong> e <strong style="color:#e8b4e8">Shein</strong> para essa ocasião.</p></div>
+        <div><p style="font-size:16px;font-weight:500;margin-bottom:6px">Escolha a ocasião</p><p style="font-size:14px;color:var(--gray2);line-height:1.6">A IA busca roupas, calçados e acessórios reais na <strong style="color:#EE4D2D">Shopee</strong> para essa ocasião.</p></div>
       </div>
       <div style="display:flex;gap:20px;align-items:flex-start;">
         <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);flex-shrink:0">3</div>
@@ -354,7 +354,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
     <button class="nav-back" style="margin-bottom:20px;padding:0" onclick="showScreen(2)">← Voltar</button>
     <p class="step-label">PASSO 4 DE 5</p>
     <h1 class="form-title">Qual é a ocasião?</h1>
-    <p class="form-sub" style="margin-bottom:20px">A IA vai buscar 3 looks da <strong style="color:#EE4D2D">Shopee</strong> e <strong style="color:#e8b4e8">Shein</strong> para você.</p>
+    <p class="form-sub" style="margin-bottom:20px">A IA vai buscar 3 looks completos da <strong style="color:#EE4D2D">Shopee</strong> para você.</p>
   </div>
   <div style="padding:0 24px 24px;flex:1;max-width:480px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:16px">
     <div class="occasion-grid" id="occasionGrid"></div>
@@ -374,7 +374,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
     <h2 class="processing-title" id="procTitle">Buscando roupas reais...</h2>
     <p class="processing-sub" id="procSub">Gerando 3 looks personalizados para você.</p>
     <div class="analysis-list">
-      <div class="analysis-item"><span style="font-size:18px">🛍️</span><span class="analysis-label">Buscando na Shopee e Shein</span><span class="analysis-status loading" id="st1">buscando...</span></div>
+      <div class="analysis-item"><span style="font-size:18px">🛍️</span><span class="analysis-label">Buscando roupas, calçados e acessórios</span><span class="analysis-status loading" id="st1">buscando...</span></div>
       <div class="analysis-item"><span style="font-size:18px">🎨</span><span class="analysis-label">Analisando seu biotipo</span><span class="analysis-status" id="st2">aguardando</span></div>
       <div class="analysis-item"><span style="font-size:18px">👗</span><span class="analysis-label" id="st3label">Gerando look 1 de 3</span><span class="analysis-status" id="st3">aguardando</span></div>
       <div class="analysis-item"><span style="font-size:18px">✨</span><span class="analysis-label" id="st4label">Gerando look 2 de 3</span><span class="analysis-status" id="st4">aguardando</span></div>
@@ -392,7 +392,10 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
       <button class="nav-back" style="margin-bottom:16px;padding:0" onclick="showScreen(3)">← Escolher outra ocasião</button>
       <p style="font-size:11px;letter-spacing:2px;color:var(--gray3);margin-bottom:6px">SEUS 3 LOOKS GERADOS</p>
       <h2 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:400;margin-bottom:4px" id="resultTitle">Festa Sertaneja</h2>
-      <p style="font-size:13px;color:var(--gray2)">Toque no look favorito para ver os produtos</p>
+      <p style="font-size:13px;color:var(--gray2);margin-bottom:10px">Toque no look favorito para ver os produtos</p>
+      <div id="analiseBox" style="display:none;background:var(--gold-dim);border:0.5px solid var(--gold-border);border-radius:10px;padding:10px 14px;margin-bottom:6px">
+        <p style="font-size:12px;color:var(--gold);line-height:1.5" id="analiseTexto"></p>
+      </div>
     </div>
 
     <!-- 3 cards de looks -->
@@ -442,13 +445,6 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:18px 2
     <h2 class="form-title" style="margin-bottom:4px" id="productsTitle">Festa Sertaneja</h2>
     <p style="font-size:12px;color:var(--gray3);margin-bottom:20px" id="productsSource">Produtos encontrados na Shopee</p>
     <div id="productsGrid" class="products-grid"></div>
-    <div style="background:var(--dark2);border-radius:14px;padding:20px;border:0.5px solid rgba(201,168,76,.12);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <p style="font-size:13px;color:var(--gray2);margin-bottom:4px">Total estimado do look</p>
-        <p id="totalLook" style="font-family:'Playfair Display',serif;font-size:26px;color:var(--gold)">R$ ---</p>
-      </div>
-      <div style="text-align:right"><p style="font-size:11px;color:var(--gray3);max-width:110px;line-height:1.5">Links afiliados — sem custo extra</p></div>
-    </div>
     <div style="display:flex;gap:10px;margin-bottom:20px">
       <button class="btn-secondary" style="flex:1" onclick="showScreen(5)">← Ver looks</button>
       <button class="btn-primary" style="flex:1" onclick="showScreen(3)">Nova ocasião</button>
@@ -641,12 +637,12 @@ onAuthStateChanged(auth,async(user)=>{
 <!-- ══ APP LOGIC ══ -->
 <script>
 // FAL_KEY removida do frontend — agora protegida no backend (api/tryon.js)
-// ML_AFFILIATE_ID removida — Vesh agora usa apenas Shopee e Shein
+// ML_AFFILIATE_ID removida — Vesh agora usa apenas Shopee
 const SHOPEE_AFFILIATE_ID="SEU_ID_SHOPEE"; // substitua pelo seu ID Shopee Afiliados
-const SHEIN_AFFILIATE_ID="SEU_ID_SHEIN";  // substitua pelo seu ID Shein Afiliados
+// SHEIN removida — Vesh agora usa apenas Shopee
 const AMAZON_AFFILIATE_ID="SEU_TAG_AQUI";
 
-let _selectedOccasion=null, _selectedOccasionQuery=null, _selectedPlan=null;
+let _selectedOccasion=null, _selectedOccasionQuery=null, _selectedOccasionCalcado=null, _selectedOccasionAcessorio=null, _selectedPlan=null;
 let _produtosEncontrados=[], _lookSelecionado=null, _looksGerados=[null,null,null];
 
 // ── NAV ──
@@ -656,7 +652,19 @@ function showScreen(n){
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
   if(n===3) buildOccasions();
+  if(n===5) exibirAnaliseEstilo();
   if(n===6) renderProdutos();
+}
+function exibirAnaliseEstilo(){
+  const box=document.getElementById('analiseBox');
+  const a=window._analiseUsuario;
+  if(a && a.recomendacao){
+    document.getElementById('analiseTexto').innerHTML=
+      `✨ <strong>${a.formatoCorpo||''}${a.formatoRosto?' · '+a.formatoRosto:''}${a.subtomPele?' · subtom '+a.subtomPele:''}</strong><br>${a.recomendacao}`;
+    box.style.display='block';
+  } else {
+    box.style.display='none';
+  }
 }
 function handleCTA(){showScreen(window._creditos!==undefined?15:1);}
 function showToast(msg){
@@ -679,24 +687,24 @@ window.selecionarGenero=function(genero, card){
 
 // ── OCASIÕES POR GÊNERO ──
 const OCCASIONS_MASC=[
-  {emoji:'💼',name:'Reunião de Negócios',style:'Executivo & formal',query:'camisa social masculina'},
-  {emoji:'❤️',name:'Encontro Romântico',style:'Casual chique',query:'camisa masculina casual estilosa'},
-  {emoji:'💍',name:'Casamento',style:'Elegante & sofisticado',query:'terno masculino slim casamento'},
-  {emoji:'🤠',name:'Festa Sertaneja',style:'Country & estiloso',query:'camisa xadrez country masculina'},
-  {emoji:'🎉',name:'Balada',style:'Festivo & ousado',query:'camisa masculina social festa'},
-  {emoji:'🥩',name:'Churrasco',style:'Casual & confortável',query:'camiseta masculina casual'},
-  {emoji:'🎓',name:'Formatura',style:'Elegante & memorável',query:'terno masculino formatura'},
-  {emoji:'🏢',name:'Evento Corporativo',style:'Business casual',query:'blazer masculino casual'},
+  {emoji:'💼',name:'Reunião de Negócios',style:'Executivo & formal',query:'camisa social masculina',queryCalcado:'sapato social masculino',queryAcessorio:'relogio social masculino'},
+  {emoji:'❤️',name:'Encontro Romântico',style:'Casual chique',query:'camisa masculina casual estilosa',queryCalcado:'tenis casual masculino couro',queryAcessorio:'relogio casual masculino'},
+  {emoji:'💍',name:'Casamento',style:'Elegante & sofisticado',query:'terno masculino slim casamento',queryCalcado:'sapato social verniz masculino',queryAcessorio:'gravata social masculina'},
+  {emoji:'🤠',name:'Festa Sertaneja',style:'Country & estiloso',query:'camisa xadrez country masculina',queryCalcado:'bota country masculina',queryAcessorio:'chapeu country masculino'},
+  {emoji:'🎉',name:'Balada',style:'Festivo & ousado',query:'camisa masculina social festa',queryCalcado:'tenis masculino estiloso',queryAcessorio:'relogio masculino moderno'},
+  {emoji:'🥩',name:'Churrasco',style:'Casual & confortável',query:'camiseta masculina casual',queryCalcado:'tenis casual masculino',queryAcessorio:'bone masculino casual'},
+  {emoji:'🎓',name:'Formatura',style:'Elegante & memorável',query:'terno masculino formatura',queryCalcado:'sapato social masculino preto',queryAcessorio:'gravata formatura masculina'},
+  {emoji:'🏢',name:'Evento Corporativo',style:'Business casual',query:'blazer masculino casual',queryCalcado:'sapato casual masculino couro',queryAcessorio:'relogio executivo masculino'},
 ];
 const OCCASIONS_FEM=[
-  {emoji:'💼',name:'Reunião de Negócios',style:'Executivo & elegante',query:'blazer feminino social'},
-  {emoji:'❤️',name:'Encontro Romântico',style:'Delicado & chique',query:'vestido feminino casual romantrico'},
-  {emoji:'💍',name:'Casamento',style:'Elegante & sofisticado',query:'vestido de festa feminino casamento'},
-  {emoji:'🤠',name:'Festa Sertaneja',style:'Country & estiloso',query:'moda country feminina bota'},
-  {emoji:'🎉',name:'Balada',style:'Festivo & ousado',query:'vestido feminino festa balada'},
-  {emoji:'🥩',name:'Churrasco',style:'Casual & confortável',query:'conjunto feminino casual'},
-  {emoji:'🎓',name:'Formatura',style:'Elegante & memorável',query:'vestido longo formatura feminino'},
-  {emoji:'🏢',name:'Evento Corporativo',style:'Business casual',query:'blazer feminino trabalho'},
+  {emoji:'💼',name:'Reunião de Negócios',style:'Executivo & elegante',query:'blazer feminino social',queryCalcado:'sapato scarpin feminino',queryAcessorio:'relogio feminino elegante'},
+  {emoji:'❤️',name:'Encontro Romântico',style:'Delicado & chique',query:'vestido feminino casual romantrico',queryCalcado:'sandalia feminina elegante',queryAcessorio:'colar feminino delicado'},
+  {emoji:'💍',name:'Casamento',style:'Elegante & sofisticado',query:'vestido de festa feminino casamento',queryCalcado:'sandalia salto feminina festa',queryAcessorio:'brinco feminino festa'},
+  {emoji:'🤠',name:'Festa Sertaneja',style:'Country & estiloso',query:'moda country feminina bota',queryCalcado:'bota country feminina',queryAcessorio:'chapeu country feminino'},
+  {emoji:'🎉',name:'Balada',style:'Festivo & ousado',query:'vestido feminino festa balada',queryCalcado:'sandalia salto alto feminina',queryAcessorio:'bolsa feminina festa'},
+  {emoji:'🥩',name:'Churrasco',style:'Casual & confortável',query:'conjunto feminino casual',queryCalcado:'tenis feminino casual',queryAcessorio:'oculos sol feminino'},
+  {emoji:'🎓',name:'Formatura',style:'Elegante & memorável',query:'vestido longo formatura feminino',queryCalcado:'sandalia salto formatura feminina',queryAcessorio:'colar formatura feminino'},
+  {emoji:'🏢',name:'Evento Corporativo',style:'Business casual',query:'blazer feminino trabalho',queryCalcado:'sapato feminino trabalho',queryAcessorio:'relogio feminino trabalho'},
 ];
 
 // ── UPLOAD ──
@@ -737,6 +745,7 @@ function buildOccasions(){
       document.querySelectorAll('.occasion-card').forEach(c=>c.classList.remove('selected'));
       card.classList.add('selected');
       _selectedOccasion=oc.name;_selectedOccasionQuery=oc.query;
+      _selectedOccasionCalcado=oc.queryCalcado;_selectedOccasionAcessorio=oc.queryAcessorio;
       document.getElementById('btnConfirmarOcasiao').disabled=false;
     };
     grid.appendChild(card);
@@ -756,7 +765,7 @@ function gerarProdutosFallback(query){
     {nome:'Calça masculina estilosa',preco:'R$ 129,90',precoNum:129.90,foto:'',link:`https://shopee.com.br/search?keyword=${encodeURIComponent(query)}`},
     {nome:'Look completo masculino',preco:'R$ 159,90',precoNum:159.90,foto:'',link:`https://br.shein.com/pdsearch/${encodeURIComponent(query)}/`},
   ];
-  return base.map((p,i)=>({...p,id:'fallback-'+i,store:'Shopee/Shein',storeClass:'store-shopee'}));
+  return base.map((p,i)=>({...p,id:'fallback-'+i,store:'Shopee',storeClass:'store-shopee'}));
 }
 
 // ── ROUPAS DE REFERÊNCIA FIXAS (por ocasião e gênero) ──
@@ -932,21 +941,37 @@ async function iniciarProcessamento(){
   });
 
   try{
-    // Step 1: Buscar produtos na Shopee — SÓ desconta crédito depois disso
+    // Step 2 primeiro: análise de biotipo/rosto/subtom (rápida, ~2-3s)
+    document.getElementById('procEtapa').textContent='🎨 Analisando seu estilo...';
+    document.getElementById('st2').textContent='analisando...';document.getElementById('st2').className='analysis-status loading';
+    const analise = await analisarUsuario(window._fotoBase64, _genero);
+    window._analiseUsuario = analise;
+    document.getElementById('st2').textContent=analise?'✓ Analisado':'✓ Concluído';
+    document.getElementById('st2').className='analysis-status done';
+    if(analise) console.log('Biotipo:',analise.formatoCorpo,'| Rosto:',analise.formatoRosto,'| Subtom:',analise.subtomPele);
+
+    // Step 1: Buscar roupa + calçado + acessório na Shopee, já refinado pelo subtom de pele
     document.getElementById('procEtapa').textContent='🛍️ Buscando roupas na Shopee...';
-    _produtosEncontrados = await buscarProdutosShopee(_selectedOccasionQuery);
+    document.getElementById('st1').textContent='buscando...';document.getElementById('st1').className='analysis-status loading';
+    const queryRefinada = refinarQueryComSubtom(_selectedOccasionQuery, analise);
+    const [produtosRoupa, produtosCalcado, produtosAcessorio] = await Promise.all([
+      buscarProdutosShopee(queryRefinada),
+      buscarProdutosShopee(_selectedOccasionCalcado || _selectedOccasionQuery),
+      buscarProdutosShopee(_selectedOccasionAcessorio || _selectedOccasionQuery)
+    ]);
+
+    // Junta tudo: roupa principal + calçado + acessório formam o look completo
+    _produtosEncontrados = [
+      ...produtosRoupa.slice(0,3),
+      ...produtosCalcado.slice(0,2),
+      ...produtosAcessorio.slice(0,2)
+    ];
     document.getElementById('st1').textContent='✓ '+_produtosEncontrados.length+' produtos';
     document.getElementById('st1').className='analysis-status done';
 
     // Desconta crédito APENAS após busca bem sucedida
     const ok=await window.usarCredito();
     if(!ok){ showScreen(3); return; }
-
-    // Step 2: Biotipo
-    document.getElementById('st2').textContent='analisando...';document.getElementById('st2').className='analysis-status loading';
-    document.getElementById('procTitle').textContent='Analisando seu biotipo...';
-    await sleep(900);
-    document.getElementById('st2').textContent='✓ Analisado';document.getElementById('st2').className='analysis-status done';
 
     // Steps 3,4,5: Gera 3 looks em paralelo mas mostra um a um
     showScreen(5); // Vai para tela de looks enquanto gera
@@ -1012,6 +1037,36 @@ window.regerarTodos=async function(){
 };
 
 // ── SHOPEE — busca real via backend (Vercel Function) ──
+// ── REFINA A BUSCA COM BASE NO SUBTOM DE PELE ──
+function refinarQueryComSubtom(queryBase, analise){
+  if(!analise || !analise.subtomPele) return queryBase;
+  const subtom = analise.subtomPele.toLowerCase();
+  // Cores frias: prata, azul, branco puro, roxo | Cores quentes: dourado, marrom, terrosos, vermelho
+  if(subtom.includes('quente')) return queryBase + ' marrom';
+  if(subtom.includes('frio') || subtom.includes('fria')) return queryBase + ' azul';
+  return queryBase; // neutro: mantém busca original
+}
+
+// ── ANÁLISE DE BIOTIPO/ROSTO/SUBTOM VIA IA ──
+async function analisarUsuario(fotoBase64, genero){
+  try{
+    const res = await fetch('/api/analyze', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ fotoBase64, genero })
+    });
+    const text = await res.text();
+    let data;
+    try{ data = JSON.parse(text); }catch{ throw new Error('Resposta não-JSON: '+text.slice(0,150)); }
+    if(!data.success) throw new Error(data.error||'Falha na análise');
+    console.log('[Análise IA]', data.analise);
+    return data.analise;
+  }catch(e){
+    console.warn('Análise de biotipo falhou, seguindo sem ela:', e.message);
+    return null; // segue o fluxo normalmente mesmo sem a análise
+  }
+}
+
 async function buscarProdutosShopee(query){
   try{
     const res = await fetch(`/api/shopee?keyword=${encodeURIComponent(query)}&limit=9`);
@@ -1032,23 +1087,15 @@ function linkShopee(query){
     ?`https://s.shopee.com.br/affiliate?offerId=${SHOPEE_AFFILIATE_ID}&url=${encodeURIComponent(base)}`
     :base;
 }
-function linkShein(query){
-  const base=`https://br.shein.com/pdsearch/${encodeURIComponent(query)}/`;
-  return SHEIN_AFFILIATE_ID!=='SEU_ID_SHEIN'
-    ?`${base}?ref=${SHEIN_AFFILIATE_ID}`
-    :base;
-}
 
 // ── PRODUTOS ──
 async function renderProdutos(){
   const grid=document.getElementById('productsGrid');
   grid.innerHTML='';
-  let total=0;
   const q = _selectedOccasionQuery || 'roupa';
 
-  // Produtos já buscados na Shopee durante a geração do look (até 5)
-  _produtosEncontrados.slice(0,5).forEach(p=>{
-    total+=p.precoNum;
+  // Produtos já buscados na Shopee durante a geração do look (roupa + calçado + acessório)
+  _produtosEncontrados.forEach(p=>{
     const card=document.createElement('div');card.className='product-card';
     card.innerHTML=`
       <div class="product-img-wrap">
@@ -1075,22 +1122,7 @@ async function renderProdutos(){
     grid.appendChild(shopeeCard);
   }
 
-  // Card Shein
-  const sheinCard=document.createElement('div');sheinCard.className='product-card';
-  sheinCard.innerHTML=`
-    <div class="product-img-wrap" style="background:rgba(0,0,0,.4);flex-direction:column;gap:6px">
-      <span style="font-size:36px">👗</span>
-      <span style="font-size:10px;color:#e8b4e8;font-weight:700">SHEIN</span>
-    </div>
-    <p class="product-name">Looks para ${_selectedOccasion} na Shein</p>
-    <p class="product-store"><span class="store-badge store-shein">Shein</span></p>
-    <p class="product-price">A partir de R$ 19,90</p>
-    <button class="btn-buy" style="background:#000;color:#e8b4e8;border:0.5px solid #e8b4e8" onclick="window.open('${linkShein(q)}','_blank')">Ver na Shein →</button>`;
-  grid.appendChild(sheinCard);
-
-  document.getElementById('totalLook').textContent=total>0?'R$ '+total.toFixed(2).replace('.',','):'Ver preços';
-  document.getElementById('productsSource').textContent=
-    _produtosEncontrados.length ? `Produtos reais da Shopee` : `Shopee · Shein`;
+  document.getElementById('productsSource').textContent='Produtos reais da Shopee';
 }
 
 // ── AÇÕES ──

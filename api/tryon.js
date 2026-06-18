@@ -1,9 +1,7 @@
-// Vercel Serverless Function — gera virtual try-on via fal.ai
-// Caminho: /api/tryon.js  →  acessível em https://seusite.vercel.app/api/tryon
+// Vercel Serverless Function — SUBMETE o try-on (rápido, sem esperar terminar)
+// Caminho: /api/tryon.js
 
 const FAL_KEY = process.env.FAL_KEY || "6d1c1d0b-cde8-4c11-acf4-c0b998aab676:9109b2a26c4f9deb248e6310315df539";
-
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,7 +18,7 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    // A API do fal.ai aceita Data URI em Base64 diretamente — sem precisar fazer upload manual
+    // Apenas SUBMETE o pedido para a fila — não espera terminar
     const submitRes = await fetch('https://queue.fal.run/fal-ai/fashn/tryon/v1.6', {
       method: 'POST',
       headers: {
@@ -39,11 +37,13 @@ module.exports = async function handler(req, res) {
         mode: 'balanced'
       })
     });
+
     if (!submitRes.ok) {
       const errText = await submitRes.text();
       res.status(200).json({ success: false, error: 'Submit falhou ('+submitRes.status+'): ' + errText });
       return;
     }
+
     const submitData = await submitRes.json();
     const requestId = submitData.request_id;
     if (!requestId) {
@@ -51,36 +51,8 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    // Polling do status (máximo ~25s, dentro do limite da Vercel Function)
-    for (let i = 0; i < 11; i++) {
-      await sleep(2000);
-      const statusRes = await fetch(`https://queue.fal.run/fal-ai/fashn/tryon/v1.6/requests/${requestId}/status`, {
-        headers: { 'Authorization': `Key ${FAL_KEY}` }
-      });
-      if (!statusRes.ok) continue;
-      const status = await statusRes.json();
-
-      if (status.status === 'COMPLETED') {
-        const resultRes = await fetch(`https://queue.fal.run/fal-ai/fashn/tryon/v1.6/requests/${requestId}`, {
-          headers: { 'Authorization': `Key ${FAL_KEY}` }
-        });
-        const result = await resultRes.json();
-        const imageUrl = result.images?.[0]?.url || result.image?.url;
-        if (imageUrl) {
-          res.status(200).json({ success: true, imageUrl });
-          return;
-        }
-        res.status(200).json({ success: false, error: 'Sem imagem no resultado: '+JSON.stringify(result) });
-        return;
-      }
-      if (status.status === 'FAILED') {
-        res.status(200).json({ success: false, error: 'Try-on falhou no servidor fal.ai' });
-        return;
-      }
-    }
-
-    // Não terminou a tempo — devolve o request_id para o cliente continuar verificando
-    res.status(200).json({ success: false, pending: true, requestId, error: 'Ainda processando' });
+    // Retorna IMEDIATAMENTE com o requestId — o frontend fica perguntando o status
+    res.status(200).json({ success: true, pending: true, requestId });
 
   } catch (e) {
     res.status(200).json({ success: false, error: e.message });

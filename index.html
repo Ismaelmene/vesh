@@ -3,1151 +3,1347 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vesh — Vista-se com confiança</title>
+<title>AgroTec — Gestão da Fazenda</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --black:#080808;--dark:#111;--dark2:#1a1a1a;--dark3:#242424;
-  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
-  --gold:#C9A84C;--gold2:#D4B560;--gold-dim:rgba(201,168,76,0.15);--gold-border:rgba(201,168,76,0.3);
-  --white:#FFF;--gray1:rgba(255,255,255,0.7);--gray2:rgba(255,255,255,0.45);
-  --gray3:rgba(255,255,255,0.25);--green:#4caf82;--red:#e05c7a;
+  --bg:#F5F4F0;--surface:#FFFFFF;--border:#E2E0D8;--border2:#D0CECC;
+  --green:#3B6D11;--green2:#639922;--green-dim:#EBF2E0;--green-border:#B8D48A;
+  --red:#A32D2D;--red2:#E24B4A;--red-dim:#FBEAEA;--red-border:#F0AAAA;
+  --yellow:#8B5E00;--yellow2:#EF9F27;--yellow-dim:#FEF3E0;--yellow-border:#F8D08A;
+  --blue:#1A4D8F;--blue2:#378ADD;--blue-dim:#E8F1FB;--blue-border:#A8C8F0;
+  --text:#1A1A1A;--text2:#4A4A4A;--text3:#7A7A7A;--text4:#AAAAAA;
+  --radius:10px;--radius-sm:6px;--radius-lg:14px;
 }
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5}
 .screen{display:none;min-height:100vh}
 .screen.active{display:flex;flex-direction:column}
-nav{display:flex;justify-content:space-between;align-items:center;padding:18px 28px;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:rgba(8,8,8,0.95);backdrop-filter:blur(12px);z-index:100;flex-shrink:0}
-.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:500;letter-spacing:4px}
-.logo em{color:var(--gold);font-style:normal}
-.credits-pill{display:flex;align-items:center;gap:6px;background:var(--gold-dim);border:0.5px solid var(--gold-border);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--gold);font-weight:500}
-.credits-pill .dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.nav-back{background:none;border:none;color:var(--gray2);font-size:13px;cursor:pointer;font-family:'Inter',sans-serif}
-.btn-primary{background:var(--gold);color:var(--black);border:none;border-radius:10px;padding:15px 36px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s,transform .1s}
-.btn-primary:hover{background:var(--gold2)}
-.btn-primary:active{transform:scale(.98)}
-.btn-primary:disabled{opacity:.4;cursor:not-allowed}
-.btn-secondary{background:transparent;color:var(--white);border:0.5px solid var(--border2);border-radius:10px;padding:13px 28px;font-size:14px;cursor:pointer;font-family:'Inter',sans-serif;transition:border-color .2s,background .2s}
-.btn-secondary:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.04)}
-.btn-social{width:100%;border-radius:10px;padding:14px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s}
-.btn-google{background:var(--white);color:#111;border:none}
-.btn-google:hover{background:#f0f0f0}
-.btn-apple{background:var(--dark2);color:var(--white);border:0.5px solid var(--border2);opacity:.5;cursor:not-allowed}
-.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(201,168,76,.06) 0%,transparent 70%);pointer-events:none}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--gold-dim);border:0.5px solid var(--gold-border);border-radius:20px;padding:6px 16px;font-size:11px;letter-spacing:2px;color:var(--gold);font-weight:500;margin-bottom:32px}
-.hero-title{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,50px);font-weight:400;line-height:1.25;margin-bottom:20px;max-width:680px}
-.hero-title .accent{color:var(--gold);font-style:italic}
-.hero-sub{color:var(--gray2);font-size:16px;line-height:1.7;max-width:460px;margin-bottom:44px}
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);margin:40px 24px 0;border:0.5px solid var(--border);border-radius:16px;overflow:hidden;flex-shrink:0}
-.stat-item{padding:24px 20px;text-align:center;background:var(--dark)}
-.stat-item+.stat-item{border-left:0.5px solid var(--border)}
-.stat-value{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold)}
-.stat-label{font-size:12px;color:var(--gray3);margin-top:4px}
-.form-wrap{flex:1;display:flex;flex-direction:column;padding:40px 24px;max-width:420px;margin:0 auto;width:100%}
-.step-label{font-size:11px;letter-spacing:2px;color:var(--gray3);margin-bottom:10px}
-.form-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;margin-bottom:8px}
-.form-sub{color:var(--gray2);font-size:14px;margin-bottom:36px;line-height:1.6}
-.divider{display:flex;align-items:center;gap:14px;margin:6px 0}
-.divider::before,.divider::after{content:'';flex:1;height:0.5px;background:var(--border)}
-.divider span{font-size:12px;color:var(--gray3)}
-.input-field{width:100%;background:var(--dark2);border:0.5px solid var(--border2);border-radius:10px;padding:14px 16px;color:var(--white);font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
-.input-field:focus{border-color:rgba(201,168,76,.5)}
-.input-field::placeholder{color:var(--gray3)}
-.form-gap{display:flex;flex-direction:column;gap:12px}
-.terms{font-size:11px;color:var(--gray3);text-align:center;margin-top:20px;line-height:1.6}
-.progress-bar{display:flex;gap:6px;padding:0 24px 16px;flex-shrink:0}
-.progress-step{flex:1;height:2px;background:var(--border);border-radius:2px;transition:background .3s}
-.progress-step.done{background:var(--gold)}
-.progress-step.active{background:rgba(201,168,76,.5)}
-.upload-zone{border:1.5px dashed var(--gold-border);border-radius:16px;padding:40px 24px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:14px;min-height:200px;display:flex;align-items:center;justify-content:center}
-.upload-zone:hover{border-color:rgba(201,168,76,.6);background:var(--gold-dim)}
-.upload-icon{font-size:52px;margin-bottom:16px;opacity:.5}
-.upload-title{font-size:15px;color:var(--gray1);margin-bottom:6px;font-weight:500}
-.upload-note{font-size:12px;color:var(--gray3)}
-.upload-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.tip-box{background:var(--dark2);border-radius:12px;padding:16px 18px}
-.tip-title{font-size:12px;color:var(--gold);font-weight:500;margin-bottom:10px}
-.tip-list{list-style:none;display:flex;flex-direction:column;gap:6px}
-.tip-list li{font-size:12px;color:var(--gray2);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
-.tip-list li::before{content:'–';color:var(--gold);flex-shrink:0}
-.occasion-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.occasion-card{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;padding:20px 16px;cursor:pointer;transition:border-color .2s,background .2s,transform .1s}
-.occasion-card:hover{border-color:var(--gold-border);background:var(--dark3);transform:translateY(-2px)}
-.occasion-card.selected{border-color:var(--gold);background:var(--gold-dim)}
-.oc-emoji{font-size:28px;display:block;margin-bottom:10px}
-.oc-name{font-size:13px;font-weight:500;margin-bottom:3px}
-.oc-style{font-size:11px;color:var(--gray3)}
-.processing-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
-.ai-logo-anim{width:72px;height:72px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:32px;position:relative}
-.ai-logo-anim::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:0.5px solid var(--gold-border);animation:spin 4s linear infinite}
-.ai-logo-anim::after{content:'';position:absolute;inset:-16px;border-radius:50%;border:0.5px solid rgba(201,168,76,.1);animation:spin 6s linear infinite reverse}
+h1{font-size:24px;font-weight:600;line-height:1.2}
+h2{font-size:20px;font-weight:600;line-height:1.3}
+h3{font-size:16px;font-weight:600}
+.label{font-size:11px;font-weight:600;letter-spacing:1px;color:var(--text3);text-transform:uppercase}
+.btn{border:none;border-radius:var(--radius);padding:13px 20px;font-size:15px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:var(--green);color:#fff}
+.btn-primary:hover{background:var(--green2)}
+.btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border2)}
+.btn-secondary:hover{border-color:var(--green);color:var(--green)}
+.btn-danger{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border)}
+.btn-danger:hover{background:var(--red2);color:#fff}
+.btn-sm{padding:8px 14px;font-size:13px}
+.btn-lg{padding:16px 28px;font-size:16px;width:100%}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.input,.select,.textarea{width:100%;border:1.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:15px;font-family:'Inter',sans-serif;background:var(--surface);color:var(--text);outline:none;transition:border-color .15s}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--green)}
+.input::placeholder{color:var(--text4)}
+.textarea{resize:vertical;min-height:80px}
+.select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237A7A7A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+.input-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.input-label{font-size:13px;font-weight:500;color:var(--text2)}
+.input-big{font-size:28px;font-weight:600;text-align:center;padding:16px;color:var(--green)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
+.card-sm{padding:14px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;border-radius:20px;padding:3px 10px}
+.badge-green{background:var(--green-dim);color:var(--green)}
+.badge-red{background:var(--red-dim);color:var(--red2)}
+.badge-yellow{background:var(--yellow-dim);color:var(--yellow)}
+.badge-blue{background:var(--blue-dim);color:var(--blue)}
+.progress-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width .3s}
+.progress-green{background:var(--green2)}
+.progress-yellow{background:var(--yellow2)}
+.progress-red{background:var(--red2)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:100;max-width:600px;margin:0 auto}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;cursor:pointer;font-size:10px;font-weight:500;color:var(--text3);transition:color .15s;border:none;background:none;font-family:'Inter',sans-serif}
+.nav-item.active{color:var(--green)}
+.nav-item i{font-size:22px}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-title{font-size:17px;font-weight:600}
+.back-btn{background:none;border:none;cursor:pointer;color:var(--text2);display:flex;align-items:center;gap:4px;font-size:14px;font-family:'Inter',sans-serif;padding:0}
+.back-btn:hover{color:var(--green)}
+.alert{border-radius:var(--radius);padding:12px 14px;display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.alert-red{background:var(--red-dim);border-left:3px solid var(--red2)}
+.alert-yellow{background:var(--yellow-dim);border-left:3px solid var(--yellow2)}
+.alert-green{background:var(--green-dim);border-left:3px solid var(--green2)}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
+.modal-handle{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 20px}
+.modal h3{margin-bottom:16px}
+.activity-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:10px;cursor:pointer;transition:border-color .15s}
+.activity-card:hover{border-color:var(--green)}
+.activity-icon{width:44px;height:44px;border-radius:10px;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.metrics-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px}
+.metric-val{font-size:22px;font-weight:600;margin-bottom:2px}
+.metric-lbl{font-size:12px;color:var(--text3)}
+.metric-green .metric-val{color:var(--green)}
+.metric-red .metric-val{color:var(--red2)}
+.metric-yellow .metric-val{color:var(--yellow2)}
+.metric-blue .metric-val{color:var(--blue2)}
+.animal-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:20px;text-align:center;cursor:pointer;transition:all .15s}
+.animal-card:hover{border-color:var(--green);background:var(--green-dim)}
+.animal-emoji{font-size:40px;display:block;margin-bottom:8px}
+.ingrediente-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
+.ingrediente-row:last-child{border-bottom:none}
+.ingrediente-pct{font-size:12px;color:var(--text3);min-width:36px}
+.ingrediente-nome{flex:1;font-size:14px;font-weight:500}
+.ingrediente-input{width:90px;border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 8px;font-size:13px;font-family:'Inter',sans-serif;text-align:right}
+.custo-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
+.custo-row:last-child{border-bottom:none}
+.custo-icon{width:34px;height:34px;border-radius:8px;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.custo-info{flex:1}
+.custo-desc{font-size:14px;font-weight:500}
+.custo-meta{font-size:12px;color:var(--text3)}
+.custo-val{font-size:15px;font-weight:600;color:var(--text)}
+.custo-val.perda{color:var(--red2)}
+.plan-card{border:2px solid var(--border);border-radius:var(--radius-lg);padding:20px;cursor:pointer;transition:all .15s;position:relative}
+.plan-card:hover{border-color:var(--green)}
+.plan-card.popular{border-color:var(--green)}
+.plan-popular-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;white-space:nowrap}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(100px);background:#1A1A1A;color:#fff;border-radius:var(--radius);padding:12px 20px;font-size:13px;z-index:999;transition:transform .3s,opacity .3s;white-space:nowrap;max-width:90vw;text-align:center;opacity:0;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.empty{text-align:center;padding:48px 24px;color:var(--text3)}
+.empty i{font-size:48px;display:block;margin-bottom:12px;opacity:.4}
+.empty p{margin-bottom:16px;font-size:15px}
+.page-content{flex:1;overflow-y:auto;padding:20px;padding-bottom:80px;max-width:600px;margin:0 auto;width:100%}
+.gap{display:flex;flex-direction:column;gap:12px}
+.trial-banner{background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.processing-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;margin-bottom:8px}
-.processing-sub{color:var(--gray2);font-size:14px;margin-bottom:44px}
-.analysis-list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px}
-.analysis-item{display:flex;align-items:center;gap:14px;background:var(--dark2);border-radius:10px;padding:14px 16px}
-.analysis-label{flex:1;font-size:14px;color:var(--gray1)}
-.analysis-status{font-size:13px;color:var(--gray3)}
-.analysis-status.done{color:var(--green)}
-.analysis-status.loading{color:var(--gold)}
-
-/* ── 3 LOOKS ── */
-.looks-wrap{flex:1;padding:20px 16px;max-width:520px;margin:0 auto;width:100%}
-.looks-header{margin-bottom:16px}
-.looks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.look-card{background:var(--dark2);border:2px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .1s;position:relative}
-.look-card:hover{border-color:var(--gold-border);transform:translateY(-2px)}
-.look-card.selected{border-color:var(--gold)}
-.look-card-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:var(--dark3)}
-.look-card-placeholder{width:100%;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--dark3);gap:8px}
-.look-card-loading{width:100%;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--dark3);gap:10px}
-.look-num{position:absolute;top:8px;left:8px;background:rgba(8,8,8,.8);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600;color:var(--gold)}
-.look-selected-badge{position:absolute;top:8px;right:8px;background:var(--gold);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:var(--black);display:none}
-.look-card.selected .look-selected-badge{display:block}
-.look-label{padding:8px 10px;font-size:11px;color:var(--gray2);text-align:center;border-top:0.5px solid var(--border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.look-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.look-action-btn{background:var(--dark2);border:0.5px solid var(--border);border-radius:10px;padding:11px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;color:var(--gray2);font-family:'Inter',sans-serif;transition:all .2s}
-.look-action-btn:hover{background:var(--dark3)}
-.gender-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
-.gender-card{background:var(--dark2);border:2px solid var(--border);border-radius:16px;padding:32px 16px;cursor:pointer;transition:all .2s;text-align:center}
-.gender-card:hover{border-color:var(--gold-border);background:var(--dark3);transform:translateY(-2px)}
-.gender-card.selected{border-color:var(--gold);background:var(--gold-dim)}
-.gender-emoji{font-size:52px;display:block;margin-bottom:12px}
-.gender-name{font-size:16px;font-weight:500;color:var(--white);margin-bottom:4px}
-.gender-sub{font-size:12px;color:var(--gray3)}
-.mini-spinner{width:20px;height:20px;border:2px solid var(--gold-border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
-
-/* ── PRODUTOS ── */
-.products-wrap{flex:1;padding:24px;max-width:480px;margin:0 auto;width:100%}
-.products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
-.product-card{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;padding:14px;transition:border-color .2s}
-.product-card:hover{border-color:rgba(201,168,76,.3)}
-.product-img-wrap{border-radius:10px;overflow:hidden;aspect-ratio:1;background:var(--dark3);margin-bottom:10px;display:flex;align-items:center;justify-content:center}
-.product-img-wrap img{width:100%;height:100%;object-fit:cover}
-.product-name{font-size:12px;font-weight:500;margin-bottom:3px;line-height:1.4;color:var(--white)}
-.product-store{font-size:10px;color:var(--gray3);margin-bottom:6px}
-.store-badge{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600}
-.store-ml{background:rgba(255,230,0,.15);color:#FFE600}
-.store-amazon{background:rgba(255,153,0,.15);color:#FF9900}
-.store-shopee{background:rgba(238,77,45,.15);color:#EE4D2D}
-.store-shein{background:rgba(80,10,80,.3);color:#e8b4e8;border:0.5px solid rgba(200,100,200,.3)}
-.product-price{font-size:14px;color:var(--gold);font-weight:500;margin-bottom:8px}
-.btn-buy{width:100%;background:var(--gold);color:var(--black);border:none;border-radius:7px;padding:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s}
-.btn-buy:hover{background:var(--gold2)}
-
-/* ── PLANOS ── */
-.credit-plans{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px}
-.plan-card{background:var(--dark2);border:0.5px solid var(--border);border-radius:14px;padding:20px 16px;cursor:pointer;transition:all .2s;position:relative}
-.plan-card:hover{border-color:var(--gold-border);transform:translateY(-2px)}
-.plan-card.popular{border-color:var(--gold)}
-.plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--black);font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;white-space:nowrap}
-.plan-credits{font-family:'Playfair Display',serif;font-size:28px;margin-bottom:2px}
-.plan-credits-label{font-size:12px;color:var(--gray3);margin-bottom:14px}
-.plan-price{font-size:16px;font-weight:500;color:var(--gold)}
-.plan-per{font-size:11px;color:var(--gray3)}
-.value-box{background:var(--gold-dim);border:0.5px solid var(--gold-border);border-radius:12px;padding:16px 20px;margin-bottom:20px;text-align:center}
-
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;border:0.5px solid var(--gold-border);border-radius:10px;padding:12px 20px;font-size:13px;color:var(--white);z-index:9999;transition:transform .3s;white-space:nowrap;max-width:90vw;text-align:center}
-.toast.show{transform:translateX(-50%) translateY(0)}
-.spinner{width:32px;height:32px;border:2px solid var(--gold-border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}
+.photo-zone{border:2px dashed var(--border2);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:all .15s}
+.photo-zone:hover{border-color:var(--green);background:var(--green-dim)}
+/* Niveis garantia */
+.niveis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+.nivel-item{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center}
+.nivel-val{font-size:15px;font-weight:600;color:var(--green)}
+.nivel-lbl{font-size:10px;color:var(--text3);margin-top:2px}
+/* Conversao arroba */
+.peso-wrapper{position:relative}
+.peso-badge{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px;pointer-events:none;white-space:nowrap}
+/* Tag ingrediente livre */
+.ing-tag{display:inline-flex;align-items:center;gap:5px;background:var(--green-dim);border:1px solid var(--green-border);border-radius:20px;padding:4px 10px;font-size:13px;color:var(--green);font-weight:500}
+.ing-tag button{background:none;border:none;cursor:pointer;color:var(--green);font-size:13px;line-height:1;padding:0;display:flex;align-items:center}
+.ing-tags-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:20px}
+@media(min-width:600px){
+  body{max-width:600px;margin:0 auto;border-left:1px solid var(--border);border-right:1px solid var(--border)}
+  .bottom-nav{left:50%;transform:translateX(-50%);border-radius:0}
+}
 </style>
 </head>
 <body>
 <div class="toast" id="toast"></div>
-
-<!-- ══ SCREEN 0 — LANDING ══ -->
-<section id="screen-0" class="screen active">
-  <nav>
-    <div class="logo">VE<em>SH</em></div>
-    <div style="display:flex;gap:10px;align-items:center;">
-      <span id="navUser" style="font-size:13px;color:var(--gray2);display:none"></span>
-      <button id="navBtn" class="btn-secondary" style="padding:9px 20px;font-size:13px;" onclick="showScreen(1);trocarAba('login')">Entrar</button>
+<!-- LOGIN -->
+<section id="screen-login" class="screen active">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 24px;max-width:440px;margin:0 auto;width:100%">
+    <div style="text-align:center;margin-bottom:40px">
+      <div style="font-size:48px;margin-bottom:12px">🌱</div>
+      <h1 style="color:var(--green);margin-bottom:6px">AgroTec</h1>
+      <p style="color:var(--text3);font-size:15px">Gestao inteligente da sua fazenda</p>
     </div>
-  </nav>
-  <div class="hero">
-    <div class="eyebrow"><span style="width:6px;height:6px;background:var(--gold);border-radius:50%"></span>POWERED BY INTELIGÊNCIA ARTIFICIAL</div>
-    <h1 class="hero-title">Veja você mesmo usando<br>a roupa <em class="accent">ideal</em><br>antes de comprar.</h1>
-    <p class="hero-sub">Envie sua foto, escolha a ocasião e receba <strong style="color:var(--gold)">3 looks diferentes</strong> com roupas reais da Shopee disponíveis para compra.</p>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
-      <button class="btn-primary" style="padding:16px 48px;font-size:16px;" onclick="handleCTA()">Experimentar Grátis</button>
-      <p style="font-size:12px;color:var(--gray3);">✦ 3 créditos grátis • 3 looks por crédito • R$1,60 por geração</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border-radius:var(--radius);padding:4px;margin-bottom:24px;border:1px solid var(--border)">
+      <button id="abaCadastro" onclick="trocarAbaLogin('cadastro')" style="background:var(--surface);color:var(--green);border:none;border-radius:7px;padding:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s">Criar conta</button>
+      <button id="abaEntrar" onclick="trocarAbaLogin('entrar')" style="background:transparent;color:var(--text3);border:none;border-radius:7px;padding:10px;font-size:14px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s">Ja tenho conta</button>
     </div>
-  </div>
-  <div class="stats-row">
-    <div class="stat-item"><div class="stat-value">12k+</div><div class="stat-label">usuários</div></div>
-    <div class="stat-item"><div class="stat-value">3</div><div class="stat-label">looks por crédito</div></div>
-    <div class="stat-item"><div class="stat-value">R$1,60</div><div class="stat-label">por geração</div></div>
-  </div>
-  <div style="padding:60px 24px;max-width:560px;margin:0 auto;width:100%;">
-    <p style="font-size:11px;letter-spacing:2px;color:var(--gray3);margin-bottom:14px;text-align:center;">COMO FUNCIONA</p>
-    <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:400;text-align:center;margin-bottom:48px;">Em 3 passos simples</h2>
-    <div style="display:flex;flex-direction:column;gap:32px;">
-      <div style="display:flex;gap:20px;align-items:flex-start;">
-        <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);flex-shrink:0">1</div>
-        <div><p style="font-size:16px;font-weight:500;margin-bottom:6px">Envie sua foto</p><p style="font-size:14px;color:var(--gray2);line-height:1.6">Foto de corpo inteiro. A IA analisa seu biotipo, tom de pele e formato do rosto.</p></div>
-      </div>
-      <div style="display:flex;gap:20px;align-items:flex-start;">
-        <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);flex-shrink:0">2</div>
-        <div><p style="font-size:16px;font-weight:500;margin-bottom:6px">Escolha a ocasião</p><p style="font-size:14px;color:var(--gray2);line-height:1.6">A IA busca roupas, calçados e acessórios reais na <strong style="color:#EE4D2D">Shopee</strong> para essa ocasião.</p></div>
-      </div>
-      <div style="display:flex;gap:20px;align-items:flex-start;">
-        <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);flex-shrink:0">3</div>
-        <div><p style="font-size:16px;font-weight:500;margin-bottom:6px">Receba 3 looks e compre</p><p style="font-size:14px;color:var(--gray2);line-height:1.6">Veja você em 3 roupas diferentes. Escolha a favorita e compre com 1 clique.</p></div>
-      </div>
-    </div>
-    <div style="margin-top:48px;text-align:center;"><button class="btn-primary" onclick="handleCTA()">Começar agora — é grátis</button></div>
-  </div>
-  <footer style="padding:28px 24px;border-top:0.5px solid var(--border);text-align:center;">
-    <div class="logo" style="font-size:18px;margin-bottom:12px;">VE<em>SH</em></div>
-    <p style="font-size:12px;color:var(--gray3);">© 2025 Vesh. Todos os direitos reservados.</p>
-  </footer>
-</section>
-
-<!-- ══ SCREEN 1 — CADASTRO ══ -->
-<section id="screen-1" class="screen">
-  <nav><div class="logo">VE<em>SH</em></div><button class="nav-back" onclick="showScreen(0)">← Voltar</button></nav>
-  <div class="form-wrap">
-
-    <!-- ABAS -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;background:var(--dark2);border-radius:10px;padding:4px;margin-bottom:28px;border:0.5px solid var(--border)">
-      <button id="abaNovo" onclick="trocarAba('novo')" style="background:var(--gold);color:var(--black);border:none;border-radius:7px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s">
-        Criar conta
-      </button>
-      <button id="abaLogin" onclick="trocarAba('login')" style="background:transparent;color:var(--gray2);border:none;border-radius:7px;padding:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s">
-        Já tenho conta
-      </button>
-    </div>
-
-    <!-- MODO CADASTRO -->
     <div id="modoCadastro">
-      <h1 class="form-title">Crie sua conta</h1>
-      <p class="form-sub">Ganhe <strong style="color:var(--gold)">3 créditos grátis</strong> — cada um gera 3 looks para você escolher.</p>
-      <div class="form-gap">
-        <button class="btn-social btn-google" id="btnGoogle" onclick="loginGoogle()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-          Continuar com Google
-        </button>
-        <button class="btn-social btn-apple" disabled>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          Apple (em breve)
-        </button>
-        <div class="divider"><span>ou cadastre com e-mail</span></div>
-        <input id="emailInput" class="input-field" type="email" placeholder="seu@email.com">
-        <input id="senhaInput" class="input-field" type="password" placeholder="Criar senha (mín. 6 caracteres)">
-        <button class="btn-primary" style="width:100%;margin-top:4px" onclick="loginEmail('cadastro')">Criar conta grátis →</button>
+      <div style="background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--radius);padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px">
+        <i class="ti ti-gift" style="color:var(--green);font-size:20px"></i>
+        <p style="font-size:13px;color:var(--green);font-weight:500">30 dias gratis -- sem precisar de cartao</p>
       </div>
-      <p class="terms">Ao criar conta você concorda com os Termos de Uso e Política de Privacidade</p>
+      <div class="input-group"><label class="input-label">Seu nome</label><input class="input" id="nomeInput" type="text" placeholder="Ex: Joao Silva"></div>
+      <div class="input-group"><label class="input-label">E-mail</label><input class="input" id="emailCadastro" type="email" placeholder="seu@email.com"></div>
+      <div class="input-group"><label class="input-label">Senha</label><input class="input" id="senhaCadastro" type="password" placeholder="Minimo 6 caracteres"></div>
+      <div class="input-group"><label class="input-label">Nome da fazenda</label><input class="input" id="nomeSitio" type="text" placeholder="Ex: Fazenda Sao Joao"></div>
+      <button class="btn btn-primary btn-lg" onclick="cadastrar()">Comecar 30 dias gratis</button>
     </div>
-
-    <!-- MODO LOGIN -->
-    <div id="modoLogin" style="display:none">
-      <h1 class="form-title">Bem-vindo de volta</h1>
-      <p class="form-sub" style="margin-bottom:28px">Entre com sua conta para continuar gerando looks.</p>
-      <div class="form-gap">
-        <button class="btn-social btn-google" id="btnGoogle2" onclick="loginGoogle()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-          Entrar com Google
-        </button>
-        <div class="divider"><span>ou entre com e-mail</span></div>
-        <input id="emailLogin" class="input-field" type="email" placeholder="seu@email.com">
-        <input id="senhaLogin" class="input-field" type="password" placeholder="Sua senha">
-        <button class="btn-primary" style="width:100%;margin-top:4px" onclick="loginEmail('login')">Entrar →</button>
-        <p style="font-size:12px;color:var(--gray3);text-align:center;margin-top:4px">
-          Esqueceu a senha? <a onclick="recuperarSenha()" style="color:var(--gold);cursor:pointer">Recuperar</a>
-        </p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ══ SCREEN 1.5 — GÊNERO ══ -->
-<section id="screen-15" class="screen">
-  <nav>
-    <div class="logo">VE<em>SH</em></div>
-    <div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div>
-  </nav>
-  <div class="progress-bar">
-    <div class="progress-step done"></div>
-    <div class="progress-step active"></div>
-    <div class="progress-step"></div>
-    <div class="progress-step"></div>
-    <div class="progress-step"></div>
-  </div>
-  <div class="form-wrap" style="padding-top:16px">
-    <button class="nav-back" style="margin-bottom:20px;padding:0" onclick="showScreen(1)">← Voltar</button>
-    <p class="step-label">PASSO 2 DE 5</p>
-    <h1 class="form-title">Você é?</h1>
-    <p class="form-sub">A IA vai buscar roupas do seu estilo.</p>
-    <div class="gender-grid">
-      <div class="gender-card" id="genderMasc" onclick="selecionarGenero('masculino',this)">
-        <span class="gender-emoji">👨</span>
-        <p class="gender-name">Masculino</p>
-        <p class="gender-sub">Roupas masc.</p>
-      </div>
-      <div class="gender-card" id="genderFem" onclick="selecionarGenero('feminino',this)">
-        <span class="gender-emoji">👩</span>
-        <p class="gender-name">Feminino</p>
-        <p class="gender-sub">Roupas fem.</p>
-      </div>
-    </div>
-    <button id="btnContinuarGenero" class="btn-primary" style="width:100%" disabled onclick="showScreen(2)">Continuar →</button>
-  </div>
-</section>
-
-<!-- ══ SCREEN 2 — UPLOAD ══ -->
-<section id="screen-2" class="screen">
-  <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div></nav>
-  <div class="progress-bar">
-    <div class="progress-step done"></div><div class="progress-step done"></div>
-    <div class="progress-step active"></div><div class="progress-step"></div><div class="progress-step"></div>
-  </div>
-  <div class="form-wrap" style="padding-top:16px">
-    <button class="nav-back" style="margin-bottom:20px;padding:0" onclick="showScreen(15)">← Voltar</button>
-    <p class="step-label">PASSO 3 DE 5</p>
-    <h1 class="form-title">Envie sua foto</h1>
-    <p class="form-sub">Foto de corpo inteiro para os melhores resultados.</p>
-    <input type="file" id="fotoInput" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="onFotoSelecionada(event)">
-    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="onFotoSelecionada(event)">
-    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fotoInput').click()">
-      <div id="uploadPlaceholder" style="text-align:center">
-        <div class="upload-icon">🧍</div>
-        <p class="upload-title">Arraste ou clique para enviar</p>
-        <p class="upload-note">JPG, PNG — máx. 10MB</p>
-      </div>
-      <div id="uploadPreview" style="display:none;width:100%;text-align:center;padding:8px">
-        <img id="previewImg" style="max-height:260px;max-width:100%;border-radius:12px;object-fit:cover" src="" alt="Sua foto">
-        <p style="color:var(--green);font-size:13px;margin-top:12px;font-weight:500">✓ Foto selecionada</p>
-        <p style="color:var(--gray3);font-size:12px;margin-top:4px">Clique para trocar</p>
-      </div>
-    </div>
-    <div class="upload-btns">
-      <button class="btn-secondary" onclick="document.getElementById('cameraInput').click()" style="display:flex;align-items:center;justify-content:center;gap:8px">📷 Câmera</button>
-      <button class="btn-secondary" onclick="document.getElementById('fotoInput').click()" style="display:flex;align-items:center;justify-content:center;gap:8px">🖼 Galeria</button>
-    </div>
-    <button id="btnContinuarFoto" class="btn-primary" style="width:100%;margin-bottom:16px" disabled onclick="showScreen(3)">Continuar →</button>
-    <div class="tip-box">
-      <p class="tip-title">💡 Dicas para melhor resultado</p>
-      <ul class="tip-list">
-        <li>Foto de corpo inteiro em fundo neutro ou claro</li>
-        <li>Boa iluminação — evite sombras no rosto</li>
-        <li>Posição ereta, de frente para a câmera</li>
-        <li>Roupa justa facilita a análise do biotipo</li>
-      </ul>
+    <div id="modoEntrar" style="display:none">
+      <div class="input-group"><label class="input-label">E-mail</label><input class="input" id="emailLogin" type="email" placeholder="seu@email.com"></div>
+      <div class="input-group"><label class="input-label">Senha</label><input class="input" id="senhaLogin" type="password" placeholder="Sua senha"></div>
+      <button class="btn btn-primary btn-lg" onclick="entrar()">Entrar</button>
+      <p style="text-align:center;margin-top:14px;font-size:13px;color:var(--text3)"><a onclick="recuperarSenha()" style="color:var(--green);cursor:pointer">Esqueci minha senha</a></p>
     </div>
   </div>
 </section>
 
-<!-- ══ SCREEN 3 — OCASIÃO ══ -->
-<section id="screen-3" class="screen">
-  <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div></nav>
-  <div class="progress-bar">
-    <div class="progress-step done"></div><div class="progress-step done"></div>
-    <div class="progress-step done"></div><div class="progress-step active"></div><div class="progress-step"></div>
-  </div>
-  <div style="padding:24px 24px 0;max-width:480px;margin:0 auto;width:100%">
-    <button class="nav-back" style="margin-bottom:20px;padding:0" onclick="showScreen(2)">← Voltar</button>
-    <p class="step-label">PASSO 4 DE 5</p>
-    <h1 class="form-title">Qual é a ocasião?</h1>
-    <p class="form-sub" style="margin-bottom:20px">A IA vai buscar 3 looks completos da <strong style="color:#EE4D2D">Shopee</strong> para você.</p>
-  </div>
-  <div style="padding:0 24px 24px;flex:1;max-width:480px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:16px">
-    <div class="occasion-grid" id="occasionGrid"></div>
-    <div style="background:var(--dark2);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:10px;border:0.5px solid var(--border)">
-      <span style="font-size:20px">💡</span>
-      <p style="font-size:12px;color:var(--gray2);line-height:1.5">1 crédito = <strong style="color:var(--gold)">3 looks diferentes</strong> gerados pela IA = <strong style="color:var(--gold)">R$ 1,60</strong></p>
+<!-- DASHBOARD -->
+<section id="screen-dashboard" class="screen">
+  <div class="topbar">
+    <div>
+      <p style="font-size:12px;color:var(--text3)">Ola,</p>
+      <p style="font-size:17px;font-weight:600" id="greetingName">Produtor</p>
     </div>
-    <button id="btnConfirmarOcasiao" class="btn-primary" style="width:100%" disabled onclick="iniciarProcessamento()">✨ Gerar 3 looks — 1 crédito (R$1,60)</button>
-  </div>
-</section>
-
-<!-- ══ SCREEN 4 — PROCESSAMENTO ══ -->
-<section id="screen-4" class="screen">
-  <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">3 créditos</span></div></nav>
-  <div class="processing-wrap">
-    <div class="ai-logo-anim">AI</div>
-    <h2 class="processing-title" id="procTitle">Buscando roupas reais...</h2>
-    <p class="processing-sub" id="procSub">Gerando 3 looks personalizados para você.</p>
-    <div class="analysis-list">
-      <div class="analysis-item"><span style="font-size:18px">🛍️</span><span class="analysis-label">Buscando roupas, calçados e acessórios</span><span class="analysis-status loading" id="st1">buscando...</span></div>
-      <div class="analysis-item"><span style="font-size:18px">🎨</span><span class="analysis-label">Analisando seu biotipo</span><span class="analysis-status" id="st2">aguardando</span></div>
-      <div class="analysis-item"><span style="font-size:18px">👗</span><span class="analysis-label" id="st3label">Gerando look 1 de 3</span><span class="analysis-status" id="st3">aguardando</span></div>
-      <div class="analysis-item"><span style="font-size:18px">✨</span><span class="analysis-label" id="st4label">Gerando look 2 de 3</span><span class="analysis-status" id="st4">aguardando</span></div>
-      <div class="analysis-item"><span style="font-size:18px">🌟</span><span class="analysis-label" id="st5label">Gerando look 3 de 3</span><span class="analysis-status" id="st5">aguardando</span></div>
-    </div>
-    <p id="procEtapa" style="font-size:12px;color:var(--gray3);margin-top:24px;min-height:20px"></p>
-  </div>
-</section>
-
-<!-- ══ SCREEN 5 — 3 LOOKS ══ -->
-<section id="screen-5" class="screen">
-  <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">2 créditos</span></div></nav>
-  <div class="looks-wrap">
-    <div class="looks-header">
-      <button class="nav-back" style="margin-bottom:16px;padding:0" onclick="showScreen(3)">← Escolher outra ocasião</button>
-      <p style="font-size:11px;letter-spacing:2px;color:var(--gray3);margin-bottom:6px">SEUS 3 LOOKS GERADOS</p>
-      <h2 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:400;margin-bottom:4px" id="resultTitle">Festa Sertaneja</h2>
-      <p style="font-size:13px;color:var(--gray2);margin-bottom:10px">Toque no look favorito para ver os produtos</p>
-      <div id="analiseBox" style="display:none;background:var(--gold-dim);border:0.5px solid var(--gold-border);border-radius:10px;padding:10px 14px;margin-bottom:6px">
-        <p style="font-size:12px;color:var(--gold);line-height:1.5" id="analiseTexto"></p>
-      </div>
-    </div>
-
-    <!-- 3 cards de looks -->
-    <div class="looks-grid" id="looksGrid">
-      <div class="look-card" id="lookCard0" onclick="selecionarLook(0)">
-        <div class="look-card-loading" id="lookLoading0"><div class="mini-spinner"></div><p style="font-size:11px;color:var(--gray3)">Gerando...</p></div>
-        <img class="look-card-img" id="lookImg0" style="display:none" src="" alt="Look 1">
-        <span class="look-num">1</span>
-        <span class="look-selected-badge">✓ Escolhido</span>
-        <div class="look-label" id="lookLabel0">Look 1</div>
-      </div>
-      <div class="look-card" id="lookCard1" onclick="selecionarLook(1)">
-        <div class="look-card-loading" id="lookLoading1"><div class="mini-spinner"></div><p style="font-size:11px;color:var(--gray3)">Gerando...</p></div>
-        <img class="look-card-img" id="lookImg1" style="display:none" src="" alt="Look 2">
-        <span class="look-num">2</span>
-        <span class="look-selected-badge">✓ Escolhido</span>
-        <div class="look-label" id="lookLabel1">Look 2</div>
-      </div>
-      <div class="look-card" id="lookCard2" onclick="selecionarLook(2)">
-        <div class="look-card-loading" id="lookLoading2"><div class="mini-spinner"></div><p style="font-size:11px;color:var(--gray3)">Gerando...</p></div>
-        <img class="look-card-img" id="lookImg2" style="display:none" src="" alt="Look 3">
-        <span class="look-num">3</span>
-        <span class="look-selected-badge">✓ Escolhido</span>
-        <div class="look-label" id="lookLabel2">Look 3</div>
-      </div>
-    </div>
-
-    <!-- Ações -->
-    <div class="look-actions">
-      <button class="look-action-btn" id="btnLike" onclick="toggleLike()"><span style="font-size:18px" id="likeIcon">🤍</span><span>Salvar look</span></button>
-      <button class="look-action-btn" onclick="compartilhar()"><span style="font-size:18px">📤</span><span>Compartilhar</span></button>
-      <button class="look-action-btn" onclick="regerarTodos()"><span style="font-size:18px">🔄</span><span>Regerar (1 crédito)</span></button>
-    </div>
-
-    <button class="btn-primary" style="width:100%;margin-bottom:12px" id="btnVerProdutos" onclick="showScreen(6)" disabled>
-      🛒 Ver produtos do look escolhido →
+    <button onclick="showScreen('perfil')" style="background:var(--green-dim);border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center">
+      <i class="ti ti-user" style="color:var(--green);font-size:20px"></i>
     </button>
-    <p style="font-size:12px;color:var(--gray3);text-align:center">Escolha um dos 3 looks acima para ver as peças</p>
   </div>
+  <div class="page-content">
+    <div class="trial-banner" id="trialBanner" style="display:none">
+      <i class="ti ti-clock" style="color:var(--green);font-size:20px;flex-shrink:0"></i>
+      <p style="font-size:13px;color:var(--green)"><strong id="trialDias">30</strong> dias gratuitos restantes. <a onclick="showScreen('planos')" style="color:var(--green);font-weight:600;cursor:pointer">Ver planos &rarr;</a></p>
+    </div>
+    <div class="metrics-row">
+      <div class="metric-card"><p class="metric-lbl">Investido no mes</p><p class="metric-val" id="totalInvestido">R$ 0</p></div>
+      <div class="metric-card metric-green"><p class="metric-lbl">Receita prevista</p><p class="metric-val" id="totalReceita">R$ 0</p></div>
+      <div class="metric-card metric-blue"><p class="metric-lbl">Margem projetada</p><p class="metric-val" id="margem">R$ 0</p></div>
+      <div class="metric-card"><p class="metric-lbl">Atividades ativas</p><p class="metric-val" id="totalAtividades">0</p></div>
+    </div>
+    <div id="alertasContainer"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3>Atividades</h3>
+      <button class="btn btn-sm btn-secondary" onclick="showScreen('atividades')">Ver todas</button>
+    </div>
+    <div id="rankingContainer">
+      <div class="empty"><i class="ti ti-plant"></i><p>Nenhuma atividade ainda</p><button class="btn btn-primary btn-sm" onclick="showScreen('atividades')">Criar primeira atividade</button></div>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="showScreen('dashboard')"><i class="ti ti-home"></i>Inicio</button>
+    <button class="nav-item" onclick="showScreen('atividades')"><i class="ti ti-plant"></i>Atividades</button>
+    <button class="nav-item" onclick="showScreen('formulacao')"><i class="ti ti-bowl"></i>Racao</button>
+    <button class="nav-item" onclick="showScreen('historico')"><i class="ti ti-chart-bar"></i>Historico</button>
+    <button class="nav-item" onclick="showScreen('perfil')"><i class="ti ti-user"></i>Perfil</button>
+  </nav>
 </section>
 
-<!-- ══ SCREEN 6 — PRODUTOS ══ -->
-<section id="screen-6" class="screen">
-  <nav><div class="logo">VE<em>SH</em></div><div class="credits-pill"><span class="dot"></span><span class="credits-text">2 créditos</span></div></nav>
-  <div class="products-wrap">
-    <p class="step-label">PEÇAS DO LOOK ESCOLHIDO</p>
-    <h2 class="form-title" style="margin-bottom:4px" id="productsTitle">Festa Sertaneja</h2>
-    <p style="font-size:12px;color:var(--gray3);margin-bottom:20px" id="productsSource">Produtos encontrados na Shopee</p>
-    <div id="productsGrid" class="products-grid"></div>
-    <div style="display:flex;gap:10px;margin-bottom:20px">
-      <button class="btn-secondary" style="flex:1" onclick="showScreen(5)">← Ver looks</button>
-      <button class="btn-primary" style="flex:1" onclick="showScreen(3)">Nova ocasião</button>
-    </div>
-    <div style="background:var(--dark2);border-radius:14px;padding:20px;text-align:center;border:0.5px solid var(--border)">
-      <p style="font-size:13px;color:var(--gray2);margin-bottom:4px">Ficou sem créditos?</p>
-      <p style="font-size:12px;color:var(--gray3);margin-bottom:14px">Cada crédito gera 3 looks novos por R$1,60.</p>
-      <button class="btn-secondary" onclick="showScreen(7)" style="font-size:13px;padding:10px 24px">✦ Recarregar créditos</button>
+<!-- ATIVIDADES -->
+<section id="screen-atividades" class="screen">
+  <div class="topbar">
+    <span class="topbar-title">Atividades</span>
+    <button class="btn btn-primary btn-sm" onclick="abrirModalNovaAtividade()"><i class="ti ti-plus"></i> Nova</button>
+  </div>
+  <div class="page-content">
+    <div id="atividadesContainer">
+      <div class="empty"><i class="ti ti-plant"></i><p>Nenhuma atividade cadastrada</p><button class="btn btn-primary" onclick="abrirModalNovaAtividade()"><i class="ti ti-plus"></i> Criar atividade</button></div>
     </div>
   </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="showScreen('dashboard')"><i class="ti ti-home"></i>Inicio</button>
+    <button class="nav-item active" onclick="showScreen('atividades')"><i class="ti ti-plant"></i>Atividades</button>
+    <button class="nav-item" onclick="showScreen('formulacao')"><i class="ti ti-bowl"></i>Racao</button>
+    <button class="nav-item" onclick="showScreen('historico')"><i class="ti ti-chart-bar"></i>Historico</button>
+    <button class="nav-item" onclick="showScreen('perfil')"><i class="ti ti-user"></i>Perfil</button>
+  </nav>
 </section>
 
-<!-- ══ SCREEN 7 — CRÉDITOS ══ -->
-<section id="screen-7" class="screen">
-  <nav><div class="logo">VE<em>SH</em></div><button class="nav-back" onclick="showScreen(6)">← Voltar</button></nav>
-  <div style="flex:1;padding:40px 24px;max-width:460px;margin:0 auto;width:100%">
-    <p class="step-label" style="text-align:center">RECARREGAR CRÉDITOS</p>
-    <h2 class="form-title" style="text-align:center;margin-bottom:8px">Escolha seu plano</h2>
-    <p class="form-sub" style="text-align:center;margin-bottom:20px">Cada crédito = 3 looks gerados pela IA.</p>
-
-    <div class="value-box">
-      <p style="font-size:13px;color:var(--gray2);margin-bottom:4px">💡 Entenda o valor</p>
-      <p style="font-size:22px;font-family:'Playfair Display',serif;color:var(--gold);margin-bottom:4px">R$ 1,60 por geração</p>
-      <p style="font-size:12px;color:var(--gray3)">= 3 looks personalizados com roupas reais disponíveis para compra</p>
-    </div>
-
-    <div class="credit-plans">
-      <div class="plan-card" onclick="selecionarPlano(this,'5','8.00')">
-        <p class="plan-credits">5</p>
-        <p class="plan-credits-label">créditos = 15 looks</p>
-        <p class="plan-price">R$ 8,00</p>
-        <p class="plan-per">R$ 1,60/geração</p>
-      </div>
-      <div class="plan-card popular" onclick="selecionarPlano(this,'10','14.90')">
-        <div class="plan-badge">MAIS POPULAR</div>
-        <p class="plan-credits">10</p>
-        <p class="plan-credits-label">créditos = 30 looks</p>
-        <p class="plan-price">R$ 14,90</p>
-        <p class="plan-per">R$ 1,49/geração</p>
-      </div>
-      <div class="plan-card" onclick="selecionarPlano(this,'20','26.90')">
-        <p class="plan-credits">20</p>
-        <p class="plan-credits-label">créditos = 60 looks</p>
-        <p class="plan-price">R$ 26,90</p>
-        <p class="plan-per">R$ 1,34/geração</p>
-      </div>
-      <div class="plan-card" onclick="selecionarPlano(this,'50','59.90')">
-        <p class="plan-credits">50</p>
-        <p class="plan-credits-label">créditos = 150 looks</p>
-        <p class="plan-price">R$ 59,90</p>
-        <p class="plan-per">R$ 1,20/geração</p>
+<!-- CICLO -->
+<section id="screen-ciclo" class="screen">
+  <div class="topbar">
+    <button class="back-btn" onclick="showScreen('atividades')"><i class="ti ti-arrow-left"></i> Voltar</button>
+    <span class="topbar-title" id="cicloNomeTop"></span>
+    <div style="display:flex;gap:8px;align-items:center;position:relative">
+      <button onclick="abrirModalFecharCiclo()" class="btn btn-sm btn-secondary">Fechar ciclo</button>
+      <button onclick="toggleMenuCiclo()" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--text2)"><i class="ti ti-dots-vertical" style="font-size:20px"></i></button>
+      <div id="menuCiclo" style="display:none;position:absolute;top:36px;right:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 4px 16px rgba(0,0,0,.1);z-index:50;min-width:180px;overflow:hidden">
+        <button onclick="confirmarExcluirAtividade()" style="width:100%;text-align:left;padding:12px 16px;background:none;border:none;color:var(--red2);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;font-family:'Inter',sans-serif"><i class="ti ti-trash"></i> Excluir atividade</button>
       </div>
     </div>
-    <button class="btn-primary" style="width:100%;margin-bottom:14px" onclick="iniciarPagamento()">Pagar com Mercado Pago</button>
-    <p style="font-size:12px;color:var(--gray3);text-align:center;line-height:1.7">Pagamento seguro · Créditos não expiram · Sem renovação automática</p>
+  </div>
+  <div class="page-content">
+    <div class="card" style="margin-bottom:16px">
+      <p class="label" style="margin-bottom:12px">Resultado projetado</p>
+      <div class="metrics-row" style="margin-bottom:0">
+        <div class="metric-card metric-green" style="border:none;padding:8px 0"><p class="metric-lbl">Receita prevista</p><p class="metric-val" id="cicloReceita" style="font-size:18px">R$ 0</p></div>
+        <div class="metric-card" style="border:none;padding:8px 0"><p class="metric-lbl">Custo acumulado</p><p class="metric-val" id="cicloCusto" style="font-size:18px">R$ 0</p></div>
+        <div class="metric-card" style="border:none;padding:8px 0"><p class="metric-lbl">Margem projetada</p><p class="metric-val" id="cicloMargem" style="font-size:18px">R$ 0</p></div>
+        <div class="metric-card" style="border:none;padding:8px 0"><p class="metric-lbl">Perdas</p><p class="metric-val" id="cicloPerdas" style="font-size:18px;color:var(--red2)">R$ 0</p></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <p style="font-weight:500">Orcamento de gastos extras</p>
+        <p style="font-size:13px;color:var(--text3)"><span id="cicloOrcPct">0</span>% usado</p>
+      </div>
+      <div class="progress-bar" style="margin-bottom:8px"><div class="progress-fill progress-green" id="cicloOrcBar" style="width:0%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text3)">
+        <span>R$ <span id="cicloGasto">0</span> gasto</span>
+        <span>Previsto: R$ <span id="cicloLimite">0</span></span>
+      </div>
+      <p style="font-size:11px;color:var(--text4);margin-top:8px">Nao inclui o valor de compra dos animais/mudas.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+      <button class="btn btn-primary" onclick="abrirModalLancarCusto()"><i class="ti ti-plus"></i> Lancar custo</button>
+      <button class="btn btn-danger" onclick="abrirModalRegistrarPerda()"><i class="ti ti-alert-triangle"></i> Registrar perda</button>
+    </div>
+    <h3 style="margin-bottom:12px">Custos lancados</h3>
+    <div id="custosContainer"><p style="color:var(--text3);font-size:14px;text-align:center;padding:20px">Nenhum custo lancado ainda</p></div>
+    <h3 style="margin-bottom:12px;margin-top:20px">Perdas e mortalidade</h3>
+    <div id="perdasContainer"><p style="color:var(--text3);font-size:14px;text-align:center;padding:20px">Nenhuma perda registrada</p></div>
   </div>
 </section>
+<!-- FORMULACAO -->
+<section id="screen-formulacao" class="screen">
+  <div class="topbar"><span class="topbar-title">Formulacao de Racao</span></div>
+  <div class="page-content">
+    <div id="formulacaoInicio">
+      <p style="color:var(--text3);margin-bottom:16px;font-size:14px">Escolha o tipo de animal:</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div class="animal-card" onclick="iniciarFormulacao('bovinos')"><span class="animal-emoji">&#x1F404;</span><p style="font-size:13px;font-weight:500">Bovinos</p><p style="font-size:11px;color:var(--text3)">Boi, vaca, bezerro</p></div>
+        <div class="animal-card" onclick="iniciarFormulacao('suinos')"><span class="animal-emoji">&#x1F437;</span><p style="font-size:13px;font-weight:500">Suinos</p><p style="font-size:11px;color:var(--text3)">Leitao, terminacao</p></div>
+        <div class="animal-card" onclick="iniciarFormulacao('aves')"><span class="animal-emoji">&#x1F414;</span><p style="font-size:13px;font-weight:500">Aves</p><p style="font-size:11px;color:var(--text3)">Frango, galinha</p></div>
+      </div>
+      <h3 style="margin-bottom:12px">Minhas formulacoes salvas</h3>
+      <div id="formulacoesSalvas"><div class="empty"><i class="ti ti-bowl"></i><p>Nenhuma formulacao salva ainda</p></div></div>
+    </div>
 
-<!-- ══ FIREBASE ══ -->
+    <!-- FORMULARIO BOVINOS -->
+    <div id="formBovinos" style="display:none">
+      <button class="back-btn" style="margin-bottom:20px" onclick="voltarFormulacao()"><i class="ti ti-arrow-left"></i> Voltar</button>
+      <h2 style="margin-bottom:4px">&#x1F404; Bovinos</h2>
+      <p style="color:var(--text3);font-size:14px;margin-bottom:20px">Preencha os dados do animal</p>
+
+      <div class="input-group">
+        <label class="input-label">Categoria do animal</label>
+        <select class="select" id="bovFase">
+          <option value="bezerro">Bezerro (ate 6 meses)</option>
+          <option value="garrote">Garrote (7-18 meses)</option>
+          <option value="novilha-engorda">Novilha em engorda</option>
+          <option value="novilha-reproducao">Novilha para reproducao</option>
+          <option value="vaca-lactacao">Vaca em lactacao</option>
+          <option value="vaca-seca">Vaca seca</option>
+          <option value="boi-engorda">Boi em engorda</option>
+          <option value="reprodutor">Touro reprodutor</option>
+        </select>
+      </div>
+
+      <!-- Peso em KG com conversao automatica para @ -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="input-group">
+          <label class="input-label">Peso atual (kg)</label>
+          <div class="peso-wrapper">
+            <input class="input" id="bovPesoKg" type="number" placeholder="Ex: 250" oninput="converterPeso('atual')" style="padding-right:60px">
+            <span class="peso-badge" id="bovPesoArroba">-- @</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Peso meta (kg)</label>
+          <div class="peso-wrapper">
+            <input class="input" id="bovMetaKg" type="number" placeholder="Ex: 400" oninput="converterPeso('meta')" style="padding-right:60px">
+            <span class="peso-badge" id="bovMetaArroba">-- @</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Objetivo</label>
+        <select class="select" id="bovObjetivo">
+          <option value="engorda">Engorda / Ganho de peso</option>
+          <option value="leite">Producao de leite</option>
+          <option value="reproducao">Reproducao</option>
+          <option value="manutencao">Manutencao</option>
+        </select>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="input-group">
+          <label class="input-label">Regiao do Brasil</label>
+          <select class="select" id="bovRegiao">
+            <option value="centro-oeste">Centro-Oeste</option>
+            <option value="sudeste">Sudeste</option>
+            <option value="nordeste">Nordeste</option>
+            <option value="sul">Sul</option>
+            <option value="norte">Norte</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Epoca do ano</label>
+          <select class="select" id="bovEpoca">
+            <option value="seca">Seca (mai-set)</option>
+            <option value="chuva">Chuva (out-abr)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Tipo de pasto</label>
+        <input class="input" id="bovPasto" type="text" placeholder="Ex: Brachiaria brizantha, Mombaca, Tifton">
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Foto do pasto (opcional)</label>
+        <div class="photo-zone" onclick="tirarFotoPasto()" id="fotoPastoZone">
+          <i class="ti ti-camera" style="font-size:28px;color:var(--text4);display:block;margin-bottom:8px"></i>
+          <p style="font-size:13px;color:var(--text3)">Toque para tirar foto ou carregar da galeria</p>
+          <p style="font-size:11px;color:var(--text4);margin-top:4px">A IA analisa a qualidade do pasto</p>
+        </div>
+        <input type="file" id="fotoPastoInput" accept="image/*" style="display:none" onchange="onFotoPasto(event)">
+        <img id="fotoPastoPreview" style="display:none;width:100%;border-radius:var(--radius);margin-top:8px;max-height:200px;object-fit:cover" src="" alt="Foto do pasto">
+      </div>
+
+      <!-- NUCLEO MINERAL - CAMPO LIVRE -->
+      <div class="input-group">
+        <label class="input-label">Materias-primas disponiveis</label>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:10px">Informe o nucleo que voce usa e os ingredientes disponiveis na sua regiao. A IA formulara usando apenas esses.</p>
+
+        <div style="background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--radius);padding:14px;margin-bottom:12px">
+          <p style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:8px"><i class="ti ti-star-filled"></i> Nucleo mineral / Suplemento <span style="color:var(--red2)">*</span></p>
+          <input class="input" id="bovNucleo" type="text" placeholder="Ex: Nucleo Tortuga, Rumensin, Bovifos, Ubifos, Comin..." style="background:#fff">
+          <p style="font-size:11px;color:var(--text3);margin-top:6px">A IA busca a composicao desse produto e ajusta a formulacao automaticamente.</p>
+        </div>
+
+        <div style="background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--radius);padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px">
+          <i class="ti ti-check-circle" style="color:var(--blue2);font-size:18px;flex-shrink:0"></i>
+          <div>
+            <p style="font-size:13px;font-weight:500;color:var(--blue)">Sal branco (NaCl)</p>
+            <p style="font-size:11px;color:var(--text3)">Sempre incluido -- mineral essencial</p>
+          </div>
+        </div>
+
+        <p style="font-size:13px;font-weight:500;color:var(--text2);margin-bottom:8px">Outros ingredientes disponíveis:</p>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <input class="input" id="ingInput" type="text" placeholder="Ex: Milho triturado, Farelo de soja..." style="flex:1" onkeydown="if(event.key==='Enter'){adicionarIngrediente();event.preventDefault()}">
+          <button class="btn btn-secondary btn-sm" onclick="adicionarIngrediente()" style="flex-shrink:0;white-space:nowrap"><i class="ti ti-plus"></i> Add</button>
+        </div>
+        <div class="ing-tags-wrap" id="ingTagsWrap">
+          <p style="font-size:12px;color:var(--text4)">Nenhum ingrediente adicionado ainda</p>
+        </div>
+        <p style="font-size:11px;color:var(--text4);margin-top:8px">Sugestoes: Milho triturado, Farelo de soja, Sorgo, Torta de algodao, DDG de milho, Ureia pecuaria, Farelo de trigo, Polpa citrica</p>
+      </div>
+
+      <button class="btn btn-primary btn-lg" onclick="gerarFormulacao('bovinos')">
+        <i class="ti ti-sparkles"></i> Gerar formulacao com IA
+      </button>
+    </div>
+
+    <!-- SUINOS -->
+    <div id="formSuinos" style="display:none">
+      <button class="back-btn" style="margin-bottom:20px" onclick="voltarFormulacao()"><i class="ti ti-arrow-left"></i> Voltar</button>
+      <h2 style="margin-bottom:4px">&#x1F437; Suinos</h2>
+      <p style="color:var(--text3);font-size:14px;margin-bottom:20px">Preencha os dados para a formulacao</p>
+      <div class="input-group"><label class="input-label">Fase</label>
+        <select class="select" id="suiFase">
+          <option value="leitao">Leitao (ate 30kg)</option>
+          <option value="crescimento">Crescimento (30-60kg)</option>
+          <option value="terminacao">Terminacao (60-100kg)</option>
+          <option value="gestante">Porca gestante</option>
+          <option value="lactacao">Porca em lactacao</option>
+          <option value="reprodutor">Reprodutor</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="input-group"><label class="input-label">Peso medio (kg)</label><input class="input" id="suiPeso" type="number" placeholder="Ex: 30"></div>
+        <div class="input-group"><label class="input-label">Qtd. animais</label><input class="input" id="suiQtd" type="number" placeholder="Ex: 20"></div>
+      </div>
+      <button class="btn btn-primary btn-lg" onclick="gerarFormulacao('suinos')"><i class="ti ti-sparkles"></i> Gerar formulacao</button>
+    </div>
+
+    <!-- AVES -->
+    <div id="formAves" style="display:none">
+      <button class="back-btn" style="margin-bottom:20px" onclick="voltarFormulacao()"><i class="ti ti-arrow-left"></i> Voltar</button>
+      <h2 style="margin-bottom:4px">&#x1F414; Aves</h2>
+      <p style="color:var(--text3);font-size:14px;margin-bottom:20px">Preencha os dados para a formulacao</p>
+      <div class="input-group"><label class="input-label">Tipo de ave</label>
+        <select class="select" id="aveTipo">
+          <option value="frango-corte">Frango de corte</option>
+          <option value="poedeira">Galinha poedeira</option>
+          <option value="caipira">Frango caipira</option>
+          <option value="peru">Peru</option>
+        </select>
+      </div>
+      <div class="input-group"><label class="input-label">Fase</label>
+        <select class="select" id="aveFase">
+          <option value="pintinho">Pintinho (1-21 dias)</option>
+          <option value="crescimento">Crescimento (22-35 dias)</option>
+          <option value="terminacao">Terminacao (36-42 dias)</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="input-group"><label class="input-label">Qtd. aves</label><input class="input" id="aveQtd" type="number" placeholder="Ex: 200"></div>
+        <div class="input-group"><label class="input-label">Peso medio (kg)</label><input class="input" id="avePeso" type="number" placeholder="0,5" step="0.1"></div>
+      </div>
+      <button class="btn btn-primary btn-lg" onclick="gerarFormulacao('aves')"><i class="ti ti-sparkles"></i> Gerar formulacao</button>
+    </div>
+
+    <!-- RESULTADO FORMULACAO -->
+    <div id="resultadoFormulacao" style="display:none">
+      <button class="back-btn" style="margin-bottom:20px" onclick="voltarFormulacao()"><i class="ti ti-arrow-left"></i> Nova formulacao</button>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;gap:8px">
+        <h2 id="resultadoTitulo">Formulacao</h2>
+        <div style="display:flex;gap:8px;flex-shrink:0">
+          <button class="btn btn-sm btn-secondary" onclick="salvarFormulacao()"><i class="ti ti-bookmark"></i> Salvar</button>
+          <button class="btn btn-sm btn-primary" onclick="enviarParaFabricacao()"><i class="ti ti-send"></i> Fabricacao</button>
+        </div>
+      </div>
+
+      <div id="pastAnalise" style="display:none;margin-bottom:16px" class="card">
+        <p class="label" style="margin-bottom:6px">Analise do pasto</p>
+        <p id="pastAnaliseTexto" style="font-size:14px;color:var(--text2)"></p>
+      </div>
+
+      <div id="nucleoInfoCard" style="display:none;margin-bottom:16px" class="card">
+        <p class="label" style="margin-bottom:8px">Nucleo utilizado na formulacao</p>
+        <p id="nucleoNomeUsado" style="font-size:14px;font-weight:600;color:var(--green);margin-bottom:4px"></p>
+        <p id="nucleoDescUsado" style="font-size:13px;color:var(--text2)"></p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <p class="label" style="margin-bottom:12px">Ingredientes</p>
+        <div id="ingredientesContainer"></div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px" id="niveisCard">
+        <p class="label" style="margin-bottom:12px">Niveis de garantia (por kg de racao)</p>
+        <div class="niveis-grid" id="niveisContainer"></div>
+        <p style="font-size:11px;color:var(--text4);margin-top:12px">* Valores estimados pela IA. Nao substituem analise laboratorial.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;background:var(--green-dim);border-color:var(--green-border)">
+        <p class="label" style="margin-bottom:10px">Custo calculado</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center">
+          <div><p style="font-size:20px;font-weight:600;color:var(--green)" id="custoPorKg">R$ 0,00</p><p style="font-size:11px;color:var(--text3)">por kg de racao</p></div>
+          <div><p style="font-size:20px;font-weight:600;color:var(--green)" id="custoAnimalDia">R$ 0,00</p><p style="font-size:11px;color:var(--text3)">por animal/dia</p></div>
+          <div><p style="font-size:20px;font-weight:600;color:var(--green)" id="custoLoteDia">R$ 0,00</p><p style="font-size:11px;color:var(--text3)">lote total/dia</p></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px" id="exigenciasCard">
+        <p class="label" style="margin-bottom:10px">Exigencias nutricionais do animal</p>
+        <div id="exigenciasContainer" style="font-size:14px;color:var(--text2);line-height:1.8"></div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <p class="label" style="margin-bottom:10px">Recomendacoes</p>
+        <div id="recomendacoesContainer" style="font-size:14px;color:var(--text2);line-height:1.7"></div>
+      </div>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="showScreen('dashboard')"><i class="ti ti-home"></i>Inicio</button>
+    <button class="nav-item" onclick="showScreen('atividades')"><i class="ti ti-plant"></i>Atividades</button>
+    <button class="nav-item active" onclick="showScreen('formulacao')"><i class="ti ti-bowl"></i>Racao</button>
+    <button class="nav-item" onclick="showScreen('historico')"><i class="ti ti-chart-bar"></i>Historico</button>
+    <button class="nav-item" onclick="showScreen('perfil')"><i class="ti ti-user"></i>Perfil</button>
+  </nav>
+</section>
+
+<!-- HISTORICO -->
+<section id="screen-historico" class="screen">
+  <div class="topbar"><span class="topbar-title">Historico</span></div>
+  <div class="page-content">
+    <div class="card" style="margin-bottom:16px">
+      <p class="label" style="margin-bottom:12px">Resumo do ano</p>
+      <div class="metrics-row" style="margin-bottom:0">
+        <div class="metric-card metric-green" style="border:none;padding:8px 0"><p class="metric-lbl">Lucro total</p><p class="metric-val" id="histLucro" style="font-size:18px">R$ 0</p></div>
+        <div class="metric-card" style="border:none;padding:8px 0"><p class="metric-lbl">Ciclos encerrados</p><p class="metric-val" id="histCiclos" style="font-size:18px">0</p></div>
+        <div class="metric-card" style="border:none;padding:8px 0"><p class="metric-lbl">Total investido</p><p class="metric-val" id="histInvestido" style="font-size:18px">R$ 0</p></div>
+        <div class="metric-card metric-green" style="border:none;padding:8px 0"><p class="metric-lbl">Melhor atividade</p><p class="metric-val" id="histMelhor" style="font-size:14px;font-weight:500">--</p></div>
+      </div>
+    </div>
+    <h3 style="margin-bottom:12px">Ciclos encerrados</h3>
+    <div id="historicoContainer"><div class="empty"><i class="ti ti-chart-bar"></i><p>Nenhum ciclo encerrado ainda</p></div></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="showScreen('dashboard')"><i class="ti ti-home"></i>Inicio</button>
+    <button class="nav-item" onclick="showScreen('atividades')"><i class="ti ti-plant"></i>Atividades</button>
+    <button class="nav-item" onclick="showScreen('formulacao')"><i class="ti ti-bowl"></i>Racao</button>
+    <button class="nav-item active" onclick="showScreen('historico')"><i class="ti ti-chart-bar"></i>Historico</button>
+    <button class="nav-item" onclick="showScreen('perfil')"><i class="ti ti-user"></i>Perfil</button>
+  </nav>
+</section>
+
+<!-- PERFIL -->
+<section id="screen-perfil" class="screen">
+  <div class="topbar"><span class="topbar-title">Meu Perfil</span></div>
+  <div class="page-content">
+    <div class="card" style="margin-bottom:16px;text-align:center">
+      <div style="width:64px;height:64px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><i class="ti ti-user" style="font-size:28px;color:var(--green)"></i></div>
+      <h3 id="perfilNome">Carregando...</h3>
+      <p style="font-size:13px;color:var(--text3)" id="perfilEmail"></p>
+      <span class="badge badge-green" style="margin-top:8px" id="perfilPlano">Trial gratuito</span>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <p style="font-weight:500;margin-bottom:4px" id="perfilSitio">Fazenda</p>
+      <p style="font-size:13px;color:var(--text3)">Nome da fazenda</p>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="margin-bottom:14px">Usuarios da fazenda</h3>
+      <div id="usuariosSitio"><p style="font-size:14px;color:var(--text3)">Carregando...</p></div>
+      <button class="btn btn-secondary" style="width:100%;margin-top:12px" onclick="convidarUsuario()"><i class="ti ti-user-plus"></i> Convidar membro</button>
+    </div>
+    <button class="btn btn-secondary" style="width:100%;margin-bottom:10px" onclick="showScreen('planos')"><i class="ti ti-crown"></i> Ver planos e assinatura</button>
+    <button class="btn btn-danger" style="width:100%" onclick="sair()"><i class="ti ti-logout"></i> Sair da conta</button>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="showScreen('dashboard')"><i class="ti ti-home"></i>Inicio</button>
+    <button class="nav-item" onclick="showScreen('atividades')"><i class="ti ti-plant"></i>Atividades</button>
+    <button class="nav-item" onclick="showScreen('formulacao')"><i class="ti ti-bowl"></i>Racao</button>
+    <button class="nav-item" onclick="showScreen('historico')"><i class="ti ti-chart-bar"></i>Historico</button>
+    <button class="nav-item active" onclick="showScreen('perfil')"><i class="ti ti-user"></i>Perfil</button>
+  </nav>
+</section>
+
+<!-- PLANOS -->
+<section id="screen-planos" class="screen">
+  <div class="topbar">
+    <button class="back-btn" onclick="showScreen('perfil')"><i class="ti ti-arrow-left"></i> Voltar</button>
+    <span class="topbar-title">Planos</span><div></div>
+  </div>
+  <div class="page-content">
+    <div class="trial-banner" id="trialBannerPlanos">
+      <i class="ti ti-clock" style="color:var(--green);font-size:20px;flex-shrink:0"></i>
+      <p style="font-size:13px;color:var(--green)"><strong id="trialDiasPlanos">30</strong> dias gratuitos restantes</p>
+    </div>
+    <div class="gap" style="margin-bottom:24px">
+      <div class="plan-card" onclick="selecionarPlano('individual')" id="plano-individual">
+        <h3>Individual</h3>
+        <p style="font-size:28px;font-weight:600;color:var(--green);margin:8px 0">R$ 50<span style="font-size:14px;color:var(--text3)">/mes</span></p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:12px">
+          <li style="font-size:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-check" style="color:var(--green)"></i>1 usuario</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-check" style="color:var(--green)"></i>Atividades ilimitadas</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-check" style="color:var(--green)"></i>Formulacao de racao com IA</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-check" style="color:var(--green)"></i>Alertas automaticos</li>
+        </ul>
+      </div>
+      <div class="plan-card popular" onclick="selecionarPlano('familia')" id="plano-familia">
+        <div class="plan-popular-badge">MAIS POPULAR</div>
+        <h3>Familia</h3>
+        <p style="font-size:28px;font-weight:600;color:var(--green);margin:8px 0">R$ 75<span style="font-size:14px;color:var(--text3)">/mes</span></p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:12px">
+          <li style="font-size:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-check" style="color:var(--green)"></i>Ate 3 usuarios</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-check" style="color:var(--green)"></i>Rastreabilidade de lancamentos</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-check" style="color:var(--green)"></i>Tudo do Individual</li>
+        </ul>
+      </div>
+      <div class="plan-card" onclick="selecionarPlano('sitiogrande')" id="plano-sitiogrande">
+        <h3>Fazenda Grande</h3>
+        <p style="font-size:28px;font-weight:600;color:var(--green);margin:8px 0">R$ 100<span style="font-size:14px;color:var(--text3)">/mes</span></p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:12px">
+          <li style="font-size:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-check" style="color:var(--green)"></i>Ate 6 usuarios</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-check" style="color:var(--green)"></i>Relatorios avancados</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-check" style="color:var(--green)"></i>Prioridade no suporte</li>
+          <li style="font-size:14px;display:flex;align-items:center;gap:8px"><i class="ti ti-check" style="color:var(--green)"></i>Tudo do Familia</li>
+        </ul>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-lg" id="btnAssinar" onclick="assinar()" disabled>Assinar com Mercado Pago</button>
+    <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:12px">Cancele quando quiser, sem multa</p>
+  </div>
+</section>
+<!-- MODAIS -->
+<div class="modal-overlay" id="modalNovaAtividade">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>Nova atividade</h3>
+    <div id="modalStep1">
+      <p style="font-size:14px;color:var(--text2);margin-bottom:16px">Que tipo de atividade voce vai acompanhar?</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px">
+        <button onclick="selecionarTipoAtividade('criacao')" class="animal-card" id="tipoCriacao"><span style="font-size:28px;display:block;margin-bottom:6px">&#x1F404;</span><p style="font-size:12px;font-weight:500">Criacao</p></button>
+        <button onclick="selecionarTipoAtividade('plantacao')" class="animal-card" id="tipoPlantacao" style="border:none;cursor:pointer;font-family:'Inter',sans-serif;width:100%"><span style="font-size:28px;display:block;margin-bottom:6px">&#x1F331;</span><p style="font-size:12px;font-weight:500">Plantacao</p></button>
+        <button onclick="selecionarTipoAtividade('infraestrutura')" class="animal-card" id="tipoInfraestrutura" style="border:none;cursor:pointer;font-family:'Inter',sans-serif;width:100%"><span style="font-size:28px;display:block;margin-bottom:6px">&#x1F528;</span><p style="font-size:12px;font-weight:500">Infraestrutura</p></button>
+      </div>
+      <div class="input-group"><label class="input-label">Nome da atividade</label><input class="input" id="atividadeNome" placeholder="Ex: Frangos de corte, Banana, Reforma do curral"></div>
+      <div class="input-group">
+        <label class="input-label">Icone</label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px" id="iconePicker"></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Categorias de custo (separe por virgula)</label>
+        <input class="input" id="atividadeCategorias" placeholder="Ex: Racao, Vacina, Mao de obra">
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="irParaCiclo()">Proximo: criar ciclo &rarr;</button>
+    </div>
+    <div id="modalStep2" style="display:none">
+      <button class="back-btn" style="margin-bottom:16px" onclick="voltarStep1()"><i class="ti ti-arrow-left"></i> Voltar</button>
+      <h3 style="margin-bottom:16px">Primeiro ciclo</h3>
+      <div class="input-group"><label class="input-label">Nome do ciclo</label><input class="input" id="cicloNomeInput" placeholder="Ex: Lote Junho 2026"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="input-group"><label class="input-label">Data de inicio</label><input class="input" id="cicloDataInicio" type="date"></div>
+        <div class="input-group"><label class="input-label">Previsao de termino</label><input class="input" id="cicloDataFim" type="date"></div>
+      </div>
+      <div class="input-group"><label class="input-label">Quantidade</label><input class="input" id="cicloQuantidade" placeholder="Ex: 80 frangos"></div>
+      <div class="input-group"><label class="input-label">Quantidade numerica</label><input class="input" id="cicloQuantidadeNum" type="number" placeholder="Ex: 80"></div>
+      <div class="divider"></div>
+      <p class="label" style="margin-bottom:10px">&#x1F4B0; PREVISAO FINANCEIRA</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="input-group"><label class="input-label">Preco de compra (por unidade)</label><input class="input" id="cicloPrecoCompra" type="number" placeholder="0,00"></div>
+        <div class="input-group"><label class="input-label">Preco de venda pretendido</label><input class="input" id="cicloPrecoVenda" type="number" placeholder="0,00"></div>
+      </div>
+      <div class="input-group"><label class="input-label">Valor previsto para gastos extras</label><input class="input" id="cicloOrcamento" type="number" placeholder="0,00"></div>
+      <div id="resumoFinanceiro" style="background:var(--green-dim);border-radius:10px;padding:14px;margin:14px 0;display:none">
+        <p style="font-size:12px;color:var(--text3);margin-bottom:6px">Resumo da previsao</p>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Receita prevista total</span><strong id="resumoReceita" style="color:var(--green)">R$ 0</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Orcamento total</span><strong id="resumoOrcamento" style="color:var(--red2)">R$ 0</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:600;padding-top:6px;border-top:1px solid var(--green-border)"><span>Margem projetada</span><strong id="resumoMargem">R$ 0</strong></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%" id="btnSalvarAtividade" onclick="salvarAtividade()"><i class="ti ti-check"></i> Criar atividade</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalLancarCusto">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>Lancar custo</h3>
+    <div class="input-group" style="margin-top:16px"><label class="input-label">Categoria</label><select class="select" id="custoCategoria"></select></div>
+    <div class="input-group"><label class="input-label">Valor (R$)</label><input class="input input-big" id="custoValor" type="number" placeholder="0,00" step="0.01"></div>
+    <div class="input-group"><label class="input-label">O que foi comprado ou pago</label><input class="input" id="custoDescricao" placeholder="Ex: 2 sacas de racao"></div>
+    <div class="input-group"><label class="input-label">Data</label><input class="input" id="custoData" type="date"></div>
+    <div class="input-group"><label class="input-label">Observacao (opcional)</label><input class="input" id="custoObs" placeholder="Detalhe extra"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button class="btn btn-secondary" onclick="fecharModal('modalLancarCusto')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarCusto()">Salvar custo</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalRegistrarPerda">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>Registrar perda</h3>
+    <div style="display:flex;gap:0;margin:16px 0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+      <button id="tabMortalidade" onclick="trocarAbaPerda('mortalidade')" style="flex:1;padding:10px;border:none;background:var(--green);color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer">Mortalidade</button>
+      <button id="tabPerdaProducao" onclick="trocarAbaPerda('producao')" style="flex:1;padding:10px;border:none;background:var(--surface);color:var(--text3);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer">Perda de producao</button>
+    </div>
+    <div id="formMortalidade">
+      <div class="input-group"><label class="input-label">Quantos animais morreram</label><input class="input input-big" id="mortQtd" type="number" placeholder="0"></div>
+      <div class="input-group"><label class="input-label">Causa</label>
+        <select class="select" id="mortCausa">
+          <option value="doenca-respiratoria">Doenca respiratoria</option>
+          <option value="doenca-intestinal">Doenca intestinal</option>
+          <option value="acidente">Acidente</option>
+          <option value="predador">Predador</option>
+          <option value="calor">Calor</option>
+          <option value="desconhecida">Causa desconhecida</option>
+        </select>
+      </div>
+      <div class="input-group"><label class="input-label">Valor estimado por animal (R$)</label><input class="input" id="mortValorUnit" type="number" placeholder="0,00"></div>
+      <p style="font-size:13px;color:var(--text3);margin-bottom:16px">Perda estimada: <strong id="mortTotal" style="color:var(--red2)">R$ 0,00</strong></p>
+    </div>
+    <div id="formPerdaProducao" style="display:none">
+      <div class="input-group"><label class="input-label">O que foi perdido</label><input class="input" id="perdaDesc" placeholder="Ex: Bananas apodrecidas"></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px">
+        <div class="input-group"><label class="input-label">Quantidade</label><input class="input" id="perdaQtd" type="number" placeholder="0"></div>
+        <div class="input-group"><label class="input-label">Unidade</label>
+          <select class="select" id="perdaUnidade"><option value="kg">kg</option><option value="unidade">unidade</option><option value="caixa">caixa</option><option value="cacho">cacho</option></select>
+        </div>
+      </div>
+      <div class="input-group"><label class="input-label">Motivo</label>
+        <select class="select" id="perdaMotivo">
+          <option value="praga">Praga</option><option value="doenca-planta">Doenca da planta</option><option value="chuva">Chuva excessiva</option><option value="seca">Seca</option><option value="granizo">Granizo</option><option value="apodrecimento">Apodrecimento</option><option value="geada">Geada</option>
+        </select>
+      </div>
+      <div class="input-group"><label class="input-label">Valor de venda por unidade (R$)</label><input class="input" id="perdaValorUnit" type="number" placeholder="0,00"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+      <button class="btn btn-secondary" onclick="fecharModal('modalRegistrarPerda')">Cancelar</button>
+      <button class="btn btn-danger" onclick="salvarPerda()">Registrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalFecharCiclo">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>Fechar ciclo</h3>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:20px">Informe os dados da venda para calcular o resultado final</p>
+    <div class="input-group"><label class="input-label">Quantidade vendida</label><input class="input" id="vendaQtd" type="number" placeholder="0"></div>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px">
+      <div class="input-group"><label class="input-label">Preco real de venda</label><input class="input" id="vendaPreco" type="number" placeholder="0,00"></div>
+      <div class="input-group"><label class="input-label">Unidade</label>
+        <select class="select" id="vendaUnidade"><option value="kg">por kg</option><option value="unidade">por unidade</option><option value="caixa">por caixa</option><option value="total">valor total</option></select>
+      </div>
+    </div>
+    <div class="input-group"><label class="input-label">Data da venda</label><input class="input" id="vendaData" type="date"></div>
+    <div class="input-group"><label class="input-label">Comprador (opcional)</label><input class="input" id="vendaComprador" placeholder="Ex: Cooperativa, Mercado local"></div>
+    <div id="resultadoFechamento" style="display:none;margin:16px 0">
+      <div class="divider"></div>
+      <h3 style="margin-bottom:12px">Resultado do ciclo</h3>
+      <div class="gap">
+        <div style="display:flex;justify-content:space-between"><span style="font-size:14px;color:var(--text2)">Receita real</span><span style="font-size:14px;font-weight:500;color:var(--green)" id="fechReceita">R$ 0,00</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:14px;color:var(--text2)">Total investido</span><span style="font-size:14px;font-weight:500;color:var(--red2)" id="fechInvestido">R$ 0,00</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:14px;color:var(--text2)">Perdas e mortalidade</span><span style="font-size:14px;font-weight:500;color:var(--red2)" id="fechPerdas">R$ 0,00</span></div>
+        <div class="divider"></div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:16px;font-weight:600">Resultado final</span><span style="font-size:18px;font-weight:700" id="fechResultado">R$ 0,00</span></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button class="btn btn-secondary" onclick="fecharModal('modalFecharCiclo')">Cancelar</button>
+      <button class="btn btn-primary" id="btnConfirmarFechamento" onclick="calcularFechamento()">Calcular resultado</button>
+    </div>
+  </div>
+</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, query, where, updateDoc, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const app = initializeApp({
-  apiKey:"AIzaSyBwJad_iMupLijRRvaBUXVcd7A3zMLuDhs",
-  authDomain:"vesh-a9fc3.firebaseapp.com",
-  projectId:"vesh-a9fc3",
-  storageBucket:"vesh-a9fc3.firebasestorage.app",
-  messagingSenderId:"609101052696",
-  appId:"1:609101052696:web:ba1a5b83ea5978595cfc6d"
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCe3EMp2nN0MlNtNBlflxFM5wv8W2Y9dQQ",
+  authDomain: "agrotec-bf5fd.firebaseapp.com",
+  projectId: "agrotec-bf5fd",
+  storageBucket: "agrotec-bf5fd.firebasestorage.app",
+  messagingSenderId: "818749632688",
+  appId: "1:818749632688:web:e52c3caa34de7ffe7c8b75"
+};
+
+const app = initializeApp(FIREBASE_CONFIG);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let _user=null,_sitioId=null,_sitioData=null,_atividadeAtual=null,_cicloAtual=null;
+let _tipoAtividade=null,_iconeAtividade='🌱',_planoPlamoSelecionado=null;
+let _fotoPastoBase64=null,_formulacaoAtual=null,_abaPerda='mortalidade';
+window._ingredientesLivres=[];
+
+onAuthStateChanged(auth,async(user)=>{
+  if(user){_user=user;await carregarSitio();showScreen('dashboard');}
+  else{_user=null;_sitioId=null;showScreen('login');}
 });
-const auth=getAuth(app), db=getFirestore(app), provider=new GoogleAuthProvider();
 
-async function salvarUsuario(uid,email,nome){
-  const ref=doc(db,"usuarios",uid), snap=await getDoc(ref);
-  if(!snap.exists()){await setDoc(ref,{email,nome:nome||"",creditos:3,criadoEm:new Date().toISOString()});return 3;}
-  return snap.data().creditos;
-}
-function atualizarUI(creditos,nome){
-  document.querySelectorAll('.credits-text').forEach(el=>el.textContent=`${creditos} crédito${creditos!==1?'s':''}`);
-  if(nome){
-    const nu=document.getElementById('navUser'),nb=document.getElementById('navBtn');
-    if(nu){nu.textContent=nome.split(' ')[0];nu.style.display='inline';}
-    if(nb){nb.textContent='Sair';nb.onclick=()=>{if(confirm('Deseja sair?'))signOut(auth);};}
-  }
-  window._creditos=creditos;
-}
-window.loginGoogle=async function(){
-  const btn=document.getElementById('btnGoogle');
-  btn.textContent='Conectando...';btn.disabled=true;
+window.cadastrar=async function(){
+  const nome=document.getElementById('nomeInput').value.trim();
+  const email=document.getElementById('emailCadastro').value.trim();
+  const senha=document.getElementById('senhaCadastro').value;
+  const nomeSitio=document.getElementById('nomeSitio').value.trim();
+  if(!nome||!email||!senha||!nomeSitio){showToast('Preencha todos os campos');return;}
+  if(senha.length<6){showToast('Senha minimo 6 caracteres');return;}
   try{
-    const r=await signInWithPopup(auth,provider);
-    const c=await salvarUsuario(r.user.uid,r.user.email,r.user.displayName);
-    atualizarUI(c,r.user.displayName);showToast('✓ Bem-vindo ao Vesh!');showScreen(15);
-  }catch(e){
-    showToast('Erro: '+e.message);
-    btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Continuar com Google';
-    btn.disabled=false;
-  }
+    const r=await createUserWithEmailAndPassword(auth,email,senha);
+    const trialFim=new Date();trialFim.setDate(trialFim.getDate()+30);
+    await setDoc(doc(db,'usuarios',r.user.uid),{nome,email,criadoEm:new Date().toISOString(),plano:'trial',trialFim:trialFim.toISOString()});
+    const sitioRef=await addDoc(collection(db,'sitios'),{nome:nomeSitio,donoId:r.user.uid,criadoEm:new Date().toISOString()});
+    await addDoc(collection(db,'sitio_usuarios'),{sitioId:sitioRef.id,userId:r.user.uid,papel:'dono',nome});
+    showToast('Conta criada! Bem-vindo ao AgroTec!');
+  }catch(e){const m={'auth/email-already-in-use':'E-mail ja cadastrado.','auth/invalid-email':'E-mail invalido.'};showToast(m[e.code]||'Erro: '+e.message);}
 };
-// ── ABAS LOGIN/CADASTRO ──
-window.trocarAba=function(modo){
-  const novo=modo==='novo';
-  document.getElementById('modoCadastro').style.display=novo?'block':'none';
-  document.getElementById('modoLogin').style.display=novo?'none':'block';
-  document.getElementById('abaNovo').style.background=novo?'var(--gold)':'transparent';
-  document.getElementById('abaNovo').style.color=novo?'var(--black)':'var(--gray2)';
-  document.getElementById('abaLogin').style.background=novo?'transparent':'var(--gold)';
-  document.getElementById('abaLogin').style.color=novo?'var(--gray2)':'var(--black)';
+window.entrar=async function(){
+  const email=document.getElementById('emailLogin').value.trim();
+  const senha=document.getElementById('senhaLogin').value;
+  if(!email||!senha){showToast('Preencha e-mail e senha');return;}
+  try{await signInWithEmailAndPassword(auth,email,senha);}catch(e){showToast('E-mail ou senha incorretos');}
 };
-
+window.sair=async function(){if(confirm('Deseja sair da conta?'))await signOut(auth);};
 window.recuperarSenha=async function(){
   const email=document.getElementById('emailLogin').value.trim();
-  if(!email){showToast('Digite seu e-mail primeiro.');return;}
+  if(!email){showToast('Digite seu e-mail primeiro');return;}
+  await sendPasswordResetEmail(auth,email);showToast('E-mail de recuperacao enviado!');
+};
+
+async function carregarSitio(){
+  const userData=await getDoc(doc(db,'usuarios',_user.uid));
+  if(!userData.exists())return;
+  const u=userData.data();
+  document.getElementById('greetingName').textContent=u.nome?.split(' ')[0]||'Produtor';
+  document.getElementById('perfilNome').textContent=u.nome||'';
+  document.getElementById('perfilEmail').textContent=u.email||'';
+  if(u.plano==='trial'&&u.trialFim){
+    const dias=Math.ceil((new Date(u.trialFim)-new Date())/(1000*60*60*24));
+    if(dias>0){document.getElementById('trialBanner').style.display='flex';document.getElementById('trialDias').textContent=dias;document.getElementById('trialDiasPlanos').textContent=dias;document.getElementById('trialBannerPlanos').style.display='flex';}
+    document.getElementById('perfilPlano').textContent='Trial - '+Math.max(0,dias)+' dias restantes';
+  }else{document.getElementById('perfilPlano').textContent=u.plano||'Individual';document.getElementById('trialBanner').style.display='none';}
+  const suSnap=await getDocs(query(collection(db,'sitio_usuarios'),where('userId','==',_user.uid)));
+  if(!suSnap.empty){
+    _sitioId=suSnap.docs[0].data().sitioId;
+    const sitioSnap=await getDoc(doc(db,'sitios',_sitioId));
+    if(sitioSnap.exists()){_sitioData=sitioSnap.data();document.getElementById('perfilSitio').textContent=_sitioData.nome;}
+    await carregarAtividades();await carregarHistorico();
+  }
+}
+
+async function carregarAtividades(){
+  if(!_sitioId)return;
+  const snap=await getDocs(query(collection(db,'atividades'),where('sitioId','==',_sitioId),where('ativa','==',true)));
+  const atividades=snap.docs.map(d=>({id:d.id,...d.data()}));
+  renderAtividades(atividades);renderDashboard(atividades);
+}
+
+function renderAtividades(atividades){
+  const container=document.getElementById('atividadesContainer');
+  if(!atividades.length){container.innerHTML='<div class="empty"><i class="ti ti-plant"></i><p>Nenhuma atividade cadastrada</p><button class="btn btn-primary" onclick="abrirModalNovaAtividade()"><i class="ti ti-plus"></i> Criar atividade</button></div>';return;}
+  container.innerHTML=atividades.map(a=>{
+    const gastoExtra=a.cicloAtual?.gastoTotal||0,investimentoInicial=a.cicloAtual?.investimentoInicial||0;
+    const custoTotal=gastoExtra+investimentoInicial,orcamento=a.cicloAtual?.orcamento||0;
+    const receita=a.cicloAtual?.receitaPrevista||0,perdas=a.cicloAtual?.perdasTotal||0;
+    const margem=receita-custoTotal-perdas,pct=orcamento>0?Math.min((gastoExtra/orcamento)*100,100):0;
+    let bC='badge-blue',bT='Em andamento';
+    if(margem>0&&custoTotal>0){bC='badge-green';bT='Lucrando';}else if(margem<0){bC='badge-red';bT='Prejuizo';}else if(pct>=80){bC='badge-yellow';bT='Atencao';}
+    const pC=pct>=100?'progress-red':pct>=80?'progress-yellow':'progress-green';
+    return`<div class="activity-card" onclick="abrirCiclo('${a.id}')"><div style="display:flex;align-items:flex-start;gap:12px"><div class="activity-icon">${a.icone||'🌱'}</div><div style="flex:1"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><p style="font-weight:600;font-size:15px">${a.nome}</p><span class="badge ${bC}">${bT}</span></div><p style="font-size:12px;color:var(--text3);margin-bottom:10px">${a.cicloAtual?.nome||'Sem ciclo ativo'} - ${a.cicloAtual?.quantidade||''}</p><div class="progress-bar" style="margin-bottom:6px"><div class="progress-fill ${pC}" style="width:${pct}%"></div></div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text3)"><span>R$ ${fmtNum(gastoExtra)} gasto</span><span>Previsto R$ ${fmtNum(orcamento)}</span></div></div></div></div>`;
+  }).join('');
+}
+
+function renderDashboard(atividades){
+  let totalInvestido=0,totalReceita=0,alertas=[];
+  atividades.forEach(a=>{
+    const gastoExtra=a.cicloAtual?.gastoTotal||0,investimentoInicial=a.cicloAtual?.investimentoInicial||0;
+    const custoTotal=gastoExtra+investimentoInicial,orcamento=a.cicloAtual?.orcamento||0;
+    const receita=a.cicloAtual?.receitaPrevista||0,perdas=a.cicloAtual?.perdasTotal||0;
+    totalInvestido+=custoTotal;totalReceita+=receita;
+    const pct=orcamento>0?(gastoExtra/orcamento)*100:0;
+    if(pct>=100)alertas.push({tipo:'red',msg:`<strong>${a.nome}</strong>: orcamento estourado! R$ ${fmtNum(gastoExtra)} de R$ ${fmtNum(orcamento)}`});
+    else if(pct>=80)alertas.push({tipo:'yellow',msg:`<strong>${a.nome}</strong>: orcamento em ${pct.toFixed(0)}%`});
+    if(receita>0&&(custoTotal+perdas)>receita)alertas.push({tipo:'red',msg:`<strong>${a.nome}</strong>: risco de prejuizo`});
+  });
+  const margem=totalReceita-totalInvestido;
+  document.getElementById('totalInvestido').textContent='R$ '+fmtNum(totalInvestido);
+  document.getElementById('totalReceita').textContent='R$ '+fmtNum(totalReceita);
+  document.getElementById('margem').textContent='R$ '+fmtNum(margem);
+  document.getElementById('margem').style.color=margem>=0?'var(--green)':'var(--red2)';
+  document.getElementById('totalAtividades').textContent=atividades.length;
+  document.getElementById('alertasContainer').innerHTML=alertas.map(a=>`<div class="alert alert-${a.tipo}"><i class="ti ti-alert-triangle" style="color:${a.tipo==='red'?'var(--red2)':'var(--yellow2)'};flex-shrink:0;font-size:18px"></i><p style="font-size:13px;color:var(--text2)">${a.msg}</p></div>`).join('');
+  document.getElementById('rankingContainer').innerHTML=atividades.length?atividades.map(a=>{
+    const ge=a.cicloAtual?.gastoTotal||0,ii=a.cicloAtual?.investimentoInicial||0,rc=a.cicloAtual?.receitaPrevista||0,pe=a.cicloAtual?.perdasTotal||0;
+    const res=rc-ge-ii-pe;
+    return`<div class="activity-card" onclick="abrirCiclo('${a.id}')"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:24px">${a.icone||'🌱'}</span><div style="flex:1"><p style="font-weight:500">${a.nome}</p><p style="font-size:12px;color:var(--text3)">${a.cicloAtual?.nome||''}</p></div><span style="font-weight:600;font-size:15px;color:${res>=0?'var(--green)':'var(--red2)'}">R$ ${fmtNum(res)}</span></div></div>`;
+  }).join(''):'<div class="empty"><i class="ti ti-plant"></i><p>Nenhuma atividade ainda</p><button class="btn btn-primary btn-sm" onclick="showScreen(\'atividades\')">Criar primeira atividade</button></div>';
+}
+
+const ICONES=['🐄','🐷','🐔','🐟','🐑','🐐','🌽','🍌','🍉','🥬','🍅','🌾','🌱','🌿','🔨','🏗️','🪵','🚜','💧','🌳'];
+window.abrirModalNovaAtividade=function(){
+  document.getElementById('modalStep1').style.display='block';document.getElementById('modalStep2').style.display='none';
+  ['atividadeNome','atividadeCategorias','cicloNomeInput','cicloQuantidade','cicloQuantidadeNum','cicloPrecoCompra','cicloPrecoVenda','cicloOrcamento'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cicloDataInicio').value=new Date().toISOString().split('T')[0];document.getElementById('cicloDataFim').value='';
+  document.getElementById('resumoFinanceiro').style.display='none';
+  const btn=document.getElementById('btnSalvarAtividade');btn.disabled=false;btn.innerHTML='<i class="ti ti-check"></i> Criar atividade';
+  _tipoAtividade=null;_iconeAtividade='🌱';
+  ['tipoCriacao','tipoPlantacao','tipoInfraestrutura'].forEach(id=>{const el=document.getElementById(id);el.style.borderColor='var(--border)';el.style.background='var(--surface)';});
+  document.getElementById('iconePicker').innerHTML=ICONES.map(ic=>`<button onclick="selecionarIcone('${ic}',this)" style="font-size:24px;background:none;border:2px solid var(--border);border-radius:8px;padding:4px 8px;cursor:pointer">${ic}</button>`).join('');
+  document.getElementById('modalNovaAtividade').classList.add('open');
+};
+function atualizarResumoFinanceiro(){
+  const qtd=parseFloat(document.getElementById('cicloQuantidadeNum').value)||0;
+  const pc=parseFloat(document.getElementById('cicloPrecoCompra').value)||0;
+  const pv=parseFloat(document.getElementById('cicloPrecoVenda').value)||0;
+  const ge=parseFloat(document.getElementById('cicloOrcamento').value)||0;
+  const box=document.getElementById('resumoFinanceiro');
+  if(qtd<=0||(pc<=0&&pv<=0)){box.style.display='none';return;}
+  const rec=pv*qtd,orc=(pc*qtd)+ge,mar=rec-orc;
+  document.getElementById('resumoReceita').textContent='R$ '+rec.toLocaleString('pt-BR',{minimumFractionDigits:2});
+  document.getElementById('resumoOrcamento').textContent='R$ '+orc.toLocaleString('pt-BR',{minimumFractionDigits:2});
+  const me=document.getElementById('resumoMargem');me.textContent='R$ '+mar.toLocaleString('pt-BR',{minimumFractionDigits:2});me.style.color=mar>=0?'var(--green)':'var(--red2)';
+  box.style.display='block';
+}
+['cicloQuantidadeNum','cicloPrecoCompra','cicloPrecoVenda','cicloOrcamento'].forEach(id=>document.addEventListener('input',e=>{if(e.target.id===id)atualizarResumoFinanceiro();}));
+window.selecionarTipoAtividade=function(tipo){
+  _tipoAtividade=tipo;
+  ['tipoCriacao','tipoPlantacao','tipoInfraestrutura'].forEach(id=>{const el=document.getElementById(id);el.style.borderColor='var(--border)';el.style.background='var(--surface)';});
+  const map={criacao:'tipoCriacao',plantacao:'tipoPlantacao',infraestrutura:'tipoInfraestrutura'};
+  const el=document.getElementById(map[tipo]);el.style.borderColor='var(--green)';el.style.background='var(--green-dim)';
+};
+window.selecionarIcone=function(icone,btn){_iconeAtividade=icone;document.querySelectorAll('#iconePicker button').forEach(b=>b.style.borderColor='var(--border)');btn.style.borderColor='var(--green)';};
+window.irParaCiclo=function(){if(!_tipoAtividade){showToast('Selecione o tipo de atividade');return;}if(!document.getElementById('atividadeNome').value.trim()){showToast('Digite o nome da atividade');return;}document.getElementById('modalStep1').style.display='none';document.getElementById('modalStep2').style.display='block';};
+window.voltarStep1=function(){document.getElementById('modalStep1').style.display='block';document.getElementById('modalStep2').style.display='none';};
+window.salvarAtividade=async function(){
+  const btn=document.getElementById('btnSalvarAtividade');if(btn.disabled)return;btn.disabled=true;btn.textContent='Salvando...';
+  const nome=document.getElementById('atividadeNome').value.trim();
+  const categorias=document.getElementById('atividadeCategorias').value.split(',').map(c=>c.trim()).filter(Boolean);
+  const cicloNome=document.getElementById('cicloNomeInput').value.trim();
+  const quantidade=document.getElementById('cicloQuantidade').value.trim();
+  const precoCompra=parseFloat(document.getElementById('cicloPrecoCompra').value)||0;
+  const orcamento=parseFloat(document.getElementById('cicloOrcamento').value)||0;
+  const precoVendaPrevisto=parseFloat(document.getElementById('cicloPrecoVenda').value)||0;
+  const quantidadeNum=parseFloat(document.getElementById('cicloQuantidadeNum').value)||0;
+  if(!cicloNome||!quantidade){showToast('Preencha nome do ciclo e quantidade');btn.disabled=false;btn.innerHTML='<i class="ti ti-check"></i> Criar atividade';return;}
   try{
-    const {sendPasswordResetEmail}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
-    // importamos auth do módulo firebase já carregado
-    showToast('📧 E-mail de recuperação enviado!');
+    await addDoc(collection(db,'atividades'),{sitioId:_sitioId,nome,tipo:_tipoAtividade,icone:_iconeAtividade,categorias:categorias.length?categorias:['Geral'],ativa:true,criadoEm:new Date().toISOString(),cicloAtual:{nome:cicloNome,quantidade,quantidadeNum,precoCompra,precoVendaPrevisto,investimentoInicial:precoCompra*quantidadeNum,orcamento,receitaPrevista:precoVendaPrevisto*quantidadeNum,dataInicio:document.getElementById('cicloDataInicio').value,dataFim:document.getElementById('cicloDataFim').value,gastoTotal:0,perdasTotal:0}});
+    fecharModal('modalNovaAtividade');showToast('Atividade criada!');await carregarAtividades();
+  }catch(e){showToast('Erro: '+e.message);}finally{btn.disabled=false;btn.innerHTML='<i class="ti ti-check"></i> Criar atividade';}
+};
+window.abrirCiclo=async function(atividadeId){
+  try{
+    const snap=await getDoc(doc(db,'atividades',atividadeId));
+    if(!snap.exists()){showToast('Atividade nao encontrada');return;}
+    _atividadeAtual={id:atividadeId,...snap.data()};_cicloAtual=_atividadeAtual.cicloAtual;
+    document.getElementById('cicloNomeTop').textContent=_atividadeAtual.nome;
+    showScreen('ciclo');renderCiclo();await carregarCustos();await carregarPerdas();
   }catch(e){showToast('Erro: '+e.message);}
 };
-
-window.loginEmail=async function(modo='cadastro'){
-  const isCadastro=modo==='cadastro';
-  const email=(isCadastro
-    ?document.getElementById('emailInput')
-    :document.getElementById('emailLogin')).value.trim();
-  const senha=(isCadastro
-    ?document.getElementById('senhaInput')
-    :document.getElementById('senhaLogin')).value;
-
-  if(!email||!senha){showToast('Preencha e-mail e senha.');return;}
-  if(senha.length<6){showToast('Senha mínimo 6 caracteres.');return;}
-
+function renderCiclo(){
+  if(!_cicloAtual)return;
+  const gastoExtra=_cicloAtual.gastoTotal||0,investimentoInicial=_cicloAtual.investimentoInicial||0;
+  const custoTotal=gastoExtra+investimentoInicial,receita=_cicloAtual.receitaPrevista||0;
+  const perdas=_cicloAtual.perdasTotal||0,orcamento=_cicloAtual.orcamento||0;
+  const margem=receita-custoTotal-perdas,pct=orcamento>0?Math.min((gastoExtra/orcamento)*100,100):0;
+  document.getElementById('cicloReceita').textContent='R$ '+fmtNum(receita);
+  document.getElementById('cicloCusto').textContent='R$ '+fmtNum(custoTotal);
+  document.getElementById('cicloMargem').textContent='R$ '+fmtNum(margem);
+  document.getElementById('cicloMargem').style.color=margem>=0?'var(--green)':'var(--red2)';
+  document.getElementById('cicloPerdas').textContent='R$ '+fmtNum(perdas);
+  document.getElementById('cicloOrcPct').textContent=pct.toFixed(0);
+  document.getElementById('cicloGasto').textContent=fmtNum(gastoExtra);
+  document.getElementById('cicloLimite').textContent=fmtNum(orcamento);
+  const bar=document.getElementById('cicloOrcBar');bar.style.width=pct+'%';
+  bar.className='progress-fill '+(pct>=100?'progress-red':pct>=80?'progress-yellow':'progress-green');
+}
+async function carregarCustos(){
+  if(!_atividadeAtual)return;
+  const container=document.getElementById('custosContainer');
   try{
-    let r;
-    if(isCadastro){
-      // Tenta criar conta
-      try{
-        r=await createUserWithEmailAndPassword(auth,email,senha);
-        showToast('✓ Conta criada! Bem-vindo ao Vesh!');
-      }catch(e){
-        if(e.code==='auth/email-already-in-use'||e.code==='auth/invalid-credential'){
-          // Já tem conta — faz login
-          r=await signInWithEmailAndPassword(auth,email,senha);
-          showToast('✓ Login realizado!');
-        } else throw e;
-      }
-    } else {
-      // Aba "Já tenho conta" — login direto
-      try{
-        r=await signInWithEmailAndPassword(auth,email,senha);
-        showToast('✓ Bem-vindo de volta!');
-      }catch(e){
-        if(e.code==='auth/invalid-credential'||e.code==='auth/wrong-password'||e.code==='auth/user-not-found'){
-          showToast('E-mail ou senha incorretos. Verifique e tente novamente.');
-          return;
-        } else throw e;
-      }
-    }
-    const c=await salvarUsuario(r.user.uid,email,'');
-    atualizarUI(c,email.split('@')[0]);
-    showScreen(15);
-  }catch(e){
-    const m={
-      'auth/wrong-password':'Senha incorreta.',
-      'auth/invalid-credential':'E-mail ou senha incorretos.',
-      'auth/invalid-email':'E-mail inválido.',
-      'auth/user-not-found':'E-mail não cadastrado.',
-      'auth/too-many-requests':'Muitas tentativas. Aguarde alguns minutos.',
-      'auth/network-request-failed':'Erro de conexão. Verifique sua internet.'
-    };
-    showToast(m[e.code]||'Erro: '+e.message);
+    const snap=await getDocs(query(collection(db,'lancamentos'),where('atividadeId','==',_atividadeAtual.id),where('cicloNome','==',_cicloAtual.nome)));
+    const custos=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>new Date(b.data||0)-new Date(a.data||0));
+    if(!custos.length){container.innerHTML='<p style="color:var(--text3);font-size:14px;text-align:center;padding:20px">Nenhum custo lancado ainda</p>';return;}
+    container.innerHTML=custos.map(c=>`<div class="custo-row"><div class="custo-icon"><i class="ti ti-cash" style="color:var(--green)"></i></div><div class="custo-info"><p class="custo-desc">${c.descricao}</p><p class="custo-meta">${c.categoria} - ${c.data} - ${c.usuario}</p></div><span class="custo-val">R$ ${fmtNum(c.valor)}</span></div>`).join('');
+  }catch(e){container.innerHTML=`<p style="color:var(--red2);font-size:13px;text-align:center;padding:20px">Erro: ${e.message}</p>`;}
+}
+async function carregarPerdas(){
+  if(!_atividadeAtual)return;
+  const container=document.getElementById('perdasContainer');
+  try{
+    const snap=await getDocs(query(collection(db,'perdas'),where('atividadeId','==',_atividadeAtual.id),where('cicloNome','==',_cicloAtual.nome)));
+    const perdas=snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!perdas.length){container.innerHTML='<p style="color:var(--text3);font-size:14px;text-align:center;padding:20px">Nenhuma perda registrada</p>';return;}
+    container.innerHTML=perdas.map(p=>`<div class="custo-row"><div class="custo-icon" style="background:var(--red-dim)"><i class="ti ti-alert-triangle" style="color:var(--red2)"></i></div><div class="custo-info"><p class="custo-desc">${p.tipo==='mortalidade'?`${p.quantidade} animal(is) - ${p.causa}`:p.descricao}</p><p class="custo-meta">${p.tipo==='mortalidade'?'Mortalidade':'Perda de producao'} - ${p.data}</p></div><span class="custo-val perda">-R$ ${fmtNum(p.valorTotal)}</span></div>`).join('');
+  }catch(e){container.innerHTML=`<p style="color:var(--red2);font-size:13px;text-align:center;padding:20px">Erro: ${e.message}</p>`;}
+}
+window.abrirModalLancarCusto=function(){
+  if(!_atividadeAtual)return;
+  document.getElementById('custoCategoria').innerHTML=(_atividadeAtual.categorias||['Geral']).map(c=>`<option value="${c}">${c}</option>`).join('');
+  ['custoValor','custoDescricao','custoObs'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('custoData').value=new Date().toISOString().split('T')[0];
+  document.getElementById('modalLancarCusto').classList.add('open');
+};
+window.salvarCusto=async function(){
+  const valor=parseFloat(document.getElementById('custoValor').value);
+  const descricao=document.getElementById('custoDescricao').value.trim();
+  const categoria=document.getElementById('custoCategoria').value;
+  const data=document.getElementById('custoData').value;
+  if(!valor||!descricao||!data){showToast('Preencha valor, descricao e data');return;}
+  const ud=await getDoc(doc(db,'usuarios',_user.uid));
+  const nomeUsuario=ud.data()?.nome||'Usuario';
+  await addDoc(collection(db,'lancamentos'),{atividadeId:_atividadeAtual.id,sitioId:_sitioId,cicloNome:_cicloAtual.nome,categoria,descricao,valor,data,usuario:nomeUsuario,userId:_user.uid,obs:document.getElementById('custoObs').value,criadoEm:new Date().toISOString()});
+  const novoGasto=(_cicloAtual.gastoTotal||0)+valor;_cicloAtual.gastoTotal=novoGasto;
+  await updateDoc(doc(db,'atividades',_atividadeAtual.id),{'cicloAtual.gastoTotal':novoGasto});
+  fecharModal('modalLancarCusto');showToast('R$ '+fmtNum(valor)+' lancado');renderCiclo();await carregarCustos();
+};
+window.abrirModalRegistrarPerda=function(){
+  ['mortQtd','mortValorUnit','perdaDesc','perdaQtd','perdaValorUnit'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mortTotal').textContent='R$ 0,00';trocarAbaPerda('mortalidade');
+  document.getElementById('modalRegistrarPerda').classList.add('open');
+};
+window.trocarAbaPerda=function(aba){
+  _abaPerda=aba;
+  document.getElementById('formMortalidade').style.display=aba==='mortalidade'?'block':'none';
+  document.getElementById('formPerdaProducao').style.display=aba==='producao'?'block':'none';
+  document.getElementById('tabMortalidade').style.background=aba==='mortalidade'?'var(--green)':'var(--surface)';
+  document.getElementById('tabMortalidade').style.color=aba==='mortalidade'?'#fff':'var(--text3)';
+  document.getElementById('tabPerdaProducao').style.background=aba==='producao'?'var(--green)':'var(--surface)';
+  document.getElementById('tabPerdaProducao').style.color=aba==='producao'?'#fff':'var(--text3)';
+};
+document.getElementById('mortQtd')?.addEventListener('input',()=>{const q=parseFloat(document.getElementById('mortQtd').value)||0,u=parseFloat(document.getElementById('mortValorUnit').value)||0;document.getElementById('mortTotal').textContent='R$ '+fmtNum(q*u);});
+document.getElementById('mortValorUnit')?.addEventListener('input',()=>{const q=parseFloat(document.getElementById('mortQtd').value)||0,u=parseFloat(document.getElementById('mortValorUnit').value)||0;document.getElementById('mortTotal').textContent='R$ '+fmtNum(q*u);});
+window.salvarPerda=async function(){
+  let valorTotal=0,dadosPerda={};
+  if(_abaPerda==='mortalidade'){
+    const qtd=parseFloat(document.getElementById('mortQtd').value)||0,unit=parseFloat(document.getElementById('mortValorUnit').value)||0;
+    if(!qtd){showToast('Informe a quantidade');return;}
+    valorTotal=qtd*unit;dadosPerda={tipo:'mortalidade',quantidade:qtd,causa:document.getElementById('mortCausa').value,valorUnit:unit};
+  }else{
+    const qtd=parseFloat(document.getElementById('perdaQtd').value)||0,unit=parseFloat(document.getElementById('perdaValorUnit').value)||0,desc=document.getElementById('perdaDesc').value.trim();
+    if(!qtd||!desc){showToast('Preencha descricao e quantidade');return;}
+    valorTotal=qtd*unit;dadosPerda={tipo:'producao',descricao:desc,quantidade:qtd,unidade:document.getElementById('perdaUnidade').value,motivo:document.getElementById('perdaMotivo').value,valorUnit:unit};
+  }
+  await addDoc(collection(db,'perdas'),{...dadosPerda,atividadeId:_atividadeAtual.id,sitioId:_sitioId,cicloNome:_cicloAtual.nome,valorTotal,data:new Date().toISOString().split('T')[0],userId:_user.uid,criadoEm:new Date().toISOString()});
+  const novasPerdas=(_cicloAtual.perdasTotal||0)+valorTotal;_cicloAtual.perdasTotal=novasPerdas;
+  await updateDoc(doc(db,'atividades',_atividadeAtual.id),{'cicloAtual.perdasTotal':novasPerdas});
+  fecharModal('modalRegistrarPerda');showToast('Perda de R$ '+fmtNum(valorTotal)+' registrada');renderCiclo();await carregarPerdas();
+};
+let _modoFechamento='calcular';
+window.toggleMenuCiclo=function(){const m=document.getElementById('menuCiclo');m.style.display=m.style.display==='none'?'block':'none';};
+document.addEventListener('click',(e)=>{const m=document.getElementById('menuCiclo');if(m&&m.style.display==='block'&&!e.target.closest('#menuCiclo')&&!e.target.closest('[onclick="toggleMenuCiclo()"]'))m.style.display='none';});
+window.confirmarExcluirAtividade=async function(){
+  document.getElementById('menuCiclo').style.display='none';if(!_atividadeAtual)return;
+  if(!confirm('Tem certeza que deseja excluir "'+_atividadeAtual.nome+'"? Esta acao nao pode ser desfeita.'))return;
+  try{await deleteDoc(doc(db,'atividades',_atividadeAtual.id));showToast('Atividade excluida');showScreen('atividades');await carregarAtividades();}catch(e){showToast('Erro: '+e.message);}
+};
+window.abrirModalFecharCiclo=function(){
+  _modoFechamento='calcular';
+  ['vendaQtd','vendaPreco','vendaComprador'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('vendaData').value=new Date().toISOString().split('T')[0];
+  document.getElementById('resultadoFechamento').style.display='none';
+  document.getElementById('btnConfirmarFechamento').textContent='Calcular resultado';
+  document.getElementById('modalFecharCiclo').classList.add('open');
+};
+window.calcularFechamento=async function(){
+  if(_modoFechamento==='calcular'){
+    const qtd=parseFloat(document.getElementById('vendaQtd').value)||0,preco=parseFloat(document.getElementById('vendaPreco').value)||0,unidade=document.getElementById('vendaUnidade').value;
+    if(!qtd||!preco){showToast('Informe quantidade e preco');return;}
+    const receita=unidade==='total'?preco:qtd*preco,investido=_cicloAtual.gastoTotal||0,perdas=_cicloAtual.perdasTotal||0,resultado=receita-investido-perdas;
+    document.getElementById('fechReceita').textContent='R$ '+fmtNum(receita);document.getElementById('fechInvestido').textContent='R$ '+fmtNum(investido);document.getElementById('fechPerdas').textContent='R$ '+fmtNum(perdas);
+    document.getElementById('fechResultado').textContent='R$ '+fmtNum(resultado);document.getElementById('fechResultado').style.color=resultado>=0?'var(--green)':'var(--red2)';
+    document.getElementById('resultadoFechamento').style.display='block';document.getElementById('btnConfirmarFechamento').textContent='Confirmar e arquivar';
+    _modoFechamento='confirmar';_cicloAtual._receitaReal=receita;_cicloAtual._resultadoFinal=resultado;
+  }else{await fecharCicloConfirmar();}
+};
+async function fecharCicloConfirmar(){
+  await addDoc(collection(db,'ciclos_historico'),{..._cicloAtual,atividadeId:_atividadeAtual.id,atividadeNome:_atividadeAtual.nome,sitioId:_sitioId,receitaReal:_cicloAtual._receitaReal,resultadoFinal:_cicloAtual._resultadoFinal,comprador:document.getElementById('vendaComprador').value,dataVenda:document.getElementById('vendaData').value,encerradoEm:new Date().toISOString()});
+  await updateDoc(doc(db,'atividades',_atividadeAtual.id),{'cicloAtual.nome':'','cicloAtual.gastoTotal':0,'cicloAtual.perdasTotal':0,'cicloAtual.encerrado':true});
+  fecharModal('modalFecharCiclo');showToast('Ciclo encerrado e arquivado!');await carregarAtividades();await carregarHistorico();showScreen('atividades');
+}
+async function carregarHistorico(){
+  if(!_sitioId)return;
+  const snap=await getDocs(query(collection(db,'ciclos_historico'),where('sitioId','==',_sitioId)));
+  const ciclos=snap.docs.map(d=>({id:d.id,...d.data()}));
+  const container=document.getElementById('historicoContainer');
+  if(!ciclos.length){container.innerHTML='<div class="empty"><i class="ti ti-chart-bar"></i><p>Nenhum ciclo encerrado ainda</p></div>';['histLucro','histCiclos','histInvestido'].forEach(id=>document.getElementById(id).textContent=id==='histCiclos'?'0':'R$ 0');return;}
+  const totalLucro=ciclos.reduce((s,c)=>s+(c.resultadoFinal||0),0);
+  const totalInvestido=ciclos.reduce((s,c)=>s+(c.gastoTotal||0),0);
+  const melhor=ciclos.reduce((m,c)=>(!m||(c.resultadoFinal||0)>(m.resultadoFinal||0))?c:m,null);
+  document.getElementById('histLucro').textContent='R$ '+fmtNum(totalLucro);document.getElementById('histLucro').style.color=totalLucro>=0?'var(--green)':'var(--red2)';
+  document.getElementById('histCiclos').textContent=ciclos.length;document.getElementById('histInvestido').textContent='R$ '+fmtNum(totalInvestido);
+  document.getElementById('histMelhor').textContent=melhor?melhor.atividadeNome:'--';
+  container.innerHTML=ciclos.sort((a,b)=>new Date(b.encerradoEm)-new Date(a.encerradoEm)).map(c=>{
+    const res=c.resultadoFinal||0,dias=c.dataInicio&&c.dataVenda?Math.ceil((new Date(c.dataVenda)-new Date(c.dataInicio))/(1000*60*60*24)):'--';
+    return`<div class="card card-sm" style="margin-bottom:10px"><div style="display:flex;align-items:flex-start;justify-content:space-between"><div><p style="font-weight:600;font-size:14px">${c.atividadeNome}</p><p style="font-size:13px;color:var(--text3)">${c.nome} - ${c.quantidade}</p><p style="font-size:12px;color:var(--text4);margin-top:4px">${dias} dias - Encerrado ${new Date(c.encerradoEm).toLocaleDateString('pt-BR')}</p></div><span style="font-size:16px;font-weight:700;color:${res>=0?'var(--green)':'var(--red2)'}">R$ ${fmtNum(res)}</span></div></div>`;
+  }).join('');
+}
+// ====== FORMULACAO ======
+// Conversao kg -> arroba (1@ = 15kg)
+window.converterPeso=function(tipo){
+  const kgId=tipo==='atual'?'bovPesoKg':'bovMetaKg';
+  const badgeId=tipo==='atual'?'bovPesoArroba':'bovMetaArroba';
+  const kg=parseFloat(document.getElementById(kgId).value)||0;
+  document.getElementById(badgeId).textContent=kg>0?(kg/15).toFixed(2)+' @':'-- @';
+};
+
+// Ingredientes livres
+window.adicionarIngrediente=function(){
+  const input=document.getElementById('ingInput');
+  const nome=input.value.trim();
+  if(!nome){showToast('Digite o nome do ingrediente');return;}
+  if(window._ingredientesLivres.includes(nome)){showToast('Ingrediente ja adicionado');input.value='';return;}
+  window._ingredientesLivres.push(nome);input.value='';renderIngTags();
+};
+window.removerIngrediente=function(nome){
+  window._ingredientesLivres=window._ingredientesLivres.filter(i=>i!==nome);renderIngTags();
+};
+function renderIngTags(){
+  const wrap=document.getElementById('ingTagsWrap');if(!wrap)return;
+  if(!window._ingredientesLivres.length){wrap.innerHTML='<p style="font-size:12px;color:var(--text4)">Nenhum ingrediente adicionado ainda</p>';return;}
+  wrap.innerHTML=window._ingredientesLivres.map(nome=>`<span class="ing-tag">${nome}<button onclick="removerIngrediente('${nome.replace(/'/g,"\\'")}')"><i class="ti ti-x" style="font-size:12px"></i></button></span>`).join('');
+}
+
+window.iniciarFormulacao=function(tipo){
+  document.getElementById('formulacaoInicio').style.display='none';
+  document.getElementById('formBovinos').style.display=tipo==='bovinos'?'block':'none';
+  document.getElementById('formSuinos').style.display=tipo==='suinos'?'block':'none';
+  document.getElementById('formAves').style.display=tipo==='aves'?'block':'none';
+  document.getElementById('resultadoFormulacao').style.display='none';
+  if(tipo==='bovinos'){
+    window._ingredientesLivres=[];renderIngTags();
+    document.getElementById('bovNucleo').value='';
+    ['bovPesoKg','bovMetaKg'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('bovPesoArroba').textContent='-- @';document.getElementById('bovMetaArroba').textContent='-- @';
   }
 };
-window.usarCredito=async function(){
-  const user=auth.currentUser;
-  if(!user){showScreen(1);return false;}
-  if((window._creditos||0)<1){showToast('Sem créditos! Recarregue para continuar.');showScreen(7);return false;}
-  const ref=doc(db,"usuarios",user.uid);
-  await updateDoc(ref,{creditos:increment(-1)});
-  atualizarUI((window._creditos||1)-1,null);
-  return true;
+window.voltarFormulacao=function(){
+  document.getElementById('formulacaoInicio').style.display='block';
+  ['formBovinos','formSuinos','formAves','resultadoFormulacao'].forEach(id=>document.getElementById(id).style.display='none');
+  _fotoPastoBase64=null;
+  document.getElementById('fotoPastoPreview').style.display='none';document.getElementById('fotoPastoZone').style.display='block';
 };
-onAuthStateChanged(auth,async(user)=>{
-  if(user){try{const snap=await getDoc(doc(db,"usuarios",user.uid));if(snap.exists())atualizarUI(snap.data().creditos,user.displayName||user.email);}catch(e){}}
-});
-</script>
-
-<!-- ══ APP LOGIC ══ -->
-<script>
-// FAL_KEY removida do frontend — agora protegida no backend (api/tryon.js)
-// ML_AFFILIATE_ID removida — Vesh agora usa apenas Shopee
-const SHOPEE_AFFILIATE_ID="SEU_ID_SHOPEE"; // substitua pelo seu ID Shopee Afiliados
-// SHEIN removida — Vesh agora usa apenas Shopee
-const AMAZON_AFFILIATE_ID="SEU_TAG_AQUI";
-
-let _selectedOccasion=null, _selectedOccasionQuery=null, _selectedOccasionCalcado=null, _selectedOccasionAcessorio=null, _selectedPlan=null;
-let _produtosEncontrados=[], _lookSelecionado=null, _looksGerados=[null,null,null];
-
-// ── NAV ──
-function showScreen(n){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const id = n===15 ? 'screen-15' : 'screen-'+n;
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
-  if(n===3) buildOccasions();
-  if(n===5) exibirAnaliseEstilo();
-  if(n===6) renderProdutos();
-}
-function exibirAnaliseEstilo(){
-  const box=document.getElementById('analiseBox');
-  const a=window._analiseUsuario;
-  if(a && a.recomendacao){
-    document.getElementById('analiseTexto').innerHTML=
-      `✨ <strong>${a.formatoCorpo||''}${a.formatoRosto?' · '+a.formatoRosto:''}${a.subtomPele?' · subtom '+a.subtomPele:''}</strong><br>${a.recomendacao}`;
-    box.style.display='block';
-  } else {
-    box.style.display='none';
-  }
-}
-function handleCTA(){showScreen(window._creditos!==undefined?15:1);}
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('show'),3500);
-}
-
-// ── GÊNERO ──
-let _genero='masculino'; // padrão
-
-window.selecionarGenero=function(genero, card){
-  _genero=genero;
-  document.querySelectorAll('.gender-card').forEach(c=>c.classList.remove('selected'));
-  card.classList.add('selected');
-  document.getElementById('btnContinuarGenero').disabled=false;
-  // Atualiza emoji da tela de upload
-  document.querySelector('#uploadPlaceholder .upload-icon').textContent=genero==='feminino'?'🧍‍♀️':'🧍';
-};
-
-// ── OCASIÕES POR GÊNERO ──
-const OCCASIONS_MASC=[
-  {emoji:'💼',name:'Reunião de Negócios',style:'Executivo & formal',query:'camisa social masculina',queryCalcado:'sapato social masculino',queryAcessorio:'relogio social masculino'},
-  {emoji:'❤️',name:'Encontro Romântico',style:'Casual chique',query:'camisa masculina casual estilosa',queryCalcado:'tenis casual masculino couro',queryAcessorio:'relogio casual masculino'},
-  {emoji:'💍',name:'Casamento',style:'Elegante & sofisticado',query:'terno masculino slim casamento',queryCalcado:'sapato social verniz masculino',queryAcessorio:'gravata social masculina'},
-  {emoji:'🤠',name:'Festa Sertaneja',style:'Country & estiloso',query:'camisa xadrez country masculina',queryCalcado:'bota country masculina',queryAcessorio:'chapeu country masculino'},
-  {emoji:'🎉',name:'Balada',style:'Festivo & ousado',query:'camisa masculina social festa',queryCalcado:'tenis masculino estiloso',queryAcessorio:'relogio masculino moderno'},
-  {emoji:'🥩',name:'Churrasco',style:'Casual & confortável',query:'camiseta masculina casual',queryCalcado:'tenis casual masculino',queryAcessorio:'bone masculino casual'},
-  {emoji:'🎓',name:'Formatura',style:'Elegante & memorável',query:'terno masculino formatura',queryCalcado:'sapato social masculino preto',queryAcessorio:'gravata formatura masculina'},
-  {emoji:'🏢',name:'Evento Corporativo',style:'Business casual',query:'blazer masculino casual',queryCalcado:'sapato casual masculino couro',queryAcessorio:'relogio executivo masculino'},
-];
-const OCCASIONS_FEM=[
-  {emoji:'💼',name:'Reunião de Negócios',style:'Executivo & elegante',query:'blazer feminino social',queryCalcado:'sapato scarpin feminino',queryAcessorio:'relogio feminino elegante'},
-  {emoji:'❤️',name:'Encontro Romântico',style:'Delicado & chique',query:'vestido feminino casual romantrico',queryCalcado:'sandalia feminina elegante',queryAcessorio:'colar feminino delicado'},
-  {emoji:'💍',name:'Casamento',style:'Elegante & sofisticado',query:'vestido de festa feminino casamento',queryCalcado:'sandalia salto feminina festa',queryAcessorio:'brinco feminino festa'},
-  {emoji:'🤠',name:'Festa Sertaneja',style:'Country & estiloso',query:'moda country feminina bota',queryCalcado:'bota country feminina',queryAcessorio:'chapeu country feminino'},
-  {emoji:'🎉',name:'Balada',style:'Festivo & ousado',query:'vestido feminino festa balada',queryCalcado:'sandalia salto alto feminina',queryAcessorio:'bolsa feminina festa'},
-  {emoji:'🥩',name:'Churrasco',style:'Casual & confortável',query:'conjunto feminino casual',queryCalcado:'tenis feminino casual',queryAcessorio:'oculos sol feminino'},
-  {emoji:'🎓',name:'Formatura',style:'Elegante & memorável',query:'vestido longo formatura feminino',queryCalcado:'sandalia salto formatura feminina',queryAcessorio:'colar formatura feminino'},
-  {emoji:'🏢',name:'Evento Corporativo',style:'Business casual',query:'blazer feminino trabalho',queryCalcado:'sapato feminino trabalho',queryAcessorio:'relogio feminino trabalho'},
-];
-
-// ── UPLOAD ──
-window.onFotoSelecionada=function(e){
-  const file=e.target.files[0];if(!file) return;
-  if(file.size>10*1024*1024){showToast('Foto muito grande. Máx. 10MB.');return;}
+window.tirarFotoPasto=function(){document.getElementById('fotoPastoInput').click();};
+window.onFotoPasto=function(e){
+  const file=e.target.files[0];if(!file)return;
   const reader=new FileReader();
-  reader.onload=function(ev){
-    document.getElementById('previewImg').src=ev.target.result;
-    document.getElementById('uploadPreview').style.display='block';
-    document.getElementById('uploadPlaceholder').style.display='none';
-    document.getElementById('btnContinuarFoto').disabled=false;
-    window._fotoBase64=ev.target.result;
-    showToast('✓ Foto carregada!');
-  };
+  reader.onload=function(ev){_fotoPastoBase64=ev.target.result;document.getElementById('fotoPastoPreview').src=ev.target.result;document.getElementById('fotoPastoPreview').style.display='block';document.getElementById('fotoPastoZone').style.display='none';showToast('Foto carregada!');};
   reader.readAsDataURL(file);
 };
-window.addEventListener('load',()=>{
-  const zone=document.getElementById('uploadZone');if(!zone)return;
-  zone.addEventListener('dragover',e=>{e.preventDefault();zone.style.borderColor='rgba(201,168,76,.8)';});
-  zone.addEventListener('dragleave',()=>{zone.style.borderColor='rgba(201,168,76,.3)';});
-  zone.addEventListener('drop',e=>{
-    e.preventDefault();zone.style.borderColor='rgba(201,168,76,.3)';
-    const file=e.dataTransfer.files[0];
-    if(file&&file.type.startsWith('image/')) window.onFotoSelecionada({target:{files:[file]}});
-  });
-});
 
-// ── OCASIÕES ──
-function buildOccasions(){
-  const grid=document.getElementById('occasionGrid');
-  grid.innerHTML=''; // rebuild sempre para refletir o gênero atual
-  const lista=_genero==='feminino'?OCCASIONS_FEM:OCCASIONS_MASC;
-  lista.forEach(oc=>{
-    const card=document.createElement('div');card.className='occasion-card';
-    card.innerHTML=`<span class="oc-emoji">${oc.emoji}</span><p class="oc-name">${oc.name}</p><p class="oc-style">${oc.style}</p>`;
-    card.onclick=()=>{
-      document.querySelectorAll('.occasion-card').forEach(c=>c.classList.remove('selected'));
-      card.classList.add('selected');
-      _selectedOccasion=oc.name;_selectedOccasionQuery=oc.query;
-      _selectedOccasionCalcado=oc.queryCalcado;_selectedOccasionAcessorio=oc.queryAcessorio;
-      document.getElementById('btnConfirmarOcasiao').disabled=false;
-    };
-    grid.appendChild(card);
-  });
-}
+window.gerarFormulacao=async function(tipo){
+  let prompt='',tituloPag='';
+  if(tipo==='bovinos'){
+    const fase=document.getElementById('bovFase').value;
+    const pesoKg=parseFloat(document.getElementById('bovPesoKg').value)||0;
+    const metaKg=parseFloat(document.getElementById('bovMetaKg').value)||0;
+    const objetivo=document.getElementById('bovObjetivo').value;
+    const regiao=document.getElementById('bovRegiao').value;
+    const epoca=document.getElementById('bovEpoca').value;
+    const pasto=document.getElementById('bovPasto').value;
+    const nucleo=document.getElementById('bovNucleo').value.trim();
+    if(!pesoKg){showToast('Informe o peso do animal');return;}
+    if(!nucleo){showToast('Informe o nucleo mineral ou suplemento que voce usa');return;}
+    tituloPag='Bovinos - '+fase.replace(/-/g,' ');
+    const listaIngredientes=['Sal branco (NaCl)',nucleo,...window._ingredientesLivres].join(', ');
+    prompt=`Voce e um zootecnista especialista em nutricao de bovinos no Brasil. Formule um suplemento/racao. Responda SOMENTE em JSON valido, sem texto extra nem markdown.
 
-// ── PRODUTOS FALLBACK (quando Shopee não retorna nada) ──
+Dados do animal:
+- Categoria: ${fase}
+- Peso atual: ${pesoKg} kg (${(pesoKg/15).toFixed(2)} arrobas)
+- Meta de peso: ${metaKg>0?metaKg+' kg ('+(metaKg/15).toFixed(2)+' arrobas)':'nao informada'}
+- Objetivo: ${objetivo}
+- Regiao: ${regiao}
+- Epoca: ${epoca}
+- Tipo de pasto: ${pasto||'nao informado'}
+${_fotoPastoBase64?'- Foto do pasto enviada para analise':''}
 
-function gerarProdutosFallback(query){
-  const isFem=_genero==='feminino';
-  const base=isFem?[
-    {nome:'Blusa feminina elegante',preco:'R$ 79,90',precoNum:79.90,foto:'',link:`https://shopee.com.br/search?keyword=${encodeURIComponent(query)}`},
-    {nome:'Calça feminina fashion',preco:'R$ 119,90',precoNum:119.90,foto:'',link:`https://shopee.com.br/search?keyword=${encodeURIComponent(query)}`},
-    {nome:'Vestido estiloso',preco:'R$ 149,90',precoNum:149.90,foto:'',link:`https://br.shein.com/pdsearch/${encodeURIComponent(query)}/`},
-  ]:[
-    {nome:'Camisa masculina premium',preco:'R$ 89,90',precoNum:89.90,foto:'',link:`https://shopee.com.br/search?keyword=${encodeURIComponent(query)}`},
-    {nome:'Calça masculina estilosa',preco:'R$ 129,90',precoNum:129.90,foto:'',link:`https://shopee.com.br/search?keyword=${encodeURIComponent(query)}`},
-    {nome:'Look completo masculino',preco:'R$ 159,90',precoNum:159.90,foto:'',link:`https://br.shein.com/pdsearch/${encodeURIComponent(query)}/`},
-  ];
-  return base.map((p,i)=>({...p,id:'fallback-'+i,store:'Shopee',storeClass:'store-shopee'}));
-}
+NUCLEO/SUPLEMENTO INFORMADO PELO PRODUTOR: "${nucleo}"
+Pesquise o conhecimento nutricional deste produto (composicao, nivel de inclusao recomendado, minerais e vitaminas que fornece) e baseie a formulacao nisso. Se nao reconhecer exatamente a marca, use o perfil nutricional tipico do tipo de produto mais proximo e informe no campo nucleoDescricao.
 
-// ── ROUPAS DE REFERÊNCIA FIXAS (por ocasião e gênero) ──
-// Usadas quando a API não retorna foto do produto
-const ROUPAS_REF = {
-  masculino: {
-    'Reunião de Negócios': [
-      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80',
-      'https://images.unsplash.com/photo-1594938298603-c8148c4b4d7b?w=600&q=80',
-      'https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=600&q=80',
-    ],
-    'Encontro Romântico': [
-      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80',
-      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80',
-      'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=80',
-    ],
-    'Casamento': [
-      'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=600&q=80',
-      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80',
-      'https://images.unsplash.com/photo-1594938298603-c8148c4b4d7b?w=600&q=80',
-    ],
-    'Festa Sertaneja': [
-      'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&q=80',
-      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80',
-      'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=80',
-    ],
-    'Balada': [
-      'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=80',
-      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80',
-      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80',
-    ],
-    'Churrasco': [
-      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80',
-      'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=80',
-      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80',
-    ],
-    'Formatura': [
-      'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=600&q=80',
-      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80',
-      'https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=600&q=80',
-    ],
-    'Evento Corporativo': [
-      'https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=600&q=80',
-      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80',
-      'https://images.unsplash.com/photo-1594938298603-c8148c4b4d7b?w=600&q=80',
-    ],
-  },
-  feminino: {
-    'Reunião de Negócios': [
-      'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&q=80',
-      'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&q=80',
-      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
-    ],
-    'Encontro Romântico': [
-      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
-      'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80',
-      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
-    ],
-    'Casamento': [
-      'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&q=80',
-      'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80',
-      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
-    ],
-    'Festa Sertaneja': [
-      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
-      'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80',
-      'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=600&q=80',
-    ],
-    'Balada': [
-      'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80',
-      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
-      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
-    ],
-    'Churrasco': [
-      'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=600&q=80',
-      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
-      'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80',
-    ],
-    'Formatura': [
-      'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80',
-      'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&q=80',
-      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
-    ],
-    'Evento Corporativo': [
-      'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&q=80',
-      'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&q=80',
-      'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=600&q=80',
-    ],
-  }
-};
+MATERIAS-PRIMAS DISPONIVEIS: ${listaIngredientes}
+Use APENAS esses ingredientes listados. Nao inclua nenhum outro.
 
-function getFotoRoupa(roupa, indice){
-  // Se o produto tem foto real usa ela, senão usa referência da ocasião
-  if(roupa.foto && roupa.foto.length > 10) return roupa.foto;
-  const refs = ROUPAS_REF[_genero]?.[_selectedOccasion] || ROUPAS_REF['masculino']['Reunião de Negócios'];
-  return refs[indice % refs.length];
-}
-async function gerarTryOn(fotoBase64, fotoRoupaUrl, lookIndex){
-  console.log(`[Look ${lookIndex}] Enviando para /api/tryon...`);
-  const res = await fetch('/api/tryon', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fotoBase64, fotoRoupaUrl })
-  });
-  if(!res.ok) throw new Error('Erro HTTP no /api/tryon: '+res.status);
-  const data = await res.json();
-  console.log(`[Look ${lookIndex}] Resposta do submit:`, data);
+NIVEIS DE GARANTIA: Gere os niveis para a categoria ${fase} baseado nos ingredientes usados.
+EXIGENCIAS NUTRICIONAIS: Use referencias NRC/CNCPS para bovinos.
 
-  if(data.success && data.imageUrl) return data.imageUrl;
-
-  if(data.pending && data.requestId){
-    console.log(`[Look ${lookIndex}] requestId=${data.requestId} — iniciando polling`);
-    const urlParams = new URLSearchParams({ requestId: data.requestId });
-    if(data.statusUrl) urlParams.set('statusUrl', encodeURIComponent(data.statusUrl));
-    if(data.responseUrl) urlParams.set('responseUrl', encodeURIComponent(data.responseUrl));
-
-    for(let i=0;i<45;i++){
-      await sleep(2000);
-      let stRes;
-      try{
-        stRes = await fetch(`/api/tryon-status?${urlParams.toString()}`);
-      }catch(netErr){
-        console.warn(`[Look ${lookIndex}] erro de rede no poll #${i+1}:`, netErr.message);
-        continue;
-      }
-      const rawText = await stRes.text();
-      if(!rawText || rawText.trim()===''){
-        console.warn(`[Look ${lookIndex}] poll #${i+1}: resposta vazia, HTTP ${stRes.status}`);
-        continue;
-      }
-      let st;
-      try{ st = JSON.parse(rawText); }
-      catch(parseErr){
-        console.warn(`[Look ${lookIndex}] poll #${i+1}: corpo não-JSON (HTTP ${stRes.status}):`, rawText.slice(0,200));
-        continue;
-      }
-      console.log(`[Look ${lookIndex}] poll #${i+1}:`, st);
-      if(st.done && st.success && st.imageUrl) return st.imageUrl;
-      if(st.done && !st.success) throw new Error(st.error||'Try-on falhou (sem detalhes)');
-      if(st.status) document.getElementById('procEtapa').textContent = `🤖 ${st.status}${st.queuePosition!=null?' (posição na fila: '+st.queuePosition+')':''}`;
-    }
-    throw new Error('Timeout — passou de 90s aguardando o fal.ai');
+JSON obrigatorio com esta estrutura exata:
+{
+  "nucleoNome": "nome como o produtor informou",
+  "nucleoDescricao": "composicao e inclusao tipica do produto",
+  "ingredientes": [
+    {"nome":"string","percentual":number,"kgPorAnimalDia":number,"unidadeCompra":"string"}
+  ],
+  "consumoPorAnimalDia": number,
+  "niveisGarantia": [
+    {"nome":"PB","valor":"XX%","descricao":"Proteina Bruta"},
+    {"nome":"NDT","valor":"XX%","descricao":"Nutrientes Digestiveis Totais"},
+    {"nome":"Ca","valor":"X,Xg/kg","descricao":"Calcio"},
+    {"nome":"P","valor":"X,Xg/kg","descricao":"Fosforo"},
+    {"nome":"EM","valor":"X,XX Mcal/kg","descricao":"Energia Metabolizavel"},
+    {"nome":"MS","valor":"XX%","descricao":"Materia Seca"}
+  ],
+  "exigenciasNutricionais": [
+    "Exigencia de PB: XX% para ${fase} com ${pesoKg}kg",
+    "Exigencia de NDT: XX%",
+    "Exigencia de Ca: X,Xg/dia",
+    "Exigencia de P: X,Xg/dia",
+    "Ganho de peso esperado: X,XXkg/dia"
+  ],
+  "recomendacoes": ["string"],
+  "analisePasto": ${_fotoPastoBase64?'"descricao da qualidade visual do pasto"':'null'}
+}`;
+  }else if(tipo==='suinos'){
+    const fase=document.getElementById('suiFase').value,peso=document.getElementById('suiPeso').value,qtd=document.getElementById('suiQtd').value;
+    if(!peso||!qtd){showToast('Informe peso e quantidade');return;}
+    tituloPag='Suinos - '+fase;
+    prompt=`Zootecnista especialista. Formule racao para suinos. Responda SOMENTE em JSON valido.
+Dados: Fase: ${fase}, Peso: ${peso}kg, Quantidade: ${qtd}
+JSON: {"nucleoNome":null,"nucleoDescricao":null,"ingredientes":[{"nome":"string","percentual":number,"kgPorAnimalDia":number,"unidadeCompra":"string"}],"consumoPorAnimalDia":number,"niveisGarantia":[{"nome":"PB","valor":"XX%","descricao":"Proteina Bruta"},{"nome":"Ca","valor":"X,Xg/kg","descricao":"Calcio"},{"nome":"P","valor":"X,Xg/kg","descricao":"Fosforo"},{"nome":"EM","valor":"X,XX Mcal/kg","descricao":"Energia Metabolizavel"}],"exigenciasNutricionais":["string"],"recomendacoes":["string"],"analisePasto":null}`;
+  }else{
+    const tipo2=document.getElementById('aveTipo').value,fase=document.getElementById('aveFase').value,qtd=document.getElementById('aveQtd').value,peso=document.getElementById('avePeso').value;
+    if(!qtd){showToast('Informe a quantidade de aves');return;}
+    tituloPag=tipo2+' - '+fase;
+    prompt=`Zootecnista especialista. Formule racao para aves. Responda SOMENTE em JSON valido.
+Dados: Tipo: ${tipo2}, Fase: ${fase}, Quantidade: ${qtd}, Peso: ${peso||'0.5'}kg
+JSON: {"nucleoNome":null,"nucleoDescricao":null,"ingredientes":[{"nome":"string","percentual":number,"kgPorAnimalDia":number,"unidadeCompra":"string"}],"consumoPorAnimalDia":number,"niveisGarantia":[{"nome":"PB","valor":"XX%","descricao":"Proteina Bruta"},{"nome":"Ca","valor":"X,Xg/kg","descricao":"Calcio"},{"nome":"P","valor":"X,Xg/kg","descricao":"Fosforo"},{"nome":"EM","valor":"X,XX Mcal/kg","descricao":"Energia Metabolizavel"}],"exigenciasNutricionais":["string"],"recomendacoes":["string"],"analisePasto":null}`;
   }
 
-  throw new Error(data.error || 'Erro desconhecido no submit (sem pending nem imageUrl)');
-}
-
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-
-// ── FLUXO PRINCIPAL: gera 3 looks ──
-async function iniciarProcessamento(){
-
-  _looksGerados=[null,null,null];_lookSelecionado=null;_produtosEncontrados=[];
-
-  // Reset cards
-  for(let i=0;i<3;i++){
-    document.getElementById('lookImg'+i).style.display='none';
-    document.getElementById('lookLoading'+i).style.display='flex';
-    document.getElementById('lookCard'+i).classList.remove('selected');
-    document.getElementById('lookLabel'+i).textContent='Look '+(i+1);
-  }
-  document.getElementById('btnVerProdutos').disabled=true;
-  document.getElementById('resultTitle').textContent=_selectedOccasion;
-  document.getElementById('productsTitle').textContent=_selectedOccasion;
-
-  showScreen(4);
-
-  // Reset steps
-  ['st1','st2','st3','st4','st5'].forEach((id,i)=>{
-    const el=document.getElementById(id);
-    el.textContent=i===0?'buscando...':'aguardando';
-    el.className='analysis-status'+(i===0?' loading':'');
-  });
+  ['formBovinos','formSuinos','formAves'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('resultadoFormulacao').style.display='block';
+  document.getElementById('resultadoTitulo').textContent=tituloPag;
+  document.getElementById('ingredientesContainer').innerHTML='<div class="spinner" style="margin:20px auto"></div><p style="text-align:center;color:var(--text3);font-size:14px;margin-top:12px">Calculando formulacao com IA...</p>';
+  ['recomendacoesContainer','niveisContainer','exigenciasContainer'].forEach(id=>document.getElementById(id).innerHTML='');
+  document.getElementById('pastAnalise').style.display='none';document.getElementById('nucleoInfoCard').style.display='none';
+  document.getElementById('niveisCard').style.display='none';document.getElementById('exigenciasCard').style.display='none';
 
   try{
-    // Step 2 primeiro: análise de biotipo/rosto/subtom (rápida, ~2-3s)
-    document.getElementById('procEtapa').textContent='🎨 Analisando seu estilo...';
-    document.getElementById('st2').textContent='analisando...';document.getElementById('st2').className='analysis-status loading';
-    const analise = await analisarUsuario(window._fotoBase64, _genero);
-    window._analiseUsuario = analise;
-    document.getElementById('st2').textContent=analise?'✓ Analisado':'✓ Concluído';
-    document.getElementById('st2').className='analysis-status done';
-    if(analise) console.log('Biotipo:',analise.formatoCorpo,'| Rosto:',analise.formatoRosto,'| Subtom:',analise.subtomPele);
-
-    // Step 1: Buscar roupa + calçado + acessório na Shopee, já refinado pelo subtom de pele
-    document.getElementById('procEtapa').textContent='🛍️ Buscando roupas na Shopee...';
-    document.getElementById('st1').textContent='buscando...';document.getElementById('st1').className='analysis-status loading';
-    const queryRefinada = refinarQueryComSubtom(_selectedOccasionQuery, analise);
-    const [produtosRoupa, produtosCalcado, produtosAcessorio] = await Promise.all([
-      buscarProdutosShopee(queryRefinada),
-      buscarProdutosShopee(_selectedOccasionCalcado || _selectedOccasionQuery),
-      buscarProdutosShopee(_selectedOccasionAcessorio || _selectedOccasionQuery)
-    ]);
-
-    // Junta tudo: roupa principal + calçado + acessório formam o look completo
-    _produtosEncontrados = [
-      ...produtosRoupa.slice(0,3),
-      ...produtosCalcado.slice(0,2),
-      ...produtosAcessorio.slice(0,2)
-    ];
-    document.getElementById('st1').textContent='✓ '+_produtosEncontrados.length+' produtos';
-    document.getElementById('st1').className='analysis-status done';
-
-    // Desconta crédito APENAS após busca bem sucedida
-    const ok=await window.usarCredito();
-    if(!ok){ showScreen(3); return; }
-
-    // Steps 3,4,5: Gera 3 looks em paralelo mas mostra um a um
-    showScreen(5); // Vai para tela de looks enquanto gera
-
-    const roupas=_produtosEncontrados.slice(0,3);
-
-    // Gera os 3 looks (em paralelo para ser mais rápido)
-    const promessas=roupas.map(async(roupa,i)=>{
-      try{
-        const fotoRoupa = getFotoRoupa(roupa, i);
-        document.getElementById('procEtapa').textContent=`✨ Gerando look ${i+1} de 3...`;
-        const url=await gerarTryOn(window._fotoBase64, fotoRoupa, i+1);
-        _looksGerados[i]={url,produto:roupa};
-
-        // Mostra na tela assim que ficar pronto
-        document.getElementById('lookLoading'+i).style.display='none';
-        document.getElementById('lookImg'+i).src=url;
-        document.getElementById('lookImg'+i).style.display='block';
-        const label = roupa.nome || `Look ${i+1} — ${_selectedOccasion}`;
-        document.getElementById('lookLabel'+i).textContent=label.split(' ').slice(0,4).join(' ');
-        showToast(`✓ Look ${i+1} gerado!`);
-      }catch(e){
-        console.error(`Erro no try-on do look ${i+1}:`, e.message, e);
-        // Fallback: mostra foto original com nome da roupa
-        _looksGerados[i]={url:window._fotoBase64,produto:roupa,fallback:true};
-        document.getElementById('lookLoading'+i).style.display='none';
-        document.getElementById('lookImg'+i).src=window._fotoBase64;
-        document.getElementById('lookImg'+i).style.display='block';
-        document.getElementById('lookLabel'+i).textContent=roupa.nome.split(' ').slice(0,4).join(' ');
-        showToast(`⚠️ Look ${i+1}: ${e.message.slice(0,60)}`);
-      }
-    });
-
-    await Promise.all(promessas);
-    showToast('✨ Seus 3 looks estão prontos! Escolha o favorito.');
-
-  }catch(err){
-    console.error(err);showToast('Erro: '+err.message);showScreen(3);
-  }
-}
-window.iniciarProcessamento=iniciarProcessamento;
-
-// ── SELECIONAR LOOK ──
-window.selecionarLook=function(i){
-  if(!_looksGerados[i])return;
-  document.querySelectorAll('.look-card').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('lookCard'+i).classList.add('selected');
-  _lookSelecionado=i;
-  document.getElementById('btnVerProdutos').disabled=false;
-  showToast(`Look ${i+1} selecionado! Clique em "Ver produtos" para comprar.`);
-};
-
-// ── REGERAR ──
-window.regerarTodos=async function(){
-  if((window._creditos||0)<1){
-    showToast('Sem créditos! Recarregue para continuar.');
-    showScreen(7);return;
-  }
-  showScreen(4);
-  document.getElementById('procTitle').textContent='Gerando novos looks...';
-  document.getElementById('procSub').textContent='Buscando novas roupas para você.';
-  await iniciarProcessamento();
-};
-
-// ── SHOPEE — busca real via backend (Vercel Function) ──
-// ── REFINA A BUSCA COM BASE NO SUBTOM DE PELE ──
-function refinarQueryComSubtom(queryBase, analise){
-  if(!analise || !analise.subtomPele) return queryBase;
-  const subtom = analise.subtomPele.toLowerCase();
-  // Cores frias: prata, azul, branco puro, roxo | Cores quentes: dourado, marrom, terrosos, vermelho
-  if(subtom.includes('quente')) return queryBase + ' marrom';
-  if(subtom.includes('frio') || subtom.includes('fria')) return queryBase + ' azul';
-  return queryBase; // neutro: mantém busca original
-}
-
-// ── ANÁLISE DE BIOTIPO/ROSTO/SUBTOM VIA IA ──
-async function analisarUsuario(fotoBase64, genero){
-  try{
-    const res = await fetch('/api/analyze', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ fotoBase64, genero })
-    });
-    const text = await res.text();
-    let data;
-    try{ data = JSON.parse(text); }catch{ throw new Error('Resposta não-JSON: '+text.slice(0,150)); }
-    if(!data.success) throw new Error(data.error||'Falha na análise');
-    console.log('[Análise IA]', data.analise);
-    return data.analise;
+    const res=await fetch('/api/formular',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,fotoBase64:(_fotoPastoBase64&&tipo==='bovinos')?_fotoPastoBase64:null})});
+    const text=await res.text();let data;
+    try{data=JSON.parse(text);}catch{throw new Error('Resposta invalida: '+text.slice(0,200));}
+    if(!data.success)throw new Error(data.error||'Erro desconhecido');
+    _formulacaoAtual={tipo,tituloPag,result:data.resultado};
+    await renderFormulacao(data.resultado);
   }catch(e){
-    console.warn('Análise de biotipo falhou, seguindo sem ela:', e.message);
-    return null; // segue o fluxo normalmente mesmo sem a análise
+    document.getElementById('ingredientesContainer').innerHTML=`<div style="text-align:center;padding:24px"><i class="ti ti-cloud-off" style="font-size:36px;color:var(--text3);display:block;margin-bottom:10px"></i><p style="font-size:13px;color:var(--text2);margin-bottom:4px;font-weight:500">Nao foi possivel gerar a formulacao</p><p style="font-size:12px;color:var(--text3);margin-bottom:16px">${e.message}</p><button class="btn btn-primary btn-sm" onclick="gerarFormulacao('${tipo}')"><i class="ti ti-refresh"></i> Tentar novamente</button></div>`;
   }
-}
+};
 
-async function buscarProdutosShopee(query){
-  try{
-    const res = await fetch(`/api/shopee?keyword=${encodeURIComponent(query)}&limit=9`);
-    if(!res.ok) throw new Error('status '+res.status);
-    const data = await res.json();
-    if(!data.success || !data.produtos || !data.produtos.length) throw new Error(data.error||'sem produtos');
-    return data.produtos;
-  }catch(e){
-    console.warn('Shopee API falhou, usando fallback:', e.message);
-    return gerarProdutosFallback(query);
+async function renderFormulacao(r){
+  if(r.analisePasto){document.getElementById('pastAnalise').style.display='block';document.getElementById('pastAnaliseTexto').textContent=r.analisePasto;}
+  if(r.nucleoNome){document.getElementById('nucleoInfoCard').style.display='block';document.getElementById('nucleoNomeUsado').textContent=r.nucleoNome;document.getElementById('nucleoDescUsado').textContent=r.nucleoDescricao||'';}
+  const tabelaPrecos=await carregarTabelaPrecos();
+  document.getElementById('ingredientesContainer').innerHTML=r.ingredientes.map((ing,i)=>{
+    const precoTabelado=tabelaPrecos[normalizarNome(ing.nome)];
+    return`<div class="ingrediente-row"><span class="ingrediente-pct">${ing.percentual}%</span><span class="ingrediente-nome">${ing.nome}<br><span style="font-size:11px;color:var(--text3)">${ing.kgPorAnimalDia}kg/animal/dia - ${ing.unidadeCompra}${precoTabelado?' - <span style="color:var(--green)">preco de tabela</span>':''}</span></span><div style="display:flex;align-items:center;gap:4px"><span style="font-size:11px;color:var(--text3)">R$</span><input class="ingrediente-input" type="number" placeholder="0,00" id="preco_${i}" value="${precoTabelado||''}" oninput="calcularCusto()" step="0.01"></div></div>`;
+  }).join('');
+  if(r.niveisGarantia&&r.niveisGarantia.length){
+    document.getElementById('niveisCard').style.display='block';
+    document.getElementById('niveisContainer').innerHTML=r.niveisGarantia.map(n=>`<div class="nivel-item"><div class="nivel-val">${n.valor}</div><div class="nivel-lbl">${n.nome}</div><div style="font-size:9px;color:var(--text4);margin-top:2px">${n.descricao}</div></div>`).join('');
   }
+  if(r.exigenciasNutricionais&&r.exigenciasNutricionais.length){
+    document.getElementById('exigenciasCard').style.display='block';
+    document.getElementById('exigenciasContainer').innerHTML=r.exigenciasNutricionais.map(e=>`<p style="margin-bottom:6px">- ${e}</p>`).join('');
+  }
+  document.getElementById('recomendacoesContainer').innerHTML=r.recomendacoes.map(rec=>`<p style="margin-bottom:8px">- ${rec}</p>`).join('');
+  calcularCusto();
 }
 
-// ── LINKS DE AFILIADO (fallback quando API não retorna produto) ──
-function linkShopee(query){
-  const base=`https://shopee.com.br/search?keyword=${encodeURIComponent(query)}`;
-  return SHOPEE_AFFILIATE_ID!=='SEU_ID_SHOPEE'
-    ?`https://s.shopee.com.br/affiliate?offerId=${SHOPEE_AFFILIATE_ID}&url=${encodeURIComponent(base)}`
-    :base;
+function normalizarNome(nome){return(nome||'').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+async function carregarTabelaPrecos(){
+  try{const snap=await getDocs(collection(db,'catalogo_ingredientes'));const t={};snap.forEach(d=>{const data=d.data();if(data.nome&&data.preco)t[normalizarNome(data.nome)]=data.preco;});return t;}catch(e){return{};}
 }
-
-// ── PRODUTOS ──
-async function renderProdutos(){
-  const grid=document.getElementById('productsGrid');
-  grid.innerHTML='';
-  const q = _selectedOccasionQuery || 'roupa';
-
-  // Produtos já buscados na Shopee durante a geração do look (roupa + calçado + acessório)
-  _produtosEncontrados.forEach(p=>{
-    const card=document.createElement('div');card.className='product-card';
-    card.innerHTML=`
-      <div class="product-img-wrap">
-        ${p.foto?`<img src="${p.foto}" alt="${p.nome}" onerror="this.style.display='none'">`:'<span style="font-size:32px">🛍️</span>'}
-      </div>
-      <p class="product-name">${p.nome.length>42?p.nome.slice(0,42)+'...':p.nome}</p>
-      <p class="product-store"><span class="store-badge store-shopee">Shopee</span>${p.avaliacao?` <span style="font-size:10px;color:var(--gray3)">★${p.avaliacao}</span>`:''}</p>
-      <p class="product-price">${p.preco}</p>
-      <button class="btn-buy" style="background:#EE4D2D" onclick="window.open('${p.link}','_blank')">Comprar →</button>`;
-    grid.appendChild(card);
+window.calcularCusto=function(){
+  if(!_formulacaoAtual)return;
+  const ings=_formulacaoAtual.result.ingredientes;let custoPorKg=0;
+  ings.forEach((ing,i)=>{
+    const preco=parseFloat(document.getElementById('preco_'+i)?.value)||0;
+    const tam=ing.unidadeCompra?.includes('60')?60:ing.unidadeCompra?.includes('40')?40:50;
+    custoPorKg+=(preco>0?preco/tam:0)*(ing.percentual/100);
   });
-
-  if(!_produtosEncontrados.length){
-    const shopeeCard=document.createElement('div');shopeeCard.className='product-card';
-    shopeeCard.innerHTML=`
-      <div class="product-img-wrap" style="background:rgba(238,77,45,.08);flex-direction:column;gap:6px">
-        <span style="font-size:36px">🛍️</span>
-        <span style="font-size:10px;color:#EE4D2D;font-weight:700">SHOPEE</span>
-      </div>
-      <p class="product-name">Roupas para ${_selectedOccasion} na Shopee</p>
-      <p class="product-store"><span class="store-badge store-shopee">Shopee</span></p>
-      <p class="product-price">A partir de R$ 29,90</p>
-      <button class="btn-buy" style="background:#EE4D2D" onclick="window.open('${linkShopee(q)}','_blank')">Ver na Shopee →</button>`;
-    grid.appendChild(shopeeCard);
-  }
-
-  document.getElementById('productsSource').textContent='Produtos reais da Shopee';
+  const consumo=_formulacaoAtual.result.consumoPorAnimalDia||0;
+  const qtd=parseInt(document.getElementById('suiQtd')?.value||document.getElementById('aveQtd')?.value||'1')||1;
+  document.getElementById('custoPorKg').textContent='R$ '+custoPorKg.toFixed(3);
+  document.getElementById('custoAnimalDia').textContent='R$ '+(custoPorKg*consumo).toFixed(2);
+  document.getElementById('custoLoteDia').textContent='R$ '+(custoPorKg*consumo*qtd).toFixed(2);
+};
+window.salvarFormulacao=async function(){
+  if(!_formulacaoAtual||!_sitioId)return;
+  await addDoc(collection(db,'formulacoes'),{sitioId:_sitioId,userId:_user.uid,tipo:_formulacaoAtual.tipo,titulo:_formulacaoAtual.tituloPag,resultado:_formulacaoAtual.result,criadoEm:new Date().toISOString()});
+  showToast('Formulacao salva!');await carregarFormulacoesSalvas();
+};
+window.enviarParaFabricacao=async function(){
+  if(!_formulacaoAtual||!_sitioId)return;
+  const qtdKg=prompt('Quantos KG de racao deseja encomendar?');
+  if(!qtdKg||isNaN(parseFloat(qtdKg))||parseFloat(qtdKg)<=0){if(qtdKg!==null)showToast('Informe uma quantidade valida');return;}
+  const ud=await getDoc(doc(db,'usuarios',_user.uid));const nomeUsuario=ud.data()?.nome||_user.email;
+  const ingredientesComPreco=_formulacaoAtual.result.ingredientes.map((ing,i)=>({...ing,precoInformado:parseFloat(document.getElementById('preco_'+i)?.value)||0}));
+  try{await addDoc(collection(db,'pedidos_fabricacao'),{sitioId:_sitioId,sitioNome:_sitioData?.nome||'',userId:_user.uid,solicitante:nomeUsuario,email:_user.email,tipo:_formulacaoAtual.tipo,titulo:_formulacaoAtual.tituloPag,ingredientes:ingredientesComPreco,quantidadeKg:parseFloat(qtdKg),status:'pendente',criadoEm:new Date().toISOString()});showToast('Pedido enviado para fabricacao!');}
+  catch(e){showToast('Erro ao enviar: '+e.message);}
+};
+async function carregarFormulacoesSalvas(){
+  if(!_sitioId)return;
+  try{
+    const snap=await getDocs(query(collection(db,'formulacoes'),where('sitioId','==',_sitioId),orderBy('criadoEm','desc')));
+    const fs=snap.docs.map(d=>({id:d.id,...d.data()}));
+    const container=document.getElementById('formulacoesSalvas');
+    if(!fs.length){container.innerHTML='<div class="empty"><i class="ti ti-bowl"></i><p>Nenhuma formulacao salva ainda</p></div>';return;}
+    container.innerHTML=fs.slice(0,5).map(f=>`<div class="card card-sm" style="margin-bottom:8px;cursor:pointer" onclick="verFormulacao('${f.id}')"><div style="display:flex;align-items:center;justify-content:space-between"><div><p style="font-weight:500;font-size:14px">${f.titulo}</p><p style="font-size:12px;color:var(--text3)">${new Date(f.criadoEm).toLocaleDateString('pt-BR')}</p></div><i class="ti ti-chevron-right" style="color:var(--text3)"></i></div></div>`).join('');
+  }catch(e){console.warn('formulacoes:',e.message);}
 }
-
-// ── AÇÕES ──
-window.toggleLike=function(){
-  const icon=document.getElementById('likeIcon'),btn=document.getElementById('btnLike');
-  if(icon.textContent==='🤍'){icon.textContent='❤️';btn.style.borderColor='var(--red)';showToast('❤️ Look salvo!');}
-  else{icon.textContent='🤍';btn.style.borderColor='var(--border)';}
-};
-window.compartilhar=function(){
-  if(navigator.share)navigator.share({title:'Meu look no Vesh',text:`Olha que look incrível para ${_selectedOccasion}!`,url:window.location.href});
-  else navigator.clipboard.writeText(window.location.href).then(()=>showToast('🔗 Link copiado!'));
-};
-window.selecionarPlano=function(card,creditos,valor){
-  document.querySelectorAll('.plan-card').forEach(c=>c.style.outline='none');
-  card.style.outline='2px solid var(--gold)';
-  _selectedPlan={creditos,valor};
-  showToast(`${creditos} créditos = ${parseInt(creditos)*3} looks por R$${valor}`);
-};
-window.iniciarPagamento=function(){
-  if(!_selectedPlan){showToast('Selecione um plano primeiro.');return;}
-  showToast('Redirecionando para pagamento...');
-  setTimeout(()=>window.open('https://www.mercadopago.com.br/developers','_blank'),800);
+window.verFormulacao=async function(id){
+  const snap=await getDoc(doc(db,'formulacoes',id));if(!snap.exists())return;
+  const f=snap.data();_formulacaoAtual={tipo:f.tipo,tituloPag:f.titulo,result:f.resultado};
+  document.getElementById('formulacaoInicio').style.display='none';document.getElementById('resultadoFormulacao').style.display='block';
+  document.getElementById('resultadoTitulo').textContent=f.titulo;await renderFormulacao(f.resultado);
 };
 
-buildOccasions();
+window.selecionarPlano=function(plano){
+  _planoPlamoSelecionado=plano;
+  ['individual','familia','sitiogrande'].forEach(p=>document.getElementById('plano-'+p).style.borderColor=p===plano?'var(--green)':p==='familia'?'var(--green)':'var(--border)');
+  document.getElementById('btnAssinar').disabled=false;
+  const precos={individual:50,familia:75,sitiogrande:100};
+  document.getElementById('btnAssinar').textContent='Assinar por R$ '+precos[plano]+'/mes';
+};
+window.assinar=function(){showToast('Integracao com Mercado Pago em breve!');};
+window.convidarUsuario=function(){showToast('Funcionalidade de convite em breve!');};
+
+window.showScreen=function(screen){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+screen)?.classList.add('active');window.scrollTo(0,0);
+  if(screen==='formulacao')carregarFormulacoesSalvas();
+  if(screen==='historico')carregarHistorico();
+};
+window.fecharModal=function(id){document.getElementById(id)?.classList.remove('open');};
+window.trocarAbaLogin=function(aba){
+  const iC=aba==='cadastro';
+  document.getElementById('modoCadastro').style.display=iC?'block':'none';document.getElementById('modoEntrar').style.display=iC?'none':'block';
+  document.getElementById('abaCadastro').style.background=iC?'var(--surface)':'transparent';document.getElementById('abaCadastro').style.color=iC?'var(--green)':'var(--text3)';
+  document.getElementById('abaEntrar').style.background=iC?'transparent':'var(--surface)';document.getElementById('abaEntrar').style.color=iC?'var(--text3)':'var(--green)';
+};
+document.querySelectorAll('.modal-overlay').forEach(overlay=>overlay.addEventListener('click',(e)=>{if(e.target===overlay)overlay.classList.remove('open');}));
+</script>
+
+<script>
+function showToast(msg){
+  const t=document.getElementById('toast');if(!t)return;
+  t.textContent=msg;t.classList.add('show');
+  if(window._tt)clearTimeout(window._tt);
+  window._tt=setTimeout(()=>t.classList.remove('show'),3000);
+}
+function fmtNum(n){return(parseFloat(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
 </script>
 </body>
 </html>
